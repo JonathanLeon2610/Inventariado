@@ -1,0 +1,161 @@
+/* Estilo base */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo del sidebar */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #154b96;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  transition: all 0.3s ease;
+  color: black;
+  transition: all  0.3s ease;
+}
+
+.sidebar img{
+  width: 100px !important;
+  height: 100px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  cursor: pointer;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 1rem;
+  text-align: center;
+}
+
+.sidebar li:hover {
+  background-color: #183a6d;
+  border-radius: 35px;
+  transition: all  0.3s ease;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: white;
+}
+
+
+/* Estilo del contenido principal */
+.content {
+  margin-left: 260px;
+  padding: 20px;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  margin-left: 2rem;
+}
+
+.content-shifted {
+  transform: translateX(-8rem); /* Mueve el contenido 2 rem hacia la izquierda */
+}
+
+.sidebar.collapsed img {
+  margin-left: 5rem;
+}
+
+/* */
+
+/* Estilos para la tabla */
+table {
+  width: 100%; /* La tabla abarcará todo el ancho disponible */
+  border-collapse: collapse; /* Fusiona los bordes de las celdas */
+  border: 1px solid #ccc; /* Borde de la tabla */
+}
+
+/* Estilos para las celdas de encabezado */
+th {
+  background-color: #f2f2f2; /* Color de fondo del encabezado */
+  border: 1px solid #ccc; /* Borde de las celdas de encabezado */
+  padding: 8px; /* Espaciado interior */
+  text-align: left; /* Alineación del texto en el encabezado */
+}
+
+/* Estilos para las celdas de datos */
+td {
+  border: 1px solid #ccc; /* Borde de las celdas de datos */
+  padding: 8px; /* Espaciado interior */
+  text-align: left; /* Alineación del texto en las celdas de datos */
+}
+
+
+td button{
+  display: block; /* Hacer que el botón sea un bloque para centrarlo */
+  margin: 0 auto; /* Centrar horizontalmente */
+  text-align: center; /* Centrar el texto del botón */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+  width: fit-content;
+  height: 2rem;
+  transition: all .2s ease-in-out;
+}
+
+td button.free {
+  background-color: #154b96;
+}
+
+td button.set {
+  background-color: #18792d;
+}
+
+td button.free:hover {
+  background-color: #1d62c4;
+}
+
+td button.set:hover {
+  background-color: #25b343;
+}
+
+
+.formulario-container {
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Abarca toda la pantalla verticalmente */
+  background-color: #f0f0f0; /* Color de fondo */
+}
+
+/* Estilo para los inputs */
+.formulario-container input {
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Estilo para el botón */
+.formulario-container button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #007bff; /* Color de fondo del botón */
+  color: #fff; /* Color del texto del botón */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Estilo para el botón cuando se coloca el mouse sobre él */
+.formulario-container button:hover {
+  background-color: #0056b3; /* Cambia el color de fondo al pasar el mouse */
+}
