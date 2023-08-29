@@ -129,9 +129,7 @@ td button.set:hover {
 
 
 .formulario-container {
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* Abarca toda la pantalla verticalmente */
+  height: 90vh; /* Abarca toda la pantalla verticalmente */
   background-color: #f0f0f0; /* Color de fondo */
 }
 
@@ -159,3 +157,55 @@ td button.set:hover {
 .formulario-container button:hover {
   background-color: #0056b3; /* Cambia el color de fondo al pasar el mouse */
 }
+
+.login-container {
+  width: 500px;
+  margin: 15rem auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-container .form-group {
+  margin-bottom: 15px;
+}
+
+.login-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-container button:hover {
+  background-color: #0056b3;
+}
+
+

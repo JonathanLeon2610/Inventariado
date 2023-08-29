@@ -5,7 +5,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 function Proveedores() {
   return (
     <div>
-      <h2>Asignacion de Resguardos</h2>
+      <h2>Proveedores</h2>
       <table>
         <thead>
           <tr>

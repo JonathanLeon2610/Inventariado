@@ -1,4 +1,23 @@
+import { useEffect } from "react";
+
 function Inventariables() {
+
+
+
+  useEffect(() => {
+    const apiUrl = 'https://192.168.10.100/api/v1/salas/vlist';
+    fetch(apiUrl,{
+      credentials:"include"
+    })
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error(error);
+            console.log("Error al entrar");
+        });
+}, []);
+
     return (
       <div>
         <h2>Lista de Inventariables</h2>
