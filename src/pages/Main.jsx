@@ -15,6 +15,7 @@ import Proveedores from "../pages/Proveedores";
 import EditProveedor from "../pages/EditProveedor";
 import Login from "../pages/Login";
 import Swal from 'sweetalert2';
+import EditBienInventariable from "./EditBienInventarible";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -53,6 +54,8 @@ function Main() {
         return <Proveedores />;
       case "editProveedor":
         return <EditProveedor />;
+      case "editBienInventariable":
+        return <EditBienInventariable />;
       default:
         return <Login />; // Página inicial por defecto
     }

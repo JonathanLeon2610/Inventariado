@@ -1,26 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faPlus,faEdit} from "@fortawesome/free-solid-svg-icons";
 
 function Inventariables() {
-
-
+  const [data, setdata] = useState([]);
 
   useEffect(() => {
-    const apiUrl = 'https://192.168.10.100/api/v1/salas/vlist';
-    fetch(apiUrl,{
-      credentials:"include"
+    fetch("https://192.168.10.100/api/v1/activobien/filtrar", {
+      method: "GET",
     })
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error(error);
-            console.log("Error al entrar");
-        });
-}, []);
+      .then((response) => response.json())
+      .then((data) => {
+        setdata(data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-    return (
+
+  return (
+    <>
       <div>
         <h2>Lista de Inventariables</h2>
+        <Link to={"/agregar-bien-inventariable"}><button className="add"> <FontAwesomeIcon icon={faPlus}/> Agregar Bien</button></Link>
         <table>
           <thead>
             <tr>
@@ -30,22 +32,28 @@ function Inventariables() {
               <th>Modelo</th>
               <th># Serie</th>
               <th>Costo</th>
+              <th>Opciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Producto A</td>
-              <td>10</td>
-              <td>$20.00</td>
-              <td>$20.00</td>
-              <td>$20.00</td>
-            </tr>
+            {data.map((item) => (
+              <>
+                <tr key={item.id}>
+                  <td>{item.numeroInventario}</td>
+                  <td>{item.activoDescripcion}</td>
+                  <td>{item.marca}</td>
+                  <td>{item.modelo}</td>
+                  <td>{item.numeroSerie}</td>
+                  <td>${(item.costo).toLocaleString("en")}</td>
+                  <td><Link to={`/edit-bien-inventariable/${item.id}`}><button className="free"><FontAwesomeIcon icon={faEdit}/> Editar</button></Link></td>
+                </tr>
+              </>
+            ))}
           </tbody>
         </table>
       </div>
-    );
-  }
-  
-  export default Inventariables;
-  
+    </>
+  );
+}
+
+export default Inventariables;

@@ -5,6 +5,14 @@ body {
   padding: 0;
 }
 
+select{
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 /* Estilo del sidebar */
 .sidebar {
   height: 100%;
@@ -97,6 +105,11 @@ td {
   text-align: left; /* Alineación del texto en las celdas de datos */
 }
 
+tbody :hover{
+  background-color: rgb(177, 208, 255);
+  transition: all .1s ease-in-out;
+}
+
 
 td button{
   display: block; /* Hacer que el botón sea un bloque para centrarlo */
@@ -129,6 +142,10 @@ td button.set:hover {
 
 
 .formulario-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  align-items: start;
   height: 90vh; /* Abarca toda la pantalla verticalmente */
   background-color: #f0f0f0; /* Color de fondo */
 }
@@ -137,7 +154,7 @@ td button.set:hover {
 .formulario-container input {
   margin: 10px;
   padding: 10px;
-  width: 300px;
+  width: 22rem;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -209,3 +226,26 @@ td button.set:hover {
 }
 
 
+
+
+
+.add{
+  color: white;
+  background-color: #25b343;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+  width: fit-content;
+  height: 2rem;
+  transition: all .2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.add:hover{
+  background-color: #18742c;
+}
+
+
+.error-message{
+  text-align: center;
+}
