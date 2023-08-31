@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-
+import Swal from 'sweetalert2';
 function EditBienInventariable() {
   const [inputValues, setInputValues] = useState({
-    nombre: "",
+    activoDescripcion: "",
     marca: "",
     modelo: "",
     costo: "",
@@ -35,12 +35,26 @@ function EditBienInventariable() {
     )
       .then((response) => response.json()) // Cambiar a response.json() para parsear JSON
       .then((result) => {
+        setInputValues({ activoDescripcion: result.activoDescripcion,
+          costo: result.costo.toString(), 
+          marca: result.marca,
+          modelo: result.modelo
+        })
+        //setInputValues({ ...inputValues, modelo: result.modelo })
         setData(result);
-
         setSelectedMarca(result.marca); // Establecer la marca seleccionada
-        console.log(result);
+        
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Tu sesion ha expirado',
+          text: 'Vuelve a iniciar sesion',
+        })
+        .then(()=>{
+          window.location.href = "/login"
+        })
+      });
   }, []);
 
   useEffect(() => {
@@ -69,36 +83,48 @@ function EditBienInventariable() {
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: JSON.stringify(inputValues), // Convierte el estado inputValues a JSON
+      body: inputValues, // Convierte el estado inputValues a JSON
       redirect: "follow",
     };
-
+    
     console.log(inputValues);
+    console.log(localStorage.getItem("token"));
 
-    // fetch(
-    //   `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
-    //   requestOptions
-    // )
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     // Realiza cualquier acción adicional necesaria después de la actualización
-    //     console.log(result);
-    //   })
-    //   .catch((error) => console.log("error", error));
+    fetch(
+      `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        // Realiza cualquier acción adicional necesaria después de la actualización
+        console.log(result);
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Tu sesion ha expirado',
+          text: 'Vuelve a iniciar sesion',
+        })
+        .then(()=>{
+          window.location.href = "/login"
+        })
+      });
   };
 
   return (
     <>
       {data ? (
+        <>
+
         <div>
           <h2 style={{ marginLeft: "1rem" }}>Editar Bien Inventariable</h2>
           <div className="formulario-container">
             <input
               type="text"
-              placeholder="Nombre"
+              placeholder="activoDescripcion"
               defaultValue={data.activoDescripcion}
               onChange={(e) =>
-                setInputValues({ ...inputValues, nombre: e.target.value })
+                setInputValues({ ...inputValues, activoDescripcion: e.target.value })
               }
             />
             <select
@@ -109,7 +135,7 @@ function EditBienInventariable() {
             >
               <option value={selectedMarca}>{selectedMarca}</option>
               {marcas.map((marca) => (
-                <option key={marca.id} value={marca.name}>
+                <option key={marca.id} value={marca.id}>
                   {marca.name}
                 </option>
               ))}
@@ -123,7 +149,7 @@ function EditBienInventariable() {
               }
             />
             <input
-              type="text"
+              type="number"
               placeholder="Costo"
               defaultValue={data.costo}
               onChange={(e) =>
@@ -133,12 +159,13 @@ function EditBienInventariable() {
             <button onClick={handleEdit}>Confirmar cambios</button>
             <button
               style={{ backgroundColor: "red" }}
-              onClick={() => history.back()}
+              onClick={() => window.location.href = "/main"}
             >
               Cancelar
             </button>
           </div>
         </div>
+        </>
       ) : (
         <p>Cargando</p>
       )}

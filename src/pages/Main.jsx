@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStore,
@@ -20,6 +20,19 @@ import EditBienInventariable from "./EditBienInventarible";
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState("inventariable"); // Página inicial
+
+  // Add a state to track if the token exists in local storage
+  const [tokenExists, setTokenExists] = useState(true);
+
+  // Check for the existence of the "token" item in local storage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setTokenExists(false);
+      // Redirect to the login page if the token doesn't exist
+      window.location.href = "/login";
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);

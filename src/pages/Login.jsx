@@ -55,8 +55,7 @@ function Login() {
         console.log(localStorage.getItem("token"));
         const token = localStorage.getItem("token");
         const decodedToken = jwtDecode(token);
-
-
+        localStorage.setItem("role", decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
         window.location.href ="/main"
       })
       .catch((error) => {

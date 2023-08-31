@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faPlus,faEdit} from "@fortawesome/free-solid-svg-icons";
+import Swal from 'sweetalert2';
 
 function Inventariables() {
   const [data, setdata] = useState([]);
@@ -17,12 +18,20 @@ function Inventariables() {
       .catch((error) => console.log(error));
   }, []);
 
+  function allowAddButton(){
+    if(localStorage.getItem("role") === "Auxiliar Administrativo"){
+      return true;
+    }else{
+      return null;
+    }
+  }
+
 
   return (
     <>
       <div>
         <h2>Lista de Inventariables</h2>
-        <Link to={"/agregar-bien-inventariable"}><button className="add"> <FontAwesomeIcon icon={faPlus}/> Agregar Bien</button></Link>
+        {allowAddButton() ? (<Link to={"/agregar-bien-inventariable"}><button className="add"> <FontAwesomeIcon icon={faPlus}/> Agregar Bien</button></Link>):("")}
         <table>
           <thead>
             <tr>
