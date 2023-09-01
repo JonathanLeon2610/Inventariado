@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 function AgregarBienInventariable() {
   const [data, setdata] = useState([]);
   const [inputValues, setInputValues] = useState({
-    ActivoTipo :"",
-    NumeroInventario : "",
-    ActivoDescripcion :"",
-    MarcaId : "4",
-    Modelo : "",
-    NumeroSerie :"",
-    Costo : "",
-    TipoAlta :"Compra",
-    Comentarios :"",
+    ActivoTipo: "",
+    NumeroInventario: "",
+    ActivoDescripcion: "",
+    MarcaId: "4",
+    Modelo: "",
+    NumeroSerie: "",
+    Costo: "",
+    TipoAlta: "Compra",
+    Comentarios: "",
   });
 
   useEffect(() => {
@@ -26,8 +26,6 @@ function AgregarBienInventariable() {
       })
       .catch((error) => console.log(error));
   }, []);
-
-
 
   const handleEdit = () => {
     const myHeaders = new Headers();
@@ -43,37 +41,31 @@ function AgregarBienInventariable() {
       body: JSON.stringify(inputValues), // Convierte el estado inputValues a JSON
       redirect: "follow",
     };
-    
+
     console.log(inputValues);
 
-    fetch(
-      `https://192.168.10.100/api/v1/activobien`,
-      requestOptions
-    )
+    fetch(`https://192.168.10.100/api/v1/activobien`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         // Realiza cualquier acción adicional necesaria después de la actualización
         Swal.fire(
-          'Registro exitoso!',
-          'Se ha realizado su registro satisfactoriamente!',
-          'success'
-        )
-        .then(() => {
-          window.location.href = "/main"
-        })
-        console.log(result,"hola");
+          "Registro exitoso!",
+          "Se ha realizado su registro satisfactoriamente!",
+          "success"
+        ).then(() => {
+          window.location.href = "/main";
+        });
+        console.log(result, "hola");
       })
       .catch(() => {
         Swal.fire({
-          icon: 'error',
-          title:"Hubo un error al crear el registro",
-          text: 'Por favor intente nuevamente',
-        })
-        .then(()=>{
-          //window.location.href = "/login"
-        })
+          icon: "error",
+          title: "Hubo un error al crear el registro",
+          text: "Por favor intente nuevamente",
+        }).then(() => {
+          //window.location.href = "/main"
+        });
       });
-
   };
   return (
     <>
@@ -92,39 +84,74 @@ function AgregarBienInventariable() {
             type="text"
             placeholder="No. Inventario"
             onChange={(e) =>
-              setInputValues({ ...inputValues, NumeroInventario: e.target.value })
+              setInputValues({
+                ...inputValues,
+                NumeroInventario: e.target.value,
+              })
             }
             required
           />
-          <input type="text" placeholder="Descripcion"   onChange={(e) =>
-              setInputValues({ ...inputValues, ActivoDescripcion: e.target.value })
-            } 
+          <input
+            type="text"
+            placeholder="Descripcion"
+            onChange={(e) =>
+              setInputValues({
+                ...inputValues,
+                ActivoDescripcion: e.target.value,
+              })
+            }
             required
-            />
-          <select onChange={(e) =>
+          />
+          <select
+            onChange={(e) =>
               setInputValues({ ...inputValues, MarcaId: e.target.value })
-            }>
-            {data.map((marca) =>(
-                <>
-                <option value={(marca.id).toString()}>{marca.name}</option>
-                </>
+            }
+          >
+            {data.map((marca) => (
+              <>
+                b
+                <option
+                  value={marca.id.toString()}
+                  onClick={() =>
+                    setInputValues({ ...inputValues, Marca: marca.name })
+                  }
+                >
+                  {marca.name}
+                </option>
+              </>
             ))}
           </select>
-          
-          <input type="text" placeholder="Modelo"  onChange={(e) =>
+
+          <input
+            type="text"
+            placeholder="Modelo"
+            onChange={(e) =>
               setInputValues({ ...inputValues, Modelo: e.target.value })
             }
-            required/>
-          <input type="text" placeholder="No. Serie" onChange={(e) =>
+            required
+          />
+          <input
+            type="text"
+            placeholder="No. Serie"
+            onChange={(e) =>
               setInputValues({ ...inputValues, NumeroSerie: e.target.value })
             }
-            required/>
-          <input type="numer" pattern="[0-9]*" placeholder="Costo" onChange={(e) =>
+            required
+          />
+          <input
+            type="numer"
+            pattern="[0-9]*"
+            placeholder="Costo"
+            onChange={(e) =>
               setInputValues({ ...inputValues, Costo: e.target.value })
-            }required/>
-          <select onChange={(e) =>
+            }
+            required
+          />
+          <select
+            onChange={(e) =>
               setInputValues({ ...inputValues, TipoAlta: e.target.value })
-            }>
+            }
+          >
             <option value={"compra"}>Compra</option>
             <option value={"Dato"}>Como Dato</option>
             <option value={"donacion"}>Donaciòn</option>
@@ -133,7 +160,7 @@ function AgregarBienInventariable() {
           <button onClick={handleEdit}>Registrar</button>
           <button
             style={{ backgroundColor: "red" }}
-            onClick={() => history.back()}
+            onClick={() => window.location.href = "/main"}
           >
             Cancelar
           </button>

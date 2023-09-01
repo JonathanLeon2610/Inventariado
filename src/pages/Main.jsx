@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStore,
@@ -14,7 +14,7 @@ import AsignacionResguardos from "../pages/AsignacionResguardos";
 import Proveedores from "../pages/Proveedores";
 import EditProveedor from "../pages/EditProveedor";
 import Login from "../pages/Login";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import EditBienInventariable from "./EditBienInventarible";
 
 function Main() {
@@ -22,7 +22,7 @@ function Main() {
   const [currentPage, setCurrentPage] = useState("inventariable"); // Página inicial
 
   // Add a state to track if the token exists in local storage
-  const [tokenExists, setTokenExists] = useState(true);
+  const [setTokenExists] = useState(true);
 
   // Check for the existence of the "token" item in local storage
   useEffect(() => {
@@ -40,20 +40,56 @@ function Main() {
 
   const showAlert = () => {
     Swal.fire({
-        title: '¡Estas Seguro?',
-        text: "Se cerrarà tu sesion actual",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, Salir',
-        cancelButtonText: 'No, Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-            (window.location.href = "/login")
-        }
-      })
+      title: "¡Estas Seguro?",
+      text: "Se cerrarà tu sesion actual",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Salir",
+      cancelButtonText: "No, Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/login";
+      }
+    });
   };
+
+  useEffect(() => {
+    const currentUTC = new Date().toISOString();
+    const expirationValue = localStorage.getItem("expiration");
+    const expirationDate = new Date(expirationValue);
+
+    // Calcula la diferencia en milisegundos entre la hora actual y la hora de expiración
+    const timeDiff = expirationDate.getTime() - new Date(currentUTC).getTime();
+
+    // Define el tiempo límite, en este caso, 5 minutos antes de la expiración
+    const fiveMinutes = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+    // Compara si la diferencia es menor o igual a 5 minutos
+    if (timeDiff <= fiveMinutes) {
+      // Realiza la acción que desees cuando falten 5 minutos
+      var myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        "Bearer " + localStorage.getItem("token")
+      );
+
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch("https://192.168.10.100/api/cuentas/RenovarToken", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("expiration", result.expiration);
+        })
+        .catch((error) => console.log("error", error));
+    }
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -77,32 +113,26 @@ function Main() {
   return (
     <div>
       <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
-        <img
-          onClick={toggleSidebar}
-          src="URL de tu logotipo"
-          alt="No carga"
-        />
-        <ul style={{color:"white",cursor:"pointer"}}>
+        <img onClick={toggleSidebar} src="URL de tu logotipo" alt="No carga" />
+        <ul style={{ color: "white", cursor: "pointer" }}>
           <li onClick={() => setCurrentPage("inventariable")}>
-              <FontAwesomeIcon icon={faShop} /> Inventariable
+            <FontAwesomeIcon icon={faShop} /> Inventariable
           </li>
-          <li  onClick={() => setCurrentPage("noInventariable")}>
-              <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
+          <li onClick={() => setCurrentPage("noInventariable")}>
+            <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
           </li>
           <li onClick={() => setCurrentPage("asignacionResguardos")}>
-              <FontAwesomeIcon icon={faBookBookmark} /> Asignacion de Resguardos
+            <FontAwesomeIcon icon={faBookBookmark} /> Asignacion de Resguardos
           </li>
           <li onClick={() => setCurrentPage("proveedores")}>
-              <FontAwesomeIcon icon={faTruckField} /> Proveedores
+            <FontAwesomeIcon icon={faTruckField} /> Proveedores
           </li>
-          <li>
-            <button onClick={() => setCurrentPage("historialFacturas")}>
+          <li onClick={() => setCurrentPage("historialFacturas")}>
               <FontAwesomeIcon icon={faMoneyBill} /> Historial de Facturas
-            </button>
           </li>
           <li onClick={showAlert}>
             <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
-        </li>
+          </li>
         </ul>
       </div>
       <div className={`content ${sidebarCollapsed ? "content-shifted" : ""}`}>
