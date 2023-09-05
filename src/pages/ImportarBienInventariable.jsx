@@ -2,7 +2,7 @@ import { useEffect, useState,useRef } from "react";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faArrowLeft,faUpload, faCheck, faBan} from "@fortawesome/free-solid-svg-icons";
-function EditBienInventariable() {
+function ImportarBienInventariable() {
   const [inputValues, setInputValues] = useState({
     id: "",
     activoTipo: "",
@@ -20,6 +20,7 @@ function EditBienInventariable() {
 
   const [data, setData] = useState(null);
   const [marcas, setMarcas] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [selectedMarca, setSelectedMarca] = useState(""); // Estado para la marca seleccionada
   const [selectedImages, setSelectedImages] = useState([]); // Estado para la imagen seleccionada
 
@@ -92,36 +93,6 @@ function EditBienInventariable() {
   }, []);
 
   useEffect(() => {
-    const url = window.location.pathname;
-    const segments = url.split("/");
-    const ultimoValor = segments[segments.length - 1];
-
-    var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + localStorage.getItem("token")
-    );
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(
-      `https://192.168.10.100/api/v1/ActivoBien/${ultimoValor}/doctos`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(() => {
-
-        });
-  }, []);
-
-  useEffect(() => {
     fetch("https://192.168.10.100/api/v1/marcas", {
       method: "GET",
     })
@@ -159,6 +130,7 @@ function EditBienInventariable() {
       .then((result) => {
         // Realiza cualquier acción adicional necesaria después de la actualización
         console.log(result);
+        console.log(inputValues);
       })
       .catch((error) => {
         console.log(error);
@@ -170,8 +142,8 @@ function EditBienInventariable() {
       {data !== null ? (
         <>
           <div>
-            <h2 style={{ marginLeft: "1rem" }}>Editar Bien Inventariable</h2>
-            <button className="add" style={{marginLeft:"1rem", backgroundColor:"gray"}} onClick={() => (window.location.href = "/main")}><FontAwesomeIcon icon={faArrowLeft}/> Regresar</button>
+            <h2 style={{ marginLeft: "1rem" }}>Importar Bien Inventariable</h2>
+            <button className="add" style={{marginLeft:"1rem", backgroundColor:"gray"}} onClick={() => (window.location.href = "/table-import-bien-inventariable")}><FontAwesomeIcon icon={faArrowLeft}/> Regresar</button>
             <div className="formulario-container">
               <input
                 type="text"
@@ -194,7 +166,7 @@ function EditBienInventariable() {
               />
               <input
                 type="text"
-                placeholder="activoDescripcion"
+                placeholder="Descripcion"
                 defaultValue={data.activoDescripcion}
                 onChange={(e) =>
                   setInputValues({
@@ -252,12 +224,12 @@ function EditBienInventariable() {
                   setInputValues({ ...inputValues, TipoAlta: e.target.value })
                 }
               >
-                <option value={data.tipoAlta} disabled>{data.tipoAlta}</option>
                 <option value={"compra"}>Compra</option>
                 <option value={"Dato"}>Como Dato</option>
                 <option value={"donacion"}>Donaciòn</option>
                 <option value={"otro"}>Otro</option>
               </select>
+
               <input
                 type="number"
                 placeholder="Costo"
@@ -266,7 +238,7 @@ function EditBienInventariable() {
                   setInputValues({ ...inputValues, costo: e.target.value })
                 }
               />
-              <button onClick={handleEdit}> <FontAwesomeIcon icon={faCheck}/> Confirmar cambios</button>
+              <button onClick={handleEdit}> <FontAwesomeIcon icon={faCheck}/> Importar Bien</button>
               <button
                 style={{ backgroundColor: "red" }}
                 onClick={() => Swal.fire({
@@ -280,7 +252,7 @@ function EditBienInventariable() {
                   cancelButtonText: "No, Cancelar",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    window.location.href = "/main";
+                    window.location.href = "/table-import-bien-inventariable";
                   }
                 })}
               >
@@ -301,7 +273,7 @@ function EditBienInventariable() {
                   ))}
 
                 </div>
-                <button onClick={handleShowFileInput}><FontAwesomeIcon icon={faUpload}/> Subir nueva Imagen</button>
+                <button onClick={handleShowFileInput}><FontAwesomeIcon icon={faUpload}/> Subir  Imagen</button>
                 <input
                   type="file"
                   accept="image/*" // Puedes ajustar los tipos de archivos que acepta
@@ -321,4 +293,4 @@ function EditBienInventariable() {
   );
 }
 
-export default EditBienInventariable;
+export default ImportarBienInventariable;

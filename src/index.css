@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
 /* Estilo base */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -11,6 +13,11 @@ select{
   width: 300px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+Link{
+  text-emphasis: none;
+  text-decoration: none;
 }
 
 /* Estilo del sidebar */
@@ -72,7 +79,7 @@ select{
 
 .sidebar.collapsed {
   width: 0;
-  margin-left: 3rem;
+  margin-left: 2rem;
 }
 
 .content-shifted {
@@ -115,10 +122,11 @@ tbody :hover{
 
 td button{
   display: block; /* Hacer que el botón sea un bloque para centrarlo */
-  margin: 0 auto; /* Centrar horizontalmente */
+  margin: 5% auto;
   text-align: center; /* Centrar el texto del botón */
   color: white;
   border: none;
+  justify-content: center;
   cursor: pointer;
   border-radius: 15px;
   width: fit-content;
@@ -263,6 +271,85 @@ td button.set:hover {
 }
 
 
+
+.import{
+  color: white;
+  background-color: #3a25b3;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+  width: fit-content;
+  height: 2rem;
+  transition: all .2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.import:hover{
+  background-color: #482ce4;
+}
+
+
 .error-message{
   text-align: center;
+}
+
+
+.images-area-container{
+  max-width: 150vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-left: .5rem;
+  border-radius: 15px;
+  border: 5px #0056b3 dashed;
+  background-color: #c1c4c7;
+  
+}
+
+.images-area{
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.images-area img{
+  width: 20rem;
+  border-radius: 5px;
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para mayor visibilidad */
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.remove-image:hover {
+  background-color: rgba(255, 0, 0, 0.8); /* Cambiar el fondo al pasar el mouse por encima */
+  color: white; /* Cambiar el color del texto al pasar el mouse por encima */
+}
+
+.importar-bien{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

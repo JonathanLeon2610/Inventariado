@@ -113,7 +113,7 @@ function Main() {
   return (
     <div>
       <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
-        <img onClick={toggleSidebar} src="URL de tu logotipo" alt="No carga" />
+        <img onClick={toggleSidebar} src="https://192.168.10.100/images/logotipo.png" alt="No carga" />
         <ul style={{ color: "white", cursor: "pointer" }}>
           <li onClick={() => setCurrentPage("inventariable")}>
             <FontAwesomeIcon icon={faShop} /> Inventariable

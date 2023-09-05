@@ -6,6 +6,7 @@ import {
   faEdit,
   faArrowRight,
   faArrowLeft,
+  faFileImport
 } from "@fortawesome/free-solid-svg-icons";
 
 function Inventariables() {
@@ -57,12 +58,23 @@ function Inventariables() {
       <div>
         <h2>Lista de Inventariables</h2>
         {allowAddButton() ? (
+          <>
+          <div>
           <Link to={"/agregar-bien-inventariable"}>
             <button className="add">
               {" "}
               <FontAwesomeIcon icon={faPlus} /> Agregar Bien
             </button>
           </Link>
+          <Link to={"/table-import-bien-inventariable"} style={{marginLeft:"1rem"}}>
+            <button className="import">
+              {" "}
+              <FontAwesomeIcon icon={faFileImport} /> Importar Bien
+            </button>
+          </Link>
+          </div>
+          </>
+          
         ) : (
           ""
         )}
