@@ -34,6 +34,7 @@ function EditBienInventariable() {
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
+  const [fileName, setFileName] = useState(null);
 
   const fileInputRef = useRef(null); // Ref para el input de archivo oculto
   const handleShowFileInput = () => {
@@ -41,14 +42,43 @@ function EditBienInventariable() {
   };
 
   const handleImageChange = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      const newImages = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
+    const file = e.target.files[0]; // Obtenemos el primer archivo
+    if (file) {
+      setFileName(file.name);
+      console.log("Nombre del archivo:", file.name); // Obtener y mostrar el nombre del archivo
+      var myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        "Bearer " + localStorage.getItem("token")
       );
-      setLoadImage(newImages);
+      var formdata = new FormData();
+      formdata.append("Archivo", file, file.name); // Agregamos el archivo al FormData
+      formdata.append("ActivoBienId", ultimoValor);
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+      };
+      
+      fetch("https://192.168.10.100/api/v1/ActivoBien/doctos/add", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          window.location.reload();
+        })
+        .catch(error => console.log('error', error));
+  
+      // Luego puedes usar el FormData para enviar la solicitud con la imagen
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "El tamaño máximo permitido es 5MB",
+      });
     }
   };
+  
 
   const handleRemoveImage = (index, id) => {
     const newImages = [...selectedImages];
@@ -60,6 +90,8 @@ function EditBienInventariable() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
+
+    
 
     var raw = "";
 
@@ -78,7 +110,7 @@ function EditBienInventariable() {
       .then((result) => {
         console.log(result);
         newImages.splice(index, 1);
-          setSelectedImages(newImages);
+        setSelectedImages(newImages);
       })
       .catch((error) => console.log("error", error));
   };
@@ -109,8 +141,15 @@ function EditBienInventariable() {
         setInputValues({
           id: ultimoValor,
           activoDescripcion: result.activoDescripcion,
+          activoTipo: result.activoTipo,
+          numeroInventario: result.numeroInventario,
+          numeroSerie:result.numeroSerie,
+          caracteristicas: result.caracteristicas,
+          comentarios: result.comentarios,
+          tipoAlta: result.tipoAlta,
+          estatusBienId: result.estatusBienId,
           costo: result.costo,
-          marcaId: result.marcaId,
+          MarcaId: result.marcaId,
           modelo: result.modelo,
         });
         setData(result);
@@ -151,7 +190,6 @@ function EditBienInventariable() {
         );
         setSelectedImages(imageUrls);
         setImagesId(result.map((item) => item.id));
-        console.log(result);
       })
       .catch(() => {
         // Manejo de errores
@@ -181,10 +219,29 @@ function EditBienInventariable() {
     );
     myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
 
+
+
+
+    var raw = JSON.stringify({
+      "id": "1",
+      "activoDescripcion": inputValues.activoDescripcion,
+      "activoTipo": inputValues.activoTipo,
+      "numeroInventario": inputValues.numeroInventario,
+      "numeroSerie": inputValues.numeroSerie,
+      "caracteristicas": inputValues.caracteristicas,
+      "comentarios": inputValues.comentarios,
+      "tipoAlta": inputValues.tipoAlta,
+      "estatusBienId": 1,
+      "costo": inputValues.costo,
+      "marcaId": inputValues.MarcaId,
+      "modelo": inputValues.modelo
+    });
+
+
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: inputValues, // Convierte el estado inputValues a JSON
+      body: raw, // Convierte el estado inputValues a JSON
       redirect: "follow",
     };
 
@@ -195,10 +252,17 @@ function EditBienInventariable() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
+        console.log(JSON.stringify(result));
         // Realiza cualquier acción adicional necesaria después de la actualización
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        Swal.fire(
+          "Registro exitoso!",
+          "Los cambios se han aplicado exitosamente!",
+          "success"
+        ).then(() => {
+          window.location.href = "/main";
+        });
       });
   };
 
@@ -234,6 +298,7 @@ function EditBienInventariable() {
                     numeroInventario: e.target.value,
                   })
                 }
+                disabled
               />
               <input
                 type="text"
@@ -247,10 +312,12 @@ function EditBienInventariable() {
                 }
               />
               <select
-                defaultValue={inputValues.marcaId}
+                defaultValue={inputValues.MarcaId}
+                
                 onChange={(e) =>
-                  setInputValues({ ...inputValues, marca: e.target.value })
+                  setInputValues({ ...inputValues, MarcaId: e.target.value })
                 }
+                
               >
                 {marcas.map((marca) => (
                   <option key={marca.id} value={marca.id}>
@@ -291,7 +358,7 @@ function EditBienInventariable() {
 
               <select
                 onChange={(e) =>
-                  setInputValues({ ...inputValues, TipoAlta: e.target.value })
+                  setInputValues({ ...inputValues, tipoAlta: e.target.value })
                 }
               >
                 <option value={data.tipoAlta} disabled>
@@ -379,48 +446,61 @@ function EditBienInventariable() {
                   <h1>No hay imagenes disponibles</h1>
                 )}
               </div>
-
               <div className="images-area-container">
                 <div className="images-area">
                   {loadImage ? (
-                    <div className="image-preview">
-                      <span
-                        className="remove-image"
-                        onClick={() =>
-                          Swal.fire({
-                            title: "¿Estas Seguro de eliminar esta imagen?",
-                            text: "Esta accion no se puede revertir",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Si, Eliminar",
-                            cancelButtonText: "No, Cancelar",
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              setLoadImage(null);
+                    <>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div className="image-preview">
+                          <span
+                            className="remove-image"
+                            onClick={() =>
+                              Swal.fire({
+                                title: "¿Estas Seguro de eliminar esta imagen?",
+                                text: "Esta accion no se puede revertir",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Si, Eliminar",
+                                cancelButtonText: "No, Cancelar",
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  setLoadImage(null);
+                                }
+                              })
                             }
-                          })
-                        }
-                      >
-                        &#10005;
-                      </span>
-                      <img src={loadImage} alt={`Previsualización de imagen`} />
-                    </div>
+                          >
+                            &#10005;
+                          </span>
+                          <img
+                            src={loadImage}
+                            alt={`Previsualización de imagen`}
+                          />
+                        </div>
+                        <button>Confirmar Imagen</button>
+                      </div>
+                    </>
                   ) : (
                     ""
                   )}
                 </div>
-                <button onClick={handleShowFileInput}>
-                  <FontAwesomeIcon icon={faUpload} /> Subir nueva Imagen
-                </button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  ref={fileInputRef}
-                  onChange={handleImageChange}
-                />
+                {loadImage ? (
+                  ""
+                ) : (
+                  <>
+                    <button onClick={handleShowFileInput}>
+                      <FontAwesomeIcon icon={faUpload} /> Subir nueva Imagen
+                    </button>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      ref={fileInputRef}
+                      onChange={handleImageChange}
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>

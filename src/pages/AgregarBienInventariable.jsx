@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
-  faUpload,
+
   faCheck,
   faBan,
 } from "@fortawesome/free-solid-svg-icons";
@@ -23,28 +23,9 @@ function AgregarBienInventariable() {
     Caracteristicas: "",
   });
 
-  const [selectedImages, setSelectedImages] = useState([]); // Estado para la imagen seleccionada
 
-  const fileInputRef = useRef(null); // Ref para el input de archivo oculto
-  const handleShowFileInput = () => {
-    fileInputRef.current.click();
-  };
 
-  const handleImageChange = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      const newImages = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setSelectedImages((prevImages) => [...prevImages, ...newImages]);
-    }
-  };
 
-  const handleRemoveImage = (index) => {
-    const newImages = [...selectedImages];
-    newImages.splice(index, 1);
-    setSelectedImages(newImages);
-  };
 
   useEffect(() => {
     fetch("https://192.168.10.100/api/v1/marcas", {
@@ -227,35 +208,7 @@ function AgregarBienInventariable() {
           >
             <FontAwesomeIcon icon={faBan} /> Cancelar
           </button>
-          <div className="images-area-container">
-            <div className="images-area">
-              {selectedImages.map((imageSrc, index) => (
-                <div key={index} className="image-preview">
-                  <span
-                    className="remove-image"
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    &#10005;
-                  </span>
-                  <img
-                    src={imageSrc}
-                    alt={`Previsualización de imagen ${index + 1}`}
-                  />
-                </div>
-              ))}
-            </div>
-            <button onClick={handleShowFileInput}>
-              <FontAwesomeIcon icon={faUpload} /> Subir nueva Imagen
-            </button>
-            <input
-              type="file"
-              accept="image/*" // Puedes ajustar los tipos de archivos que acepta
-              style={{ display: "none" }}
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              multiple
-            />
-          </div>
+
         </div>
       </div>
     </>

@@ -7,6 +7,28 @@ body {
   padding: 0;
 }
 
+@media print {
+  /* Ocultar elementos no deseados */
+  body * {
+    visibility: hidden;
+  }
+  
+  .table-to-print, .table-to-print * {
+    visibility: visible;
+  }
+  .table-to-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .option-button{
+    display: none;
+  }
+}
+
+
+
 select{
   margin: 10px;
   padding: 10px;
@@ -27,7 +49,7 @@ Link{
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #154b96;
+  background-color: #3f3f3f;
   position: fixed;
   top: 0;
   left: 0;
@@ -58,7 +80,7 @@ Link{
 }
 
 .sidebar li:hover {
-  background-color: #183a6d;
+  background-color: #181818;
   border-radius: 35px;
   transition: all  0.3s ease;
   border: 1px solid;

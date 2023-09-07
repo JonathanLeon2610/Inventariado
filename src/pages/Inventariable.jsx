@@ -6,7 +6,9 @@ import {
   faEdit,
   faArrowRight,
   faArrowLeft,
-  faFileImport
+  faFileImport,
+  faPrint
+  
 } from "@fortawesome/free-solid-svg-icons";
 
 function Inventariables() {
@@ -55,7 +57,7 @@ function Inventariables() {
 
   return (
     <>
-      <div>
+      <div className="no-print">
         <h2>Lista de Inventariables</h2>
         {allowAddButton() ? (
           <>
@@ -72,14 +74,18 @@ function Inventariables() {
               <FontAwesomeIcon icon={faFileImport} /> Importar Bien
             </button>
           </Link>
+          <button className="import" style={{marginLeft:"1rem", backgroundColor:"orange"}} onClick={()=> window.print()}> <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla</button>
           </div>
           </>
           
         ) : (
           ""
         )}
-        <table>
+        <table className="table-to-print">
           <thead>
+            <tr>
+              <th colSpan="6">Lista de inventariables</th>
+            </tr>
             <tr>
               <th># Inventario</th>
               <th>Descripcion</th>
@@ -87,7 +93,7 @@ function Inventariables() {
               <th>Modelo</th>
               <th># Serie</th>
               <th>Costo</th>
-              {allowAddButton() ? <th>Opciones</th> : ""}
+              {allowAddButton() ? <th className="option-button">Opciones</th> : ""}
             </tr>
           </thead>
           <tbody>
@@ -100,7 +106,7 @@ function Inventariables() {
                 <td>{item.numeroSerie}</td>
                 <td>${item.costo.toLocaleString("en")}</td>
                 {allowAddButton() ? (
-                  <td>
+                  <td className="option-button">
                     <Link to={`/edit-bien-inventariable/${item.id}`}>
                       <button className="free">
                         <FontAwesomeIcon icon={faEdit} /> Editar
@@ -114,6 +120,7 @@ function Inventariables() {
             ))}
           </tbody>
         </table>
+
         <div className="pagination">
           {currentPage > 1 && (
             <button
