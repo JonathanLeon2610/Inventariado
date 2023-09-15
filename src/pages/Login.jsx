@@ -35,7 +35,7 @@ function Login() {
       "Password": formData.Password
     });
   
-    fetch("https://192.168.10.100/api/cuentas/login", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/cuentas/login", {
       method: "POST",
       headers: myHeaders,
       body: raw

@@ -13,26 +13,17 @@ import NoInventariables from "../pages/NoInventariables";
 import AsignacionResguardos from "../pages/AsignacionResguardos";
 import Proveedores from "../pages/Proveedores";
 import EditProveedor from "../pages/EditProveedor";
-import Login from "../pages/Login";
 import Swal from "sweetalert2";
 import EditBienInventariable from "./EditBienInventarible";
+import SubirFactura from "./SubirFactura";
+import VerFacturas from "./VerFacturas";
+import AdjuntarPDF from "./AdjuntarPDF";
+
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState("inventariable"); // Página inicial
 
-  // Add a state to track if the token exists in local storage
-  const [setTokenExists] = useState(true);
-
-  // Check for the existence of the "token" item in local storage
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setTokenExists(false);
-      // Redirect to the login page if the token doesn't exist
-      window.location.href = "/login";
-    }
-  }, []);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -81,7 +72,7 @@ function Main() {
         redirect: "follow",
       };
 
-      fetch("https://192.168.10.100/api/cuentas/RenovarToken", requestOptions)
+      fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/cuentas/RenovarToken", requestOptions)
         .then((response) => response.text())
         .then((result) => {
           localStorage.setItem("token", result.token);
@@ -95,6 +86,12 @@ function Main() {
     switch (currentPage) {
       case "inventariable":
         return <Inventariables />;
+      case "subirFactura":
+        return <SubirFactura />;
+      case "adjuntarPDF":
+        return <AdjuntarPDF/>;
+      case "verFacturas":
+        return <VerFacturas />;
       case "noInventariable":
         return <NoInventariables />;
       case "asignacionResguardos":
@@ -106,39 +103,47 @@ function Main() {
       case "editBienInventariable":
         return <EditBienInventariable />;
       default:
-        return <Login />; // Página inicial por defecto
+        return <Inventariables />; // Página inicial por defecto
     }
   };
 
   return (
     <div>
-      <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
-        <img onClick={toggleSidebar} src="https://192.168.10.100/images/logotipo.png" alt="No carga" />
-        <ul style={{ color: "white", cursor: "pointer" }}>
-          <li onClick={() => setCurrentPage("inventariable")}>
-            <FontAwesomeIcon icon={faShop} /> Inventariable
-          </li>
-          <li onClick={() => setCurrentPage("noInventariable")}>
-            <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
-          </li>
-          <li onClick={() => setCurrentPage("asignacionResguardos")}>
-            <FontAwesomeIcon icon={faBookBookmark} /> Asignacion de Resguardos
-          </li>
-          <li onClick={() => setCurrentPage("proveedores")}>
-            <FontAwesomeIcon icon={faTruckField} /> Proveedores
-          </li>
-          <li onClick={() => setCurrentPage("historialFacturas")}>
-              <FontAwesomeIcon icon={faMoneyBill} /> Historial de Facturas
-          </li>
-          <li onClick={showAlert}>
-            <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
-          </li>
+  <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
+    <img onClick={toggleSidebar} src= {import.meta.env.VITE_REACT_APP_API_URL+ "images/logotipo.png"} alt="No carga" />
+    <ul style={{ color: "white", cursor: "pointer" }}>
+      <li onClick={() => setCurrentPage("inventariable")}>
+        <FontAwesomeIcon icon={faShop} /> Inventariable
+      </li>   
+      <li onClick={() => setCurrentPage("noInventariable")}>
+        <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
+      </li>
+      <li className="dropdown">
+        <span className="dropdown-toggle">
+          <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
+        </span>
+        <ul className="dropdown-menu">
+          <li onClick={() => setCurrentPage("subirFactura")}>Registrar (XML)</li>
+          <li onClick={() => setCurrentPage("adjuntarPDF")}>Adjuntar (PDF)</li>
+          <li onClick={() => setCurrentPage("verFacturas")}>Visualizar</li>
         </ul>
-      </div>
-      <div className={`content ${sidebarCollapsed ? "content-shifted" : ""}`}>
-        {renderPage()}
-      </div>
-    </div>
+      </li>
+      <li onClick={() => setCurrentPage("asignacionResguardos")}>
+        <FontAwesomeIcon icon={faBookBookmark} /> Asignación de Resguardos
+      </li>
+      <li onClick={() => setCurrentPage("proveedores")}>
+        <FontAwesomeIcon icon={faTruckField} /> Proveedores
+      </li>
+      <li onClick={showAlert}>
+        <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
+      </li>
+    </ul>
+  </div>
+  <div className={`content ${sidebarCollapsed ? "content-shifted" : ""}`}>
+    {renderPage()}
+  </div>
+</div>
+
   );
 }
 

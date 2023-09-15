@@ -10,6 +10,7 @@ import ImportarBienInventariable from './pages/ImportarBienInventariable';
 
 
 
+
 function App() {
   return (
     <Router>
@@ -23,8 +24,8 @@ function App() {
         <Route path="/main" element={<Main/>}/>
         <Route path="/login" element={<Login/>}/>
       </Routes>
-
     </Router>
+    
   );
 }
 

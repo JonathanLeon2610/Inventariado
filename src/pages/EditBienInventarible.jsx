@@ -60,12 +60,13 @@ function EditBienInventariable() {
         body: formdata,
         redirect: 'follow'
       };
+
       
-      fetch("https://192.168.10.100/api/v1/ActivoBien/doctos/add", requestOptions)
+      fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/ActivoBien/doctos/add", requestOptions)
         .then(response => response.text())
         .then(result => {
           console.log(result);
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(error => console.log('error', error));
   
@@ -82,9 +83,6 @@ function EditBienInventariable() {
 
   const handleRemoveImage = (index, id) => {
     const newImages = [...selectedImages];
-    console.log(
-      `https://192.168.10.100/api/v1/ActivoBien/${ultimoValor}/doctos/del/${id}`
-    );
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
@@ -103,7 +101,7 @@ function EditBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/ActivoBien/${ultimoValor}/doctos/del/${id}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/ActivoBien/${ultimoValor}/doctos/del/${id}`,
       requestOptions
     )
       .then((response) => response.text())
@@ -133,7 +131,7 @@ function EditBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -180,13 +178,13 @@ function EditBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/ActivoBien/${ultimoValor}/doctos`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/ActivoBien/${ultimoValor}/doctos`,
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
         const imageUrls = result.map(
-          (item) => "https://192.168.10.100/" + item.fileUrl
+          (item) => import.meta.env.VITE_REACT_APP_API_URL+ item.fileUrl
         );
         setSelectedImages(imageUrls);
         setImagesId(result.map((item) => item.id));
@@ -197,7 +195,7 @@ function EditBienInventariable() {
   }, []);
 
   useEffect(() => {
-    fetch("https://192.168.10.100/api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
@@ -246,7 +244,7 @@ function EditBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -438,6 +436,7 @@ function EditBienInventariable() {
                               alt={`Previsualización de imagen ${index + 1}`}
                             />
                           </div>
+                          {console.log(imageSrc)}
                         </>
                       ))}
                     </div>

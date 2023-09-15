@@ -198,7 +198,7 @@ td button.set:hover {
 .formulario-container input {
   margin: 10px;
   padding: 10px;
-  width: 22rem;
+  width: 200px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -372,4 +372,101 @@ td button.set:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+
+.custom-file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+/* Estilo del texto del botón */
+.custom-file-input .btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Estilo del texto del archivo seleccionado */
+.custom-file-input .file-selected {
+  margin-left: 10px;
+}
+
+
+.formulario-container-factura{
+  display: grid;
+  grid-template-columns: 300px 400px;
+  padding-top: 2rem;
+  background-color: #f0f0f0; /* Color de fondo */
+}
+
+.formulario-container-factura label{
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.formulario-container-factura input {
+  margin: 10px;
+  padding: 10px;
+  
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Estilo para el botón */
+.formulario-container-factura button {
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #007bff; /* Color de fondo del botón */
+  color: #fff; /* Color del texto del botón */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Estilo para el botón cuando se coloca el mouse sobre él */
+.formulario-container-factura button:hover {
+  background-color: #0056b3; /* Cambia el color de fondo al pasar el mouse */
+}
+
+
+
+.file-select {
+  position: relative;
+  margin: 1rem;
+}
+
+.file-select::before {
+  background-color: #0056b3;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  content: 'Seleccionar'; /* testo por defecto */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.file-select input[type="file"] {
+  opacity: 0;
+  width: 200px;
+  height: 32px;
+  display: inline-block;
+}
+
+#src-file1::before {
+  content: 'Adjuntar PDF';
 }

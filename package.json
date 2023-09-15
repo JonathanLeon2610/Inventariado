@@ -14,12 +14,17 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "bootstrap": "^5.3.1",
+    "dotenv": "^16.3.1",
     "jwt-decode": "^3.1.2",
+    "pdfjs-dist": "^3.10.111",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
+    "react-pdf": "^7.3.3",
     "react-router-dom": "^6.15.0",
-    "sweetalert2": "^11.7.27"
+    "sweetalert2": "^11.7.27",
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

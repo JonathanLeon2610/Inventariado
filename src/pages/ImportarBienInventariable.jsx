@@ -64,7 +64,7 @@ function ImportarBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -93,7 +93,7 @@ function ImportarBienInventariable() {
   }, []);
 
   useEffect(() => {
-    fetch("https://192.168.10.100/api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
@@ -123,7 +123,7 @@ function ImportarBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/activobien/${ultimoValor}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
       requestOptions
     )
       .then((response) => response.json())

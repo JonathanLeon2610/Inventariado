@@ -11,15 +11,18 @@ import {
   
 } from "@fortawesome/free-solid-svg-icons";
 
+
+
 function Inventariables() {
   const [data, setdata] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 25;
   const [marcas, setMarcas] = useState([]);
 
   useEffect(() => {
     fetch(
-      `https://192.168.10.100/api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+        import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       {
         method: "GET",
       }
@@ -45,7 +48,7 @@ function Inventariables() {
   }
 
   useEffect(() => {
-    fetch("https://192.168.10.100/api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
@@ -57,6 +60,7 @@ function Inventariables() {
 
   return (
     <>
+
       <div className="no-print">
         <h2>Lista de Inventariables</h2>
         {allowAddButton() ? (
@@ -142,6 +146,7 @@ function Inventariables() {
           )}
         </div>
       </div>
+      
     </>
   );
 }

@@ -28,7 +28,7 @@ function AgregarBienInventariable() {
 
 
   useEffect(() => {
-    fetch("https://192.168.10.100/api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
@@ -56,7 +56,7 @@ function AgregarBienInventariable() {
 
     console.log(inputValues);
 
-    fetch(`https://192.168.10.100/api/v1/activobien`, requestOptions)
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         // Realiza cualquier acción adicional necesaria después de la actualización
