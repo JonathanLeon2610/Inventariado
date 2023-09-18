@@ -128,7 +128,6 @@ function AgregarBienInventariable() {
           >
             {data.map((marca) => (
               <>
-                b
                 <option
                   value={marca.id.toString()}
                   onClick={() =>

@@ -25,6 +25,10 @@ body {
   .option-button{
     display: none;
   }
+
+  .no-print {
+    display: none;
+  }
 }
 
 
@@ -469,4 +473,18 @@ td button.set:hover {
 
 #src-file1::before {
   content: 'Adjuntar PDF';
+}
+
+
+.filter-form {
+  display: flex;
+  gap: 12px;
+  height: 2rem;
+  margin-bottom: 1rem;
+}
+
+
+.filter-form input{
+  border-radius: 5px;
+  border: solid 1px;
 }

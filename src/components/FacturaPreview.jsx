@@ -63,6 +63,9 @@ function FacturaPreview() {
           receptor_RFC: xmlDoc
             .getElementsByTagName("cfdi:Receptor")[0]
             .getAttribute("Rfc"),
+            comprobante_Serie: xmlDoc
+            .getElementsByTagName("cfdi:Comprobante")[0]
+            .getAttribute("Serie"),
         };
       });
       setInputValuesList(parsedDataList);
@@ -105,6 +108,14 @@ function FacturaPreview() {
           var formdata = new FormData();
           formdata.append("Archivo", rawXmlFiles[index], rawXmlFiles[index].name); // Agregamos el archivo al FormData
           formdata.append("UUID", registro.uuid);
+          formdata.append("Emisor RFC", registro.emisor_RFC)
+          formdata.append("Emisor Nombre", registro.emisor_Nombre )
+          formdata.append("Receptor RFC", registro.receptor_RFC)
+          formdata.append("Comprobante Serie",registro.comprobante_Serie)
+          formdata.append("Comprobante Folio",registro.comprobante_Folio)
+          formdata.append("Comprobante Version",registro.comprobante_Version)
+          formdata.append("Comprobante Fecha",registro.comprobante_Fecha)
+          formdata.append("Comprobante Total",registro.comprobante_Total)
 
           console.log("archivo",rawXmlFiles[index], rawXmlFiles[index].name);
           console.log("UUID", registro.uuid);
@@ -125,7 +136,7 @@ function FacturaPreview() {
               "La factura se ha registrado correctamente",
               "success"
             ).then(() => {
-              window.location.href = "/main";
+              //window.location.href = "/main";
             });
           })
           .catch(error => console.log('error', error));

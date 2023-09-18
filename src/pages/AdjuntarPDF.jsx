@@ -1,25 +1,14 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import Swal from "sweetalert2";
 
 function AdjuntarPDF() {
   const [validFiles, setValidFiles] = useState([]);
   const fileInputRef = useRef(null);
-
-  function isUUID(fileName) {
-    // Una implementación simple para verificar si el nombre del archivo es un UUID
-    // Puedes ajustar esto según tus necesidades
-    const uuidPattern =
-      /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/;
-    return uuidPattern.test(fileName);
-  }
+  const [files, setFiles] = useState([]);
 
   const handleFileUpload = (e) => {
-    const files = e.target.files;
-    if (files) {
-      const newValidFiles = Array.from(files).filter((file) =>
-        isUUID(file.name)
-      );
-      setValidFiles((prevValidFiles) => [...prevValidFiles, ...newValidFiles]);
-    }
+    const filesUploaded = e.target.files;
+    setFiles([...files, ...filesUploaded]);
   };
 
   const handleUploadButtonClick = () => {
@@ -30,7 +19,6 @@ function AdjuntarPDF() {
   const handleUploadFiles = () => {
     // Realiza la carga de archivos aquí
     validFiles.forEach((file) => {
-        console.log(file);
       var myHeaders = new Headers();
       myHeaders.append(
         "Authorization",
@@ -39,7 +27,7 @@ function AdjuntarPDF() {
 
       var formdata = new FormData();
       formdata.append("archivo", file, file.name);
-      formdata.append("UUID",  file.name);
+      formdata.append("UUID", file.name);
 
       var requestOptions = {
         method: "POST",
@@ -54,11 +42,83 @@ function AdjuntarPDF() {
       )
         .then((response) => response.text())
         .then((result) => {
-            console.log(result)
+
         })
         .catch((error) => console.log("error", error));
     });
   };
+
+  function findCommonFileNames(validFiles, files) {
+    validFiles.map((validFile, index) => {
+      var validFileName = validFile.fileNameXml.split(".")[0];
+      console.log(validFileName);
+      var uuid = validFile.uuid
+      files.forEach((file) => {
+        if (file.name.split(".")[0] === validFileName) {
+
+          var myHeaders = new Headers();
+          myHeaders.append(
+            "Authorization",
+            "Bearer " + localStorage.getItem("token")
+          );
+
+          var formdata = new FormData();
+          formdata.append("archivo", file, file.name);
+          formdata.append("UUID", uuid);
+
+          var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow",
+          };
+
+          fetch(
+            "https://192.168.10.100/api/v1/cfdis/recibidos/addfile",
+            requestOptions
+          )
+            .then((response) => response.text())
+            .then((result) => {
+              console.log(result);
+              Swal.fire(
+                "Registro exitoso!",
+                "El archivo se ha registrado correctamente",
+                "success"
+              ).then(() => {
+                window.location.href = "/main";
+              });
+            })
+            .catch((error) => console.log("error", error));
+        }
+      });
+    });
+  }
+
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      "https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=false",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setValidFiles(result);
+        findCommonFileNames(result, files);
+      })
+      .catch((error) => console.log("error", error));
+  }, [files]);
 
   return (
     <>
@@ -72,26 +132,25 @@ function AdjuntarPDF() {
           style={{ display: "none" }}
           ref={fileInputRef}
         />
+
         <button
           onClick={handleUploadButtonClick}
           style={{ marginInline: "1rem" }}
         >
           Seleccionar archivos
         </button>
-        <button onClick={handleUploadFiles} disabled={validFiles.length === 0}>
-          Cargar archivos
-        </button>
+        <button onClick={handleUploadFiles}>Cargar archivos</button>
         <hr />
       </div>
       <div>
-        <h3>Archivos Válidos</h3>
+        <h3>Archivos seleccionados</h3>
         <ul>
-          {validFiles.map((file, index) => (
+          {files.map((file, index) => (
             <li key={index}>
               <a
-                href={URL.createObjectURL(file)}
-                target="_blank"
-                rel="noopener noreferrer"
+              // href={URL.createObjectURL(file)}
+              // target="_blank"
+              // rel="noopener noreferrer"
               >
                 {file.name}
               </a>

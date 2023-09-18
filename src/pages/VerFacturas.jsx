@@ -15,20 +15,34 @@ function VerFacturas() {
   const [file, setFile] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 25;
+  const recordsPerPage = 20;
 
-  const handleFileChange = (event, rowIndex,type) => {
+  const [filterCriteria, setFilterCriteria] = useState({
+    uuid: "",
+    emisorRFC: "",
+    fecha: "",
+    emisorNombre: "",
+    folio: "",
+  });
+  const [filteredData, setFilteredData] = useState([]);
+  
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilterCriteria({
+      ...filterCriteria,
+      [name]: value,
+    });
+  };
+
+  const handleFileChange = (event, rowIndex, type) => {
     const selectedFiles = event.target.files;
-    // Realiza acciones con los archivos seleccionados
     setFile(selectedFiles);
 
-    // Actualiza el estado para indicar que se ha cargado un archivo en la fila específica
-    if (type === 2){
+    if (type === 2) {
       const updatedData = [...data];
       updatedData[rowIndex].hasPDFFile = true;
       setdata(updatedData);
-    }
-    else{
+    } else {
       const updatedData = [...data];
       updatedData[rowIndex].hasXMLFile = true;
       setdata(updatedData);
@@ -36,7 +50,12 @@ function VerFacturas() {
   };
 
   const handleDelete = (uuid, type) => {
-    console.log("https://192.168.10.100/api/v1/cfdis/recibidos/delFile/"+type+"/"+uuid);
+    console.log(
+      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/" +
+        type +
+        "/" +
+        uuid
+    );
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
@@ -53,12 +72,15 @@ function VerFacturas() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/"+type+"/"+uuid,
+      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/" +
+        type +
+        "/" +
+        uuid,
       requestOptions
     )
       .then((response) => response.text())
       .then((result) => {
-        console.log(result)
+        console.log(result);
       })
       .catch((error) => console.log("error", error));
   };
@@ -115,11 +137,42 @@ function VerFacturas() {
     fetch("https://192.168.10.100/api/v1/Cfdis/filtrar", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        setdata(result);
+        const filteredResult = result.filter((item) => {
+          const {
+            uuid,
+            emisor_RFC,
+            comprobante_Fecha,
+            emisor_Nombre,
+            comprobante_Folio,
+          } = item;
+          const {
+            uuid: filterUUID,
+            emisorRFC: filterRFC,
+            fecha: filterFecha,
+            emisorNombre: filterNombre,
+            folio: filterFolio,
+          } = filterCriteria;
+
+          return (
+            uuid.includes(filterUUID) &&
+            emisor_RFC.includes(filterRFC) &&
+            comprobante_Fecha.includes(filterFecha) &&
+            emisor_Nombre.includes(filterNombre) &&
+            comprobante_Folio.includes(filterFolio)
+          );
+        });
+
+        setFilteredData(filteredResult);
       })
       .catch((error) => console.log("error", error));
-  }, []);
+  }, [filterCriteria]);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredData.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  )
 
   return (
     <>
@@ -133,155 +186,206 @@ function VerFacturas() {
           {" "}
           <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
         </button>
-        <table className="table-to-print">
-          <thead>
-            <tr>
-              <th colSpan="6">Lista de facturas</th>
-            </tr>
-            <tr>
-              <th>UUI</th>
-              <th>Nombre del emisor</th>
-              <th>RFC del emisor</th>
-              <th>Folio</th>
-              <th>Total</th>
-              <th>Fecha</th>
-              <th>Archivo XML</th>
-              <th>Arhivo PDF</th>
-              {/* {allowAddButton() ? <th className="option-button">Opciones</th> : ""} */}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={item.id}>
-                <td>{item.uuid}</td>
-                <td>{item.emisor_Nombre}</td>
-                <td>{item.emisor_RFC}</td>
-                <td>{item.comprobante_Folio}</td>
-                <td>${item.comprobante_Total.toLocaleString("en")}</td>
-                <td>{item.comprobante_Fecha}</td>
-                <td>
-                  {item.isXML === true ? (
-                    <>
-                      <a href={item.fileUrlXml} target="blank" download={item.fileNameXml}>
-                        <button className="free">
-                          <FontAwesomeIcon icon={faDownload} /> Descargar
-                        </button>
-                      </a>
-                      <button style={{ backgroundColor: "red" }} 
-                      onClick={() => {Swal.fire({
-                        title: "¡Estas Seguro?",
-                        text: "Se borrarà solo el archivo, no el registro",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Si, borrar archivo",
-                        cancelButtonText: "No, Cancelar",
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          handleDelete(item.uuid, 1);
-                          window.location.href = "/main";
-                        }
-                      });}}
-                      >
-                        <FontAwesomeIcon icon={faBan} /> Eliminar
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        type="file"
-                        accept=".xml"
-                        onChange={(event) => handleFileChange(event, index,1)}
-                      />
-                      {item.hasXMLFile === true ? (
-                        <button
-                          className="add"
-                          onClick={() => handleUpload(item.uuid, file)}
-                        >
-                          <FontAwesomeIcon icon={faUpload} /> Subir archivo
-                        </button>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  )}{" "}
-                </td>
-                <td>
-                  {item.isPDF === true ? (
-                    <>
-                    {console.log(item)}
-                      <a href={item.fileUrlPdf} target="blank" download={item.fileUrlPdf}>
-                        <button className="free">
-                          <FontAwesomeIcon icon={faDownload} /> Descargar
-                        </button>
-                      </a>
-                      <button style={{ backgroundColor: "red" }} 
-                      onClick={() => {Swal.fire({
-                        title: "¡Estas Seguro?",
-                        text: "Se borrarà solo el archivo, no el registro",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Si, borrar archivo",
-                        cancelButtonText: "No, Cancelar",
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          handleDelete(item.uuid, 2);
-                          window.location.href = "/main";
-                        }
-                      });
-                    }}
-                      >
-                        <FontAwesomeIcon icon={faBan} /> Eliminar
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        onChange={(event) => handleFileChange(event, index, 2)}
-                      />
-                      {item.hasPDFFile === true ? (
-                        <button
-                          className="add"
-                          onClick={() => handleUpload(item.uuid, file)}
-                        >
-                          <FontAwesomeIcon icon={faUpload} /> Subir archivo
-                        </button>
-                      ) : (
-                        ""
-                      )}
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <form className="filter-form no-print">
+          <label>UUID:</label>
+          <input
+            type="text"
+            name="uuid"
+            value={filterCriteria.uuid}
+            onChange={handleFilterChange}
+          />
 
-        <div className="pagination">
-          {currentPage > 1 && (
-            <button
-              onClick={() => {
-                setCurrentPage(currentPage - 1);
-              }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Anterior
-            </button>
-          )}
-          {data.length === recordsPerPage && (
-            <button
-              onClick={() => {
-                setCurrentPage(currentPage + 1);
-              }}
-            >
-              Siguiente <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
-            </button>
-          )}
-        </div>
+          <label>RFC del Emisor:</label>
+          <input
+            type="text"
+            name="emisorRFC"
+            value={filterCriteria.emisorRFC}
+            onChange={handleFilterChange}
+          />
+
+          <label>Fecha:</label>
+          <input
+            type="text"
+            name="fecha"
+            value={filterCriteria.fecha}
+            onChange={handleFilterChange}
+          />
+
+          <label>Nombre del Emisor:</label>
+          <input
+            type="text"
+            name="emisorNombre"
+            value={filterCriteria.emisorNombre}
+            onChange={handleFilterChange}
+          />
+
+          <label>Folio:</label>
+          <input
+            type="text"
+            name="folio"
+            value={filterCriteria.folio}
+            onChange={handleFilterChange}
+          />
+        </form>
+      </div>
+      <table className="table-to-print">
+        <thead>
+          <tr>
+            <th colSpan="6">Lista de facturas</th>
+          </tr>
+          <tr>
+            <th>UUID</th>
+            <th>Nombre del emisor</th>
+            <th>RFC del emisor</th>
+            <th>Folio</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th className="no-print">Archivo XML</th>
+            <th className="no-print">Archivo PDF</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentRecords.map((item, index) => (
+            <tr key={item.id}>
+              <td>{item.uuid}</td>
+              <td>{item.emisor_Nombre}</td>
+              <td>{item.emisor_RFC}</td>
+              <td>{item.comprobante_Folio}</td>
+              <td>${item.comprobante_Total.toLocaleString("en")}</td>
+              <td>{item.comprobante_Fecha}</td>
+              <td className="no-print">
+                {item.isXML === true ? (
+                  <>
+                    <a
+                      href={item.fileUrlXml}
+                      target="blank"
+                      download={item.fileNameXml}
+                    >
+                      <button className="free">
+                        <FontAwesomeIcon icon={faDownload} /> Descargar
+                      </button>
+                    </a>
+                    <button
+                      style={{ backgroundColor: "red" }}
+                      onClick={() => {
+                        Swal.fire({
+                          title: "¡Estas Seguro?",
+                          text: "Se borrarà solo el archivo, no el registro",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#3085d6",
+                          cancelButtonColor: "#d33",
+                          confirmButtonText: "Si, borrar archivo",
+                          cancelButtonText: "No, Cancelar",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            handleDelete(item.uuid, 1);
+                            window.location.href = "/main";
+                          }
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faBan} /> Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="file"
+                      accept=".xml"
+                      onChange={(event) => handleFileChange(event, index, 1)}
+                    />
+                    {item.hasXMLFile === true ? (
+                      <button
+                        className="add"
+                        onClick={() => handleUpload(item.uuid, file)}
+                      >
+                        <FontAwesomeIcon icon={faUpload} /> Subir archivo
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                )}
+              </td>
+              <td className="no-print">
+                {item.isPDF === true ? (
+                  <>
+                    {console.log(item)}
+                    <a
+                      href={item.fileUrlPdf}
+                      target="blank"
+                      download={item.fileUrlPdf}
+                    >
+                      <button className="free">
+                        <FontAwesomeIcon icon={faDownload} /> Descargar
+                      </button>
+                    </a>
+                    <button
+                      style={{ backgroundColor: "red" }}
+                      onClick={() => {
+                        Swal.fire({
+                          title: "¡Estas Seguro?",
+                          text: "Se borrarà solo el archivo, no el registro",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#3085d6",
+                          cancelButtonColor: "#d33",
+                          confirmButtonText: "Si, borrar archivo",
+                          cancelButtonText: "No, Cancelar",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            handleDelete(item.uuid, 2);
+                            window.location.href = "/main";
+                          }
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faBan} /> Eliminar
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={(event) => handleFileChange(event, index, 2)}
+                    />
+                    {item.hasPDFFile === true ? (
+                      <button
+                        className="add"
+                        onClick={() => handleUpload(item.uuid, file)}
+                      >
+                        <FontAwesomeIcon icon={faUpload} /> Subir archivo
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="pagination">
+        {currentPage > 1 && (
+          <button
+            onClick={() => {
+              setCurrentPage(currentPage - 1);
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Anterior
+          </button>
+        )}
+        <button
+          onClick={() => {
+            setCurrentPage(currentPage + 1);
+          }}
+        >
+          Siguiente <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+        </button>
       </div>
     </>
   );

@@ -184,7 +184,7 @@ function EditBienInventariable() {
       .then((response) => response.json())
       .then((result) => {
         const imageUrls = result.map(
-          (item) => import.meta.env.VITE_REACT_APP_API_URL+ item.fileUrl
+          (item) => item.fileUrl
         );
         setSelectedImages(imageUrls);
         setImagesId(result.map((item) => item.id));
@@ -221,7 +221,7 @@ function EditBienInventariable() {
 
 
     var raw = JSON.stringify({
-      "id": "1",
+      "id": inputValues.id,
       "activoDescripcion": inputValues.activoDescripcion,
       "activoTipo": inputValues.activoTipo,
       "numeroInventario": inputValues.numeroInventario,
@@ -242,6 +242,7 @@ function EditBienInventariable() {
       body: raw, // Convierte el estado inputValues a JSON
       redirect: "follow",
     };
+    console.log(inputValues);
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
@@ -436,7 +437,6 @@ function EditBienInventariable() {
                               alt={`Previsualización de imagen ${index + 1}`}
                             />
                           </div>
-                          {console.log(imageSrc)}
                         </>
                       ))}
                     </div>
