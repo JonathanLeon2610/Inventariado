@@ -15,7 +15,7 @@ function VerFacturas() {
   const [file, setFile] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 20;
+  const recordsPerPage = 30;
 
   const [filterCriteria, setFilterCriteria] = useState({
     uuid: "",
@@ -25,13 +25,14 @@ function VerFacturas() {
     folio: "",
   });
   const [filteredData, setFilteredData] = useState([]);
-  
+
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
     setFilterCriteria({
       ...filterCriteria,
       [name]: value,
     });
+    setCurrentPage(1)
   };
 
   const handleFileChange = (event, rowIndex, type) => {
@@ -49,9 +50,13 @@ function VerFacturas() {
     }
   };
 
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+
+  const isLastPage = currentPage === totalPages;
+
   const handleDelete = (uuid, type) => {
     console.log(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/" +
+      import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/delFile/" +
         type +
         "/" +
         uuid
@@ -72,7 +77,7 @@ function VerFacturas() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/" +
+        import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/delFile/" +
         type +
         "/" +
         uuid,
@@ -104,7 +109,7 @@ function VerFacturas() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/addfile",
+      import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/addfile",
       requestOptions
     )
       .then((response) => response.text())
@@ -134,7 +139,10 @@ function VerFacturas() {
       redirect: "follow",
     };
 
-    fetch("https://192.168.10.100/api/v1/Cfdis/filtrar", requestOptions)
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL+"api/v1/Cfdis/filtrar?CantidadRegistros=100000",
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         const filteredResult = result.filter((item) => {
@@ -172,7 +180,7 @@ function VerFacturas() {
   const currentRecords = filteredData.slice(
     indexOfFirstRecord,
     indexOfLastRecord
-  )
+  );
 
   return (
     <>
@@ -195,27 +203,19 @@ function VerFacturas() {
             onChange={handleFilterChange}
           />
 
-          <label>RFC del Emisor:</label>
-          <input
-            type="text"
-            name="emisorRFC"
-            value={filterCriteria.emisorRFC}
-            onChange={handleFilterChange}
-          />
-
-          <label>Fecha:</label>
-          <input
-            type="text"
-            name="fecha"
-            value={filterCriteria.fecha}
-            onChange={handleFilterChange}
-          />
-
           <label>Nombre del Emisor:</label>
           <input
             type="text"
             name="emisorNombre"
             value={filterCriteria.emisorNombre}
+            onChange={handleFilterChange}
+          />
+
+          <label>RFC del Emisor:</label>
+          <input
+            type="text"
+            name="emisorRFC"
+            value={filterCriteria.emisorRFC}
             onChange={handleFilterChange}
           />
 
@@ -226,14 +226,23 @@ function VerFacturas() {
             value={filterCriteria.folio}
             onChange={handleFilterChange}
           />
+
+          <label>Fecha:</label>
+          <input
+            type="text"
+            name="fecha"
+            value={filterCriteria.fecha}
+            onChange={handleFilterChange}
+          />
         </form>
       </div>
       <table className="table-to-print">
         <thead>
           <tr>
-            <th colSpan="6">Lista de facturas</th>
+            <th colSpan="12">Lista de facturas -- Pagina # {currentPage}</th>
           </tr>
           <tr>
+            <th>#</th>
             <th>UUID</th>
             <th>Nombre del emisor</th>
             <th>RFC del emisor</th>
@@ -247,6 +256,7 @@ function VerFacturas() {
         <tbody>
           {currentRecords.map((item, index) => (
             <tr key={item.id}>
+              <td>{index + 1}</td>
               <td>{item.uuid}</td>
               <td>{item.emisor_Nombre}</td>
               <td>{item.emisor_RFC}</td>
@@ -379,13 +389,15 @@ function VerFacturas() {
             <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon> Anterior
           </button>
         )}
-        <button
-          onClick={() => {
-            setCurrentPage(currentPage + 1);
-          }}
-        >
-          Siguiente <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
-        </button>
+        {!isLastPage && (
+          <button
+            onClick={() => {
+              setCurrentPage(currentPage + 1);
+            }}
+          >
+            Siguiente <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+          </button>
+        )}
       </div>
     </>
   );

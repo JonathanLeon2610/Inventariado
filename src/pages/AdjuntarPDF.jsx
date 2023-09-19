@@ -16,38 +16,6 @@ function AdjuntarPDF() {
     fileInputRef.current.click();
   };
 
-  const handleUploadFiles = () => {
-    // Realiza la carga de archivos aquí
-    validFiles.forEach((file) => {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        "Bearer " + localStorage.getItem("token")
-      );
-
-      var formdata = new FormData();
-      formdata.append("archivo", file, file.name);
-      formdata.append("UUID", file.name);
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-        redirect: "follow",
-      };
-
-      fetch(
-        "https://192.168.10.100/api/v1/cfdis/recibidos/addfile",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => {
-
-        })
-        .catch((error) => console.log("error", error));
-    });
-  };
-
   function findCommonFileNames(validFiles, files) {
     validFiles.map((validFile, index) => {
       var validFileName = validFile.fileNameXml.split(".")[0];
@@ -74,7 +42,7 @@ function AdjuntarPDF() {
           };
 
           fetch(
-            "https://192.168.10.100/api/v1/cfdis/recibidos/addfile",
+            import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/addfile",
             requestOptions
           )
             .then((response) => response.text())
@@ -108,7 +76,7 @@ function AdjuntarPDF() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=false",
+      import.meta.env.VITE_REACT_APP_API_URL+"api/v1/Cfdis/filtrar?isPDF=false",
       requestOptions
     )
       .then((response) => response.json())
@@ -139,7 +107,7 @@ function AdjuntarPDF() {
         >
           Seleccionar archivos
         </button>
-        <button onClick={handleUploadFiles}>Cargar archivos</button>
+
         <hr />
       </div>
       <div>
