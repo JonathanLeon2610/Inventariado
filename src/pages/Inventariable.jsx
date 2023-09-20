@@ -88,9 +88,10 @@ function Inventariables() {
         <table className="table-to-print">
           <thead>
             <tr>
-              <th colSpan="6">Lista de inventariables</th>
+              <th colSpan="12">Lista de inventariables -- Pagina # {currentPage}</th>
             </tr>
             <tr>
+              <th>#</th>
               <th># Inventario</th>
               <th>Descripcion</th>
               <th>Marca</th>
@@ -101,8 +102,9 @@ function Inventariables() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {data.map((item,index) => (
               <tr key={item.id}>
+                <td>{index+1}</td>
                 <td>{item.numeroInventario}</td>
                 <td>{item.activoDescripcion}</td>
                 <td>{getMarcaNameById(item.marcaId)}</td>

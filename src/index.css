@@ -9,11 +9,15 @@ body {
 
 @media print {
   /* Ocultar elementos no deseados */
-  body * {
+  .sidebar{
     visibility: hidden;
   }
+
+  .reporte-body{
+    visibility: visible;
+  }
   
-  .table-to-print, .table-to-print * {
+  .table-to-print, .table-to-print  .reporte-body * {
     visibility: visible;
   }
   .table-to-print {
@@ -487,4 +491,12 @@ td button.set:hover {
 .filter-form input{
   border-radius: 5px;
   border: solid 1px;
+}
+
+
+
+.reporte-body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

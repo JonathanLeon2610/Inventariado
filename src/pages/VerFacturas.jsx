@@ -143,32 +143,39 @@ function VerFacturas() {
       import.meta.env.VITE_REACT_APP_API_URL+"api/v1/Cfdis/filtrar?CantidadRegistros=100000",
       requestOptions
     )
-      .then((response) => response.json())
-      .then((result) => {
-        const filteredResult = result.filter((item) => {
-          const {
-            uuid,
-            emisor_RFC,
-            comprobante_Fecha,
-            emisor_Nombre,
-            comprobante_Folio,
-          } = item;
-          const {
-            uuid: filterUUID,
-            emisorRFC: filterRFC,
-            fecha: filterFecha,
-            emisorNombre: filterNombre,
-            folio: filterFolio,
-          } = filterCriteria;
-
-          return (
-            uuid.includes(filterUUID) &&
-            emisor_RFC.includes(filterRFC) &&
-            comprobante_Fecha.includes(filterFecha) &&
-            emisor_Nombre.includes(filterNombre) &&
-            comprobante_Folio.includes(filterFolio)
-          );
-        });
+    .then((response) => response.json())
+    .then((result) => {
+      const filteredResult = result.filter((item) => {
+        const {
+          uuid,
+          emisor_RFC,
+          comprobante_Fecha,
+          emisor_Nombre,
+          comprobante_Folio,
+        } = item;
+        const {
+          uuid: filterUUID,
+          emisorRFC: filterRFC,
+          fecha: filterFecha,
+          emisorNombre: filterNombre,
+          folio: filterFolio,
+        } = filterCriteria;
+    
+        // Verificar y proporcionar valores predeterminados para todos los campos
+        const uuidToCompare = uuid ?? "";
+        const emisor_RFCToCompare = emisor_RFC ?? "";
+        const comprobante_FechaToCompare = comprobante_Fecha ?? "";
+        const emisor_NombreToCompare = emisor_Nombre ?? "";
+        const comprobante_FolioToCompare = comprobante_Folio ?? "-";
+    
+        return (
+          uuidToCompare.includes(filterUUID) &&
+          emisor_RFCToCompare.includes(filterRFC) &&
+          comprobante_FechaToCompare.includes(filterFecha) &&
+          emisor_NombreToCompare.includes(filterNombre) &&
+          comprobante_FolioToCompare.includes(filterFolio)
+        );
+      });
 
         setFilteredData(filteredResult);
       })
@@ -260,7 +267,7 @@ function VerFacturas() {
               <td>{item.uuid}</td>
               <td>{item.emisor_Nombre}</td>
               <td>{item.emisor_RFC}</td>
-              <td>{item.comprobante_Folio}</td>
+              <td>{item.comprobante_Folio !== null ?(item.comprobante_Folio):("")}</td>
               <td>${item.comprobante_Total.toLocaleString("en")}</td>
               <td>{item.comprobante_Fecha}</td>
               <td className="no-print">

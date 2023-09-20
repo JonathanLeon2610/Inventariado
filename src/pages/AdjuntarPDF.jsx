@@ -19,7 +19,6 @@ function AdjuntarPDF() {
   function findCommonFileNames(validFiles, files) {
     validFiles.map((validFile, index) => {
       var validFileName = validFile.fileNameXml.split(".")[0];
-      console.log(validFileName);
       var uuid = validFile.uuid
       files.forEach((file) => {
         if (file.name.split(".")[0] === validFileName) {
@@ -47,7 +46,6 @@ function AdjuntarPDF() {
           )
             .then((response) => response.text())
             .then((result) => {
-              console.log(result);
               Swal.fire(
                 "Registro exitoso!",
                 "El archivo se ha registrado correctamente",
@@ -81,7 +79,6 @@ function AdjuntarPDF() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setValidFiles(result);
         findCommonFileNames(result, files);
       })
