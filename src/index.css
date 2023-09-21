@@ -9,6 +9,9 @@ body {
 
 @media print {
   /* Ocultar elementos no deseados */
+  body{
+    visibility: visible;
+  }
   .sidebar{
     visibility: hidden;
   }
@@ -19,9 +22,12 @@ body {
   
   .table-to-print, .table-to-print  .reporte-body * {
     visibility: visible;
+    break-inside: avoid; /* Evitar que el contenido se divida en medio de las columnas */
+    page-break-inside: avoid; /* Evitar que el contenido se divida en medio de las páginas */
+
   }
   .table-to-print {
-    position: absolute;
+    position: relative;
     left: 0;
     top: 0;
   }
@@ -228,13 +234,25 @@ td button.set:hover {
 }
 
 .login-container {
-  width: 500px;
-  margin: 15rem auto;
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+  width: 800px;
+  margin: 1rem auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-image: url("./assets/fondo-login.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+}
+
+.login-container img{
+  width: 300px;
 }
 
 .login-container h2 {
@@ -256,7 +274,7 @@ td button.set:hover {
 
 .login-container input[type="text"],
 .login-container input[type="password"] {
-  width: 95%;
+  width: 30rem;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -485,6 +503,7 @@ td button.set:hover {
   gap: 12px;
   height: 2rem;
   margin-bottom: 1rem;
+  width: 100vh;
 }
 
 

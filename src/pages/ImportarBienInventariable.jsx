@@ -127,10 +127,7 @@ function ImportarBienInventariable() {
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => {
-        // Realiza cualquier acción adicional necesaria después de la actualización
-        console.log(result);
-        console.log(inputValues);
+      .then(() => {
       })
       .catch((error) => {
         console.log(error);
