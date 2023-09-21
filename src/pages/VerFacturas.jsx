@@ -57,7 +57,7 @@ function VerFacturas() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/delFile/" +
+      import.meta.env.VITE_REACT_APP_API_URL + "api/v1/cfdis/recibidos/delFile/" +
         type +
         "/" +
         uuid,
@@ -87,7 +87,7 @@ function VerFacturas() {
     };
 
     fetch(
-      "https://192.168.10.100/api/v1/cfdis/recibidos/addfile",
+      import.meta.env.VITE_REACT_APP_API_URL + "api/v1/cfdis/recibidos/addfile",
       requestOptions
     )
       .then((response) => response.text())
@@ -120,7 +120,7 @@ function VerFacturas() {
     );
   
     fetch(
-      `https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=false&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=false&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -144,11 +144,8 @@ function VerFacturas() {
       headers: myHeaders,
       redirect: "follow",
     };
-
-    console.log(`https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`);
-
     fetch(
-      `https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       requestOptions
     )
       .then((response) => response.json())

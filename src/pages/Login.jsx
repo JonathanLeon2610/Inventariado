@@ -72,7 +72,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>Dirección Administrativa</h1>
-      <img src="https://192.168.10.100/images/logotipo.png" alt="No carga" />
+      <img src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"} alt="No carga" />
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
