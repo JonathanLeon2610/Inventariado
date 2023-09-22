@@ -48,10 +48,10 @@ function AdjuntarPDF() {
             .then(() => {
               Swal.fire(
                 "Registro exitoso!",
-                "El archivo se ha registrado correctamente",
+                "El archivo PDF se ha registrado correctamente, puedes ver el regsitro en la ventana de 'Visualizar'",
                 "success"
               ).then(() => {
-                window.location.href = "/main";
+                window.location.href = "/main"
               });
             })
             .catch(() => console.log("error: CODIGO #2"));

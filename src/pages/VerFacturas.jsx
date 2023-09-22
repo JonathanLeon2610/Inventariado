@@ -226,7 +226,8 @@ function VerFacturas() {
               {/* {allowAddButton() ? <th className="option-button">Opciones</th> : ""} */}
             </tr>
           </thead>
-          {data.length > 0 && data?(<tbody>
+          {data.length > 0 && data?(
+          <tbody>
             {data.map((item, index) => (
               <tr key={item.id}>
                 <td>{index+1}</td>

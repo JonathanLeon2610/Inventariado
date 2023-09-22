@@ -7,6 +7,7 @@ import AgregarBienInventariable from './pages/AgregarBienInventariable';
 import TablaImportarBien from './pages/TablaImportarBien';
 import ImportarBienInventariable from './pages/ImportarBienInventariable';
 import Reporte from './components/Reporte';
+import VerFacturas from './pages/VerFacturas';
 
 
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/main" element={<Main/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/reporte" element={<Reporte/>}/>
+        <Route path="/verFacturas" element={<VerFacturas/>}/>
       </Routes>
     </Router>
     

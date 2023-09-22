@@ -117,13 +117,6 @@ function FacturaPreview() {
           formdata.append("Comprobante Fecha", registro.comprobante_Fecha ?? "");
           formdata.append("Comprobante Total", registro.comprobante_Total ?? "");
 
-
-
-          console.log(registro);
-
-          console.log("archivo",rawXmlFiles[index], rawXmlFiles[index].name);
-          console.log("UUID", registro.uuid);
-
           var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -137,9 +130,10 @@ function FacturaPreview() {
             console.log(result)
             Swal.fire(
               "Registro exitoso!",
-              "La factura se ha registrado correctamente",
+              "La factura se ha registrado correctamente, el siguiente paso es adjuntar el PDF, puedes hacerlo en la ventana de 'Adjuntar(PDF) o bien ver el regsitro en la ventana de 'Visualizar'",
               "success"
             ).then(() => {
+              setXmlDataList([])
               //window.location.href = "/main";
             });
           })
