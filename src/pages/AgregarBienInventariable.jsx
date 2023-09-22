@@ -34,9 +34,8 @@ function AgregarBienInventariable() {
       .then((response) => response.json())
       .then((data) => {
         setdata(data);
-        console.log(data);
       })
-      .catch((error) => console.log(error));
+      .catch(() => console.log("error: CODIGO: 1"));
   }, []);
 
   const handleEdit = () => {
@@ -54,11 +53,9 @@ function AgregarBienInventariable() {
       redirect: "follow",
     };
 
-    console.log(inputValues);
-
     fetch(import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien`, requestOptions)
       .then((response) => response.json())
-      .then((result) => {
+      .then(() => {
         // Realiza cualquier acción adicional necesaria después de la actualización
         Swal.fire(
           "Registro exitoso!",
@@ -67,16 +64,14 @@ function AgregarBienInventariable() {
         ).then(() => {
           window.location.href = "/main";
         });
-        console.log(result, "hola");
       })
       .catch(() => {
         Swal.fire({
           icon: "error",
           title: "Hubo un error al crear el registro",
           text: "Por favor intente nuevamente",
-        }).then(() => {
-          //window.location.href = "/main"
-        });
+        })
+        console.log("Error: CODIGO #2");
       });
   };
   return (

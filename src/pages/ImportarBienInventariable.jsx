@@ -77,11 +77,10 @@ function ImportarBienInventariable() {
           modelo: result.modelo,
         });
         setData(result);
-        console.log(result);
         setSelectedMarca(result.marca);
-        console.log(inputValues);
       })
       .catch(() => {
+        console.log('Error: CODIGO #2')
         Swal.fire({
           icon: "error",
           title: "Tu sesión ha expirado",
@@ -100,7 +99,7 @@ function ImportarBienInventariable() {
       .then((data) => {
         setMarcas(data);
       })
-      .catch((error) => console.log(error));
+      .catch(() => console.log('Error: CODIGO #3'));
   }, []);
 
   const handleEdit = () => {
@@ -129,9 +128,7 @@ function ImportarBienInventariable() {
       .then((response) => response.json())
       .then(() => {
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => console.log('Error: CODIGO #1'));
   };
 
   return (

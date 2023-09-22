@@ -1,0 +1,31 @@
+--POSIBLES ERRORES--
+
+
+AjuntarPDF.jsx
+1.-Error al cargar los registros con isPDF=false
+2.-Error al subir un archivo /addfile
+
+AgregarInventariables.jsx
+1.-Error al cargar las marcas
+2.- Error al actualizar el registro
+
+EditarInventariables.jsx
+1.-Error al cargar una nueva fotografia
+2.-Error al eliminar una fotografia
+3.-Error al actualizar el registro
+4.-Error al cargar las imagenes de un bien
+5.-Error al cargar las marcas
+6.-Error al aplicar los cambios realizados
+
+Inventariables.jsx
+1.-Error al cargar los registros
+2.-Error al cargar las marcas
+
+Login.jsx
+1.-Error al tratar de iniciar sesion
+
+VerFacturas.jsx
+1.-Error al eliminar una archivo
+2.-Error al subir un archivo
+3.-Error al cargar los registros
+4.-Error al cargar los registros usando los filtros

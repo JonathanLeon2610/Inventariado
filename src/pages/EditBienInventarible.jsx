@@ -45,7 +45,6 @@ function EditBienInventariable() {
     const file = e.target.files[0]; // Obtenemos el primer archivo
     if (file) {
       setFileName(file.name);
-      console.log("Nombre del archivo:", file.name); // Obtener y mostrar el nombre del archivo
       var myHeaders = new Headers();
       myHeaders.append(
         "Authorization",
@@ -64,11 +63,10 @@ function EditBienInventariable() {
       
       fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/ActivoBien/doctos/add", requestOptions)
         .then(response => response.text())
-        .then(result => {
-          console.log(result);
+        .then(() => {
           window.location.reload();
         })
-        .catch(error => console.log('error', error));
+        .catch(() => console.log('Error: CODIGO #1'));
   
       // Luego puedes usar el FormData para enviar la solicitud con la imagen
     } else {
@@ -105,12 +103,11 @@ function EditBienInventariable() {
       requestOptions
     )
       .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
+      .then(() => {
         newImages.splice(index, 1);
         setSelectedImages(newImages);
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log('Error: CODIGO #2'));
   };
 
   useEffect(() => {
@@ -154,6 +151,7 @@ function EditBienInventariable() {
         setSelectedMarca(result.marca);
       })
       .catch(() => {
+        console.log('Error: CODIGO #3')
         Swal.fire({
           icon: "error",
           title: "Tu sesión ha expirado",
@@ -189,9 +187,7 @@ function EditBienInventariable() {
         setSelectedImages(imageUrls);
         setImagesId(result.map((item) => item.id));
       })
-      .catch(() => {
-        // Manejo de errores
-      });
+      .catch(() => console.log('Error: CODIGO #4'));
   }, []);
 
   useEffect(() => {
@@ -202,7 +198,7 @@ function EditBienInventariable() {
       .then((data) => {
         setMarcas(data);
       })
-      .catch((error) => console.log(error));
+      .catch(() => console.log('Error: CODIGO #5'));
   }, []);
 
   const handleEdit = () => {
@@ -242,19 +238,17 @@ function EditBienInventariable() {
       body: raw, // Convierte el estado inputValues a JSON
       redirect: "follow",
     };
-    console.log(inputValues);
+
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/${ultimoValor}`,
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        console.log(JSON.stringify(result));
-        // Realiza cualquier acción adicional necesaria después de la actualización
+      .then(() => {
       })
       .catch(() => {
+        console.log('Error: CODIGO #6')
         Swal.fire(
           "Registro exitoso!",
           "Los cambios se han aplicado exitosamente!",
@@ -425,7 +419,6 @@ function EditBienInventariable() {
                                 }).then((result) => {
                                   if (result.isConfirmed) {
                                     handleRemoveImage(index, imagesId[index]);
-                                    console.log(imagesId[index]);
                                   }
                                 })
                               }

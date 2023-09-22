@@ -54,7 +54,7 @@ function AdjuntarPDF() {
                 window.location.href = "/main";
               });
             })
-            .catch((error) => console.log("error", error));
+            .catch(() => console.log("error: CODIGO #2"));
         }
       });
     });
@@ -82,7 +82,7 @@ function AdjuntarPDF() {
         setValidFiles(result);
         findCommonFileNames(result, files);
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log("error: CODIGO #1"));
   }, [files]);
 
   return (

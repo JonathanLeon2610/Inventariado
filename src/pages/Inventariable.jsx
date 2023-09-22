@@ -31,7 +31,7 @@ function Inventariables() {
       .then((data) => {
         setdata(data);
       })
-      .catch((error) => console.log(error));
+      .catch(() => console.log('Error: CODIGO #1'));
   }, [currentPage]);
 
   function allowAddButton() {
@@ -55,7 +55,7 @@ function Inventariables() {
       .then((result) => {
         setMarcas(result);
       })
-      .catch((error) => console.log(error));
+      .catch(() => console.log('Error: CODIGO #2'));
   }, []);
 
   return (

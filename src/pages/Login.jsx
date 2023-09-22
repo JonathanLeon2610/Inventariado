@@ -57,16 +57,13 @@ const Login = () => {
         var value = JSON.parse(result);
         localStorage.setItem("token", value.token);
         localStorage.setItem("email", email);
-        console.log(JSON.parse(result));
         const token = localStorage.getItem("token");
         const decodedToken = jwtDecode(token);
         localStorage.setItem("role", decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
         localStorage.setItem("expiration", value.expiration);
         window.location.href = "/main"
       })
-      .catch((error) => {
-        console.log("error", error);
-      });
+      .catch(() => console.log('Error: CODIGO #1'));
   };
 
   return (

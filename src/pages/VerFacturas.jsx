@@ -21,7 +21,7 @@ function VerFacturas() {
   const [RFC, setRFC] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
+  const recordsPerPage = 25;
 
   const handleFileChange = (event, rowIndex, type) => {
     const selectedFiles = event.target.files;
@@ -65,7 +65,7 @@ function VerFacturas() {
     )
       .then((response) => response.text())
       .then(() => {})
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log('Error: CODIGO #1'));
   };
 
   const handleUpload = (uuid, file) => {
@@ -100,7 +100,7 @@ function VerFacturas() {
           window.location.href = "/main";
         });
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log('Error: CODIGO #2'));
   };
 
   useEffect(() => {
@@ -115,9 +115,6 @@ function VerFacturas() {
       headers: myHeaders,
       redirect: "follow",
     };
-    console.log(
-      `https://192.168.10.100/api/v1/Cfdis/filtrar?isPDF=false&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`
-    );
   
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=false&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
@@ -127,7 +124,7 @@ function VerFacturas() {
       .then((result) => {
         setdata(result);
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log('Error: CODIGO #3'));
   }, [currentPage]);
 
   const handleChangeData = (PDF, XML) => {
@@ -152,7 +149,7 @@ function VerFacturas() {
       .then((result) => {
         setdata(result);
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => console.log('Error: CODIGO #4'));
   };
 
   const handleChange = (e) => {
@@ -229,7 +226,7 @@ function VerFacturas() {
               {/* {allowAddButton() ? <th className="option-button">Opciones</th> : ""} */}
             </tr>
           </thead>
-          <tbody>
+          {data.length > 0 && data?(<tbody>
             {data.map((item, index) => (
               <tr key={item.id}>
                 <td>{index+1}</td>
@@ -351,7 +348,9 @@ function VerFacturas() {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody>):(
+            <h1 style={{marginLeft:"1rem"}}>No hay registros para mostrar</h1>
+          )}
         </table>
 
         <div className="pagination">
