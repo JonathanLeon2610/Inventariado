@@ -15,7 +15,7 @@ function VerFacturas() {
   const [data, setdata] = useState([]);
   const [file, setFile] = useState([]);
 
-  const [PDF, setPDF] = useState(false);
+  const [PDF, setPDF] = useState(true);
   const [XML, setXML] = useState(true);
   const [UUID, setUUID] = useState("");
   const [RFC, setRFC] = useState("");
@@ -115,9 +115,11 @@ function VerFacturas() {
       headers: myHeaders,
       redirect: "follow",
     };
+
+    
   
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=false&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -134,13 +136,15 @@ function VerFacturas() {
       "Bearer " + localStorage.getItem("token")
     );
 
-    setCurrentPage(1);
-
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
+
+    setCurrentPage(1);
+
+
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL + `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       requestOptions
@@ -168,7 +172,7 @@ function VerFacturas() {
           <h2>Tabla de facturas</h2>
           <button
             className="import"
-            style={{ marginLeft: "1rem", backgroundColor: "orange" }}
+            style={{ backgroundColor: "orange" }}
             onClick={() => window.print()}
           >
             {" "}
@@ -176,16 +180,14 @@ function VerFacturas() {
           </button>
           <div className="filter-form">
             <label>UUID:</label>
-            <input type="text" name="uuid" onChange={handleChange} />
-
+            <input type="text" name="uuid" onChange={handleChange} placeholder="Introducir UUID" />
             <label>RFC del Emisor:</label>
-            <input type="text" name="emisorRFC" onChange={handleChange} />
+            <input type="text" name="emisorRFC" onChange={handleChange} placeholder="Introducir RFC (Emisor)"/>
 
             <label>Sin PDF:</label>
             <input
               type="checkbox"
               name="noPDF"
-              defaultChecked="true"
               onChange={() => {
                 setPDF(!PDF);
               }}
@@ -236,7 +238,7 @@ function VerFacturas() {
                 <td>{item.emisor_RFC}</td>
                 <td>{item.comprobante_Folio}</td>
                 <td>${item.comprobante_Total.toLocaleString("en")}</td>
-                <td>{item.comprobante_Fecha}</td>
+                <td>{new Date(item.comprobante_Fecha).toLocaleString()}</td>
                 <td className="no-print">
                   {item.isXML === true ? (
                     <>

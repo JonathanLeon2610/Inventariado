@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Swal from "sweetalert2";
 
 function AdjuntarPDF() {
+  // eslint-disable-next-line no-unused-vars
   const [validFiles, setValidFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -12,7 +13,6 @@ function AdjuntarPDF() {
   };
 
   const handleUploadButtonClick = () => {
-    // Simula el clic en el input de archivo
     fileInputRef.current.click();
   };
 
@@ -50,9 +50,7 @@ function AdjuntarPDF() {
                 "Registro exitoso!",
                 "El archivo PDF se ha registrado correctamente, puedes ver el regsitro en la ventana de 'Visualizar'",
                 "success"
-              ).then(() => {
-                window.location.href = "/main"
-              });
+              )
             })
             .catch(() => console.log("error: CODIGO #2"));
         }
@@ -113,9 +111,9 @@ function AdjuntarPDF() {
           {files.map((file, index) => (
             <li key={index}>
               <a
-              // href={URL.createObjectURL(file)}
-              // target="_blank"
-              // rel="noopener noreferrer"
+              href={URL.createObjectURL(file)}
+              target="_blank"
+              rel="noopener noreferrer"
               >
                 {file.name}
               </a>

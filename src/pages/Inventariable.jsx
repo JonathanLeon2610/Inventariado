@@ -7,11 +7,9 @@ import {
   faArrowRight,
   faArrowLeft,
   faFileImport,
-  faPrint
-  
+  faPrint,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-
-
 
 function Inventariables() {
   const [data, setdata] = useState([]);
@@ -22,7 +20,8 @@ function Inventariables() {
 
   useEffect(() => {
     fetch(
-        import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       {
         method: "GET",
       }
@@ -31,7 +30,7 @@ function Inventariables() {
       .then((data) => {
         setdata(data);
       })
-      .catch(() => console.log('Error: CODIGO #1'));
+      .catch(() => console.log("Error: CODIGO #1"));
   }, [currentPage]);
 
   function allowAddButton() {
@@ -48,47 +47,81 @@ function Inventariables() {
   }
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL + "api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
       .then((result) => {
         setMarcas(result);
       })
-      .catch(() => console.log('Error: CODIGO #2'));
+      .catch(() => console.log("Error: CODIGO #2"));
   }, []);
 
   return (
     <>
-
       <div className="no-print">
         <h2>Lista de Inventariables</h2>
         {allowAddButton() ? (
           <>
-          <div>
-          <Link to={"/agregar-bien-inventariable"}>
-            <button className="add">
-              {" "}
-              <FontAwesomeIcon icon={faPlus} /> Agregar Bien
-            </button>
-          </Link>
-          <Link to={"/table-import-bien-inventariable"} style={{marginLeft:"1rem"}}>
-            <button className="import">
-              {" "}
-              <FontAwesomeIcon icon={faFileImport} /> Importar Bien
-            </button>
-          </Link>
-          <button className="import" style={{marginLeft:"1rem", backgroundColor:"orange"}} onClick={()=> window.print()}> <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla</button>
-          </div>
+            <div>
+              <Link to={"/agregar-bien-inventariable"}>
+                <button className="add">
+                  {" "}
+                  <FontAwesomeIcon icon={faPlus} /> Agregar Bien
+                </button>
+              </Link>
+              <Link
+                to={"/table-import-bien-inventariable"}
+                style={{ marginLeft: "1rem" }}
+              >
+                <button className="import">
+                  {" "}
+                  <FontAwesomeIcon icon={faFileImport} /> Importar Bien
+                </button>
+              </Link>
+              <button
+                className="import"
+                style={{ marginLeft: "1rem", backgroundColor: "orange" }}
+                onClick={() => window.print()}
+              >
+                {" "}
+                <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
+              </button>
+            </div>
+            <div className="filter-form">
+              <label>No. Inventario:</label>
+              <input type="text" name="uuid" placeholder="Introducir No.Inventario" />
+              <label>Marca:</label>
+              <select>
+                <option value="none" disabled selected>
+                  Selecciona una marca
+                </option>
+                {marcas.map((marca) => (
+                  <option key={marca.id} value={marca.id.toString()}>
+                    {marca.name}
+                  </option>
+                ))}
+              </select>
+              <label>No.Serie</label>
+              <input
+                type="text"
+                name="noserie"
+                placeholder="Introducir No.Serie"
+              />
+              <button className="add">
+                Buscar <FontAwesomeIcon icon={faSearch} />{" "}
+              </button>
+            </div>
           </>
-          
         ) : (
           ""
         )}
         <table className="table-to-print">
           <thead>
             <tr>
-              <th colSpan="12">Lista de inventariables -- Pagina # {currentPage}</th>
+              <th colSpan="12">
+                Lista de inventariables -- Pagina # {currentPage}
+              </th>
             </tr>
             <tr>
               <th>#</th>
@@ -98,13 +131,17 @@ function Inventariables() {
               <th>Modelo</th>
               <th># Serie</th>
               <th>Costo</th>
-              {allowAddButton() ? <th className="option-button">Opciones</th> : ""}
+              {allowAddButton() ? (
+                <th className="option-button">Opciones</th>
+              ) : (
+                ""
+              )}
             </tr>
           </thead>
           <tbody>
-            {data.map((item,index) => (
+            {data.map((item, index) => (
               <tr key={item.id}>
-                <td>{index+1}</td>
+                <td>{index + 1}</td>
                 <td>{item.numeroInventario}</td>
                 <td>{item.activoDescripcion}</td>
                 <td>{getMarcaNameById(item.marcaId)}</td>
@@ -148,7 +185,6 @@ function Inventariables() {
           )}
         </div>
       </div>
-      
     </>
   );
 }
