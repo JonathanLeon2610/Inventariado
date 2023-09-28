@@ -16,6 +16,15 @@ body {
     visibility: hidden;
   }
 
+  .filter-form{
+    visibility: hidden;
+  }
+
+  .import{
+    display: none;
+  }
+  
+
   .reporte-body{
     visibility: visible;
   }
@@ -208,6 +217,15 @@ td button.set:hover {
   background-color: #f0f0f0; /* Color de fondo */
 }
 
+
+.formulario-container-proveedor input{
+  margin: 10px;
+  padding: 10px;
+  width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
 /* Estilo para los inputs */
 .formulario-container input {
   margin: 10px;
@@ -218,7 +236,7 @@ td button.set:hover {
 }
 
 /* Estilo para el botón */
-.formulario-container button {
+.formulario-container, .formulario-container-proveedor button {
   margin: 10px;
   padding: 10px 20px;
   background-color: #007bff; /* Color de fondo del botón */
@@ -533,4 +551,12 @@ td button.set:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+
+
+.tabla-facturas-proveedor-container{
+  width: 100%;
+  height: 100vh;
 }

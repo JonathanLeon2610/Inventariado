@@ -306,7 +306,6 @@ function EditBienInventariable() {
               />
               <select
                 defaultValue={inputValues.MarcaId}
-                
                 onChange={(e) =>
                   setInputValues({ ...inputValues, MarcaId: e.target.value })
                 }
