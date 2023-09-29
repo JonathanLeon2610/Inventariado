@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faShop,
-  faArrowLeft
+  faArrowLeft,
+  faFile,
+  faHome,
+  faUser,
+  faBuildingColumns
 } from "@fortawesome/free-solid-svg-icons";
 import DatosGenerales from "../components/Proveedores/DatosGenerales";
 import DatosBancarios from "../components/Proveedores/DatosBancarios";
+import DomicilioFiscal from "../components/Proveedores/DomicilioFiscal";
+import DatosRepresentante from "../components/Proveedores/DatosRepresentante";
 function EditProveedor() {
   const [currentPage, setCurrentPage] = useState("generales"); // Estado local para la página actual
 
@@ -15,6 +20,10 @@ function EditProveedor() {
         return <DatosGenerales />;
       case "datosBancarios":
         return <DatosBancarios />;
+      case "domicilioFiscal":
+        return <DomicilioFiscal />;
+      case "datosRepresentante":
+        return <DatosRepresentante />;
     }
   };
   return (
@@ -28,10 +37,16 @@ function EditProveedor() {
         <ul style={{ color: "white", cursor: "pointer" }}>
           <h2>Datos del proveedor</h2>
           <li onClick={() => setCurrentPage("generales")}>
-            <FontAwesomeIcon icon={faShop} /> Generales
+            <FontAwesomeIcon icon={faFile} /> Generales
+          </li>
+          <li onClick={() => setCurrentPage("domicilioFiscal")}>
+            <FontAwesomeIcon icon={faHome} /> Domicilio Fiscal
+          </li>
+          <li onClick={() => setCurrentPage("datosRepresentante")}>
+            <FontAwesomeIcon icon={faUser} /> Datos de representante
           </li>
           <li onClick={() => setCurrentPage("datosBancarios")}>
-            <FontAwesomeIcon icon={faShop} /> Datos Bancarios
+            <FontAwesomeIcon icon={faBuildingColumns} /> Datos Bancarios
           </li>
           <li onClick={() => window.history.back()}>
             <FontAwesomeIcon icon={faArrowLeft} /> Regresar

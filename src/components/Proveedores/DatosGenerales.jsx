@@ -7,6 +7,8 @@ function DatosGenerales() {
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
+  const [rfcError, setRfcError] = useState("");
+  const rfcRegex = /^[A-Z]{4}\d{6}[A-Z0-9]{3}$/;
 
   const [inputValues, setInputValues] = useState({
     id: "",
@@ -29,11 +31,17 @@ function DatosGenerales() {
     const segments = url.split("/");
     const ultimoValor = segments[segments.length - 1];
     const myHeaders = new Headers();
+
     myHeaders.append(
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
     myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
+
+    if (!rfcRegex.test(inputValues.rfc)) {
+      setRfcError("El RFC no es válido");
+      return;
+    }
 
     var raw = JSON.stringify({
       id: ultimoValor,
@@ -50,8 +58,6 @@ function DatosGenerales() {
       telFijo: inputValues.telFijo,
       tipoProveedorId: inputValues.tipoProveedorId,
     });
-
-    console.log(inputValues);
 
     const requestOptions = {
       method: "PUT",
@@ -78,6 +84,8 @@ function DatosGenerales() {
         console.log(error);
       });
   };
+
+  
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -118,6 +126,7 @@ function DatosGenerales() {
       })
       .catch((error) => console.log(error));
   }, []);
+  
   return (
     <>
       <div>
@@ -176,14 +185,16 @@ function DatosGenerales() {
               type="text"
               placeholder="RFC"
               defaultValue={data.rfc}
-              onChange={(e) =>
+              onChange={(e) => {
                 setInputValues({
                   ...inputValues,
-                  rfc: e.target.value,
-                })
-              }
+                  rfc: e.target.value.toUpperCase(), // Convertir a mayúsculas
+                });
+                setRfcError(""); // Limpiar el mensaje de error al cambiar el valor
+              }}
               required
             />
+            {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
           </div>
           <div>
             <label htmlFor="">Nombre</label>

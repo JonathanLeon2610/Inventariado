@@ -236,7 +236,7 @@ td button.set:hover {
 }
 
 /* Estilo para el botón */
-.formulario-container, .formulario-container-proveedor button {
+.formulario-container button, .formulario-container-proveedor button {
   margin: 10px;
   padding: 10px 20px;
   background-color: #007bff; /* Color de fondo del botón */

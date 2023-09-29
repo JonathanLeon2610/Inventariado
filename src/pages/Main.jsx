@@ -21,7 +21,7 @@ import AdjuntarPDF from "./AdjuntarPDF";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currentPage, setCurrentPage] = useState("inventariable"); // Estado local para la página actual
+  const [currentPage, setCurrentPage] = useState(localStorage.getItem("currentPage")); // Estado local para la página actual
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -115,10 +115,16 @@ function Main() {
           alt="No carga"
         />
         <ul style={{ color: "white", cursor: "pointer" }}>
-          <li onClick={() => setCurrentPage("inventariable")}>
+          <li onClick={() => {
+            setCurrentPage("inventariable")
+            localStorage.setItem("currentPage","inventariable")
+            }}>
             <FontAwesomeIcon icon={faShop} /> Inventariable
           </li>
-          <li onClick={() => setCurrentPage("noInventariable")}>
+          <li onClick={() => {
+            setCurrentPage("noInventariable")
+            localStorage.setItem("currentPage","noInventariable")
+            }}>
             <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
           </li>
           <li className="dropdown">
@@ -126,19 +132,34 @@ function Main() {
               <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
             </span>
             <ul className="dropdown-menu">
-              <li onClick={() => setCurrentPage("subirFactura")}>
+              <li onClick={() => {
+                setCurrentPage("subirFactura")
+                localStorage.setItem("currentPage","subirFactura");
+                }}>
                 Registrar (XML)
               </li>
-              <li onClick={() => setCurrentPage("adjuntarPDF")}>
+              <li onClick={() => {
+                setCurrentPage("adjuntarPDF")
+                localStorage.setItem("currentPage","adjuntarPDF");
+                }}>
                 Adjuntar (PDF)
               </li>
-              <li onClick={() => setCurrentPage("verFacturas")}>Visualizar</li>
+              <li onClick={() => {
+                setCurrentPage("verFacturas")
+                localStorage.setItem("currentPage", "verFacturas")
+                }}>Visualizar</li>
             </ul>
           </li>
-          <li onClick={() => setCurrentPage("asignacionResguardos")}>
+          <li onClick={() => {
+            setCurrentPage("asignacionResguardos")
+            localStorage.setItem("currentPage", "asignacionResguardos")
+            }}>
             <FontAwesomeIcon icon={faBookBookmark} /> Asignación de Resguardos
           </li>
-          <li onClick={() => setCurrentPage("proveedores")}>
+          <li onClick={() => {
+            setCurrentPage("proveedores")
+            localStorage.setItem("currentPage","proveedores")
+            }}>
             <FontAwesomeIcon icon={faTruckField} /> Proveedores
           </li>
           <li onClick={showAlert}>

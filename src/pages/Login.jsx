@@ -61,7 +61,7 @@ const Login = () => {
         const decodedToken = jwtDecode(token);
         localStorage.setItem("role", decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
         localStorage.setItem("expiration", value.expiration);
-        localStorage.setItem("currentPage", "inventariables")
+        localStorage.setItem("currentPage", "inventariable")
         window.location.href = "/main"
       })
       .catch(() => console.log('Error: CODIGO #1'));
