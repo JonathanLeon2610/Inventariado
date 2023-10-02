@@ -37,6 +37,42 @@ function DatosRepresentante() {
     }
   };
 
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/proveedores/${ultimoValor}/Representante`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setData(result);
+        setInputValues({
+          id: ultimoValor,
+          representanteLegal: result.representanteLegal,
+          repCURP: result.repCURP,
+          repTel: result.repTel,
+          repEmail: result.repEmail,
+          actaConstitutiva: result.actaConstitutiva,
+          poderNotarial: result.poderNotarial,
+          datosNotaria: result.datosNotaria
+        });
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -87,42 +123,6 @@ function DatosRepresentante() {
       console.log("El formulario contiene errores.");
     }
   };
-
-  useEffect(() => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + localStorage.getItem("token")
-    );
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(
-      import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/proveedores/${ultimoValor}/Representante`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setData(result);
-        setInputValues({
-          id: ultimoValor,
-          representanteLegal: result.representanteLegal,
-          repCURP: result.repCURP,
-          repTel: result.repTel,
-          repEmail: result.repEmail,
-          actaConstitutiva: result.actaConstitutiva,
-          poderNotarial: result.poderNotarial,
-          datosNotaria: result.datosNotaria
-        });
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   return (
     <>
