@@ -86,7 +86,6 @@ function DatosBancarios() {
             "Los cambios se han aplicado exitosamente!",
             "success"
           );
-          console.log(inputValues);
         }
       })
       .catch((error) => {
@@ -104,7 +103,6 @@ function DatosBancarios() {
             <div>
               <label htmlFor="">Banco</label>
               <select name="" id="" onChange={(e) => {
-                console.log(e.target.value);
                   setInputValues({
                     ...inputValues,
                     banco: parseInt(e.target.value),

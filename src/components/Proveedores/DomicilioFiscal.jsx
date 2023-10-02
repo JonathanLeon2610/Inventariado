@@ -85,8 +85,11 @@ function DomicilioFiscal() {
       paisId: selectedPaisId,
       estadoId: selectedPaisId !== "MX" ? "00" : inputValues.estadoId,
       estado: selectedPaisId !== "MX" ? "" : inputValues.estado,
+      municipio: selectedPaisId !== "MX" ? "" : inputValues.municipio,
+      colonia: selectedPaisId !== "MX" ? "" : inputValues.colonia,
     });
   };
+
 
   useEffect(() => {
     var myHeaders = new Headers();

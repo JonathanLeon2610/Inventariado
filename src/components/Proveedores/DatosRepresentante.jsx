@@ -57,7 +57,6 @@ function DatosRepresentante() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result);
         setInputValues({
           id: ultimoValor,
@@ -104,8 +103,6 @@ function DatosRepresentante() {
         redirect: "follow",
       };
 
-      console.log(raw);
-
       fetch(
         `https://192.168.10.100/api/v1/proveedores/${ultimoValor}/Representante`,
         requestOptions
@@ -119,9 +116,7 @@ function DatosRepresentante() {
           );
         })
         .catch((error) => console.log("error", error));
-    } else {
-      console.log("El formulario contiene errores.");
-    }
+    } 
   };
 
   return (
