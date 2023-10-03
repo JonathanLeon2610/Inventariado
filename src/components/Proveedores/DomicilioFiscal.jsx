@@ -185,10 +185,6 @@ function DomicilioFiscal() {
       });
   };
   
-  
-  
-  
-
   useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -243,7 +239,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               defaultValue={data.codigoPostal}
-              placeholder="Tipo de Persona"
+              placeholder="Codigo postal"
               required
               onChange={(e) =>
                 setInputValues({
@@ -257,7 +253,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Tipo de vialidad</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="Tipo de vialidad (Calle, boulevard, etc)"
               defaultValue={data.tipoVialidad}
               required
               onChange={(e) =>
@@ -272,7 +268,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Nombre de vialidad</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="Nombre de la vialidad"
               defaultValue={data.nombreVialidad}
               required
               onChange={(e) =>
@@ -356,7 +352,7 @@ function DomicilioFiscal() {
                 <label htmlFor="">Colonia</label>
                 <input
                   type="text"
-                  placeholder="Tipo de Persona"
+                  placeholder="Nombre de la colinia"
                   defaultValue={data.colonia}
                   required
                   onChange={(e) =>
@@ -374,7 +370,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Localidad (Ciudad)</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="Nombre de la localidad"
               defaultValue={data.localidad}
               required
               onChange={(e) =>
@@ -389,7 +385,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Numero interior</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="No. Interior"
               defaultValue={data.numeroInterior}
               required
               onChange={(e) =>
@@ -404,7 +400,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Numero exterior</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="No. Exterior"
               defaultValue={data.numeroExterior}
               required
               onChange={(e) =>
@@ -419,7 +415,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Calle 1</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="Calle 1"
               defaultValue={data.entreCalle1}
               required
               onChange={(e) =>
@@ -434,7 +430,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Calle 2</label>
             <input
               type="text"
-              placeholder="Tipo de Persona"
+              placeholder="Calle 2"
               defaultValue={data.entreCalle2}
               required
               onChange={(e) =>

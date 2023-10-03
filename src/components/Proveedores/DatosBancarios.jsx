@@ -125,7 +125,7 @@ function DatosBancarios() {
               <label htmlFor="">Cuenta</label>
               <input
                 type="text"
-                placeholder="Tipo de Persona"
+                placeholder="Numero de cuenta"
                 required
                 defaultValue={data.bancoCuenta}
                 onChange={(e) => {
@@ -138,7 +138,7 @@ function DatosBancarios() {
             </div>
             <div>
               <label htmlFor="">Sucursal</label>
-              <input type="text" placeholder="Tipo de Persona" required 
+              <input type="text" placeholder="Direccion de la sucursal" required 
               defaultValue={data.bancoSucursal}
               onChange={(e) => {
                 setInputValues({
@@ -152,7 +152,7 @@ function DatosBancarios() {
               <label htmlFor="">CLABE(18 Digitos)</label>
               <input
                 type="text"
-                placeholder="Tipo de Persona"
+                placeholder="CLABE interancaria"
                 required
                 minLength={18}
                 maxLength={18}

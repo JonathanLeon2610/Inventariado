@@ -8,7 +8,25 @@ function DatosGenerales() {
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
   const [rfcError, setRfcError] = useState("");
-  const rfcRegex = /^[A-Z]{4}\d{6}[A-Z0-9]{3}$/;
+  const rfcRegexFisica = /^[A-Z]{4}\d{6}[A-Z0-9]{3}$/;
+  const regexRFCPersonaMoral = /^[A-Z]{3}[0-9]{6}[A-Z0-9]{3}$/;
+  const [rfcRegex, setRfcRegex] = useState(rfcRegexFisica);
+
+  const handlePersonaTipoChange = (e) => {
+    const selectedPersonaTipo = parseInt(e.target.value);
+
+    // Actualiza la expresión regular según el tipo de persona seleccionado
+    if (selectedPersonaTipo === 1) {
+      setRfcRegex(rfcRegexFisica);
+    } else if (selectedPersonaTipo === 2) {
+      setRfcRegex(regexRFCPersonaMoral);
+    }
+
+    setInputValues({
+      ...inputValues,
+      personaTipoId: selectedPersonaTipo,
+    });
+  };
 
   const [inputValues, setInputValues] = useState({
     id: "",
@@ -85,8 +103,6 @@ function DatosGenerales() {
       });
   };
 
-  
-
   useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -126,7 +142,7 @@ function DatosGenerales() {
       })
       .catch((error) => console.log(error));
   }, []);
-  
+
   return (
     <>
       <div>
@@ -135,14 +151,7 @@ function DatosGenerales() {
         <div className="formulario-container-proveedor">
           <div>
             <label htmlFor="">Tipo de persona</label>
-            <select
-              onChange={(e) =>
-                setInputValues({
-                  ...inputValues,
-                  personaTipoId: parseInt(e.target.value),
-                })
-              }
-            >
+            <select onChange={handlePersonaTipoChange}>
               {data.personaTipoId === 1 ? (
                 <>
                   <option value={1}>Fisica</option>
@@ -188,9 +197,9 @@ function DatosGenerales() {
               onChange={(e) => {
                 setInputValues({
                   ...inputValues,
-                  rfc: e.target.value.toUpperCase(), // Convertir a mayúsculas
+                  rfc: e.target.value.toUpperCase(),
                 });
-                setRfcError(""); // Limpiar el mensaje de error al cambiar el valor
+                setRfcError("");
               }}
               required
             />
