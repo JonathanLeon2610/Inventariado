@@ -236,7 +236,7 @@ function DatosRepresentante() {
           </div>
 
           <button type="submit">
-            <FontAwesomeIcon icon={faCheck} /> Registrar
+            <FontAwesomeIcon icon={faCheck} /> Confirmar Cambios
           </button>
           <button
             style={{ backgroundColor: "red" }}

@@ -444,7 +444,7 @@ function DomicilioFiscal() {
         </div>
 
         <button onClick={() => handleEdit()}>
-          <FontAwesomeIcon icon={faCheck} /> Registrar
+          <FontAwesomeIcon icon={faCheck} /> Confirmar Cambios
         </button>
         <button
           style={{ backgroundColor: "red" }}

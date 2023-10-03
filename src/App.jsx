@@ -9,6 +9,7 @@ import ImportarBienInventariable from './pages/ImportarBienInventariable';
 import Reporte from './components/Reporte';
 import VerFacturas from './pages/VerFacturas';
 import FacturasProveedor from './components/Proveedores/FactutasProveedor';
+import AgregarProveedor from './components/Proveedores/AgregarProveedor';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/main" element={<Main/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/reporte" element={<Reporte/>}/>
+        <Route path="/agregar-proveedor" element={<AgregarProveedor/>}/>
         <Route path="/verFacturas" element={<VerFacturas/>}/>
         <Route path="/facturasProveedor/:id" element={<FacturasProveedor/>}/>
       </Routes>

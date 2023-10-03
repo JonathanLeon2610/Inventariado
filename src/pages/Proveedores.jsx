@@ -5,6 +5,7 @@ import {
   faArrowRight,
   faSearch,
   faArrowLeft,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Proveedores() {
@@ -12,7 +13,6 @@ function Proveedores() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 25;
-
   const [nombre, setNombre] = useState("");
   const [nombreComercial, setNombreComercial] = useState("");
   const [email, setEmail] = useState("");
@@ -38,11 +38,9 @@ function Proveedores() {
         `api/v1/proveedores/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&Nombre=${nombre}&Email=${email}&NombreComercial=${nombreComercial}&RFC=${RFC}`,
       requestOptions
     )
-    
       .then((response) => response.json())
       .then((result) => {
         setdata(result);
- 
       })
       .catch((error) => console.log(error));
   };
@@ -58,7 +56,7 @@ function Proveedores() {
         break;
       case "nombreComercial":
         setNombreComercial(value);
-        break
+        break;
       case "RFC":
         setRFC(value);
         break;
@@ -66,7 +64,6 @@ function Proveedores() {
   };
 
   useEffect(() => {
-
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
@@ -80,7 +77,8 @@ function Proveedores() {
     };
 
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL +`api/v1/proveedores/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&Nombre=${nombre}&Email=${email}&NombreComercial=${nombreComercial}&RFC=${RFC}`,
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/proveedores/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&Nombre=${nombre}&Email=${email}&NombreComercial=${nombreComercial}&RFC=${RFC}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -93,16 +91,46 @@ function Proveedores() {
     <>
       <div>
         <h2>Tabla de Proveedores</h2>
+        <Link to={"/agregar-proveedor"}>
+                <button className="add">
+                  <FontAwesomeIcon icon={faPlus} /> Agregar proveedor
+                </button>
+              </Link>
         <div className="filter-form">
           <label>Nombre:</label>
-          <input type="text" placeholder="Introducir Nombre" name="nombre" onChange={handleChange} />
+          <input
+            type="text"
+            placeholder="Introducir Nombre"
+            name="nombre"
+            onChange={handleChange}
+          />
           <label>Nombre Comercial:</label>
-          <input type="text" placeholder="Introducir Nombre Comercial" name="nombreComercial" onChange={handleChange}/>
+          <input
+            type="text"
+            placeholder="Introducir Nombre Comercial"
+            name="nombreComercial"
+            onChange={handleChange}
+          />
           <label>Email:</label>
-          <input type="email" placeholder="Introducir Correo Electronico" name="email" onChange={handleChange}/>
+          <input
+            type="email"
+            placeholder="Introducir Correo Electronico"
+            name="email"
+            onChange={handleChange}
+          />
           <label>RFC:</label>
-          <input type="text" placeholder="Introducir RFC" name="RFC" onChange={handleChange}/>
-          <button className="add" onClick={() => handleChangeData(nombre, nombreComercial, email, RFC)}>
+          <input
+            type="text"
+            placeholder="Introducir RFC"
+            name="RFC"
+            onChange={handleChange}
+          />
+          <button
+            className="add"
+            onClick={() =>
+              handleChangeData(nombre, nombreComercial, email, RFC)
+            }
+          >
             Buscar <FontAwesomeIcon icon={faSearch} />{" "}
           </button>
         </div>
@@ -131,7 +159,7 @@ function Proveedores() {
                   <td>{item.nombre}</td>
                   <td>{item.nombreComercial || "N/A"}</td>
                   <td>{item.telFijo || "N/A"}</td>
-                  <td>{item.nombreComercial || "N/A"}</td>
+                  <td>{item.email || "N/A"}</td>
                   <td>{item.rfc}</td>
                   <td className="no-print">
                     <Link to={`/edit-proveedor/${item.id}`}>
@@ -139,13 +167,12 @@ function Proveedores() {
                         <FontAwesomeIcon icon={faArrowRight} /> Editar Proveedor
                       </button>
                     </Link>
-                    <Link  to={`/facturasProveedor/${item.rfc}`}>
+                    <Link to={`/facturasProveedor/${item.rfc}`}>
                       <button className="add">
                         <FontAwesomeIcon icon={faArrowRight} /> Ver Facturas
                       </button>
                     </Link>
                   </td>
-                  
                 </tr>
               </>
             ))}
