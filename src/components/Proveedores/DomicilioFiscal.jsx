@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 function DomicilioFiscal() {
   const [data, setData] = useState([]);
+  const [municipios, setMunicipios] = useState([]);
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
@@ -78,6 +79,31 @@ function DomicilioFiscal() {
     tipoVialidad: "",
   });
 
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      `https://192.168.10.100/api/v1/SoftwareContable/Municipios/${inputValues.estadoId}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setMunicipios(result)
+      })
+      .catch((error) => console.log("error", error));
+  }, [inputValues.estadoId]);
+
   const handlePaisChange = (e) => {
     const selectedPaisId = e.target.value;
     setInputValues({
@@ -90,6 +116,78 @@ function DomicilioFiscal() {
     });
   };
 
+  const handleMunicipioChange = (e) => {
+    const selectedMunicipioId = e.target.value;
+    console.log(parseInt(selectedMunicipioId))
+    const selectedMunicipio = municipios.find(
+      (municipio) => municipio.municipioId === parseInt(selectedMunicipioId)
+    );
+    console.log(selectedMunicipio);
+    setInputValues({
+      ...inputValues,
+      municipioId: selectedMunicipioId,
+      municipio: selectedMunicipio ? selectedMunicipio.municipio : "",
+    });
+  };
+
+
+  const handleEdit = () => {
+    const myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      id: ultimoValor,
+      codigoPostal: inputValues.codigoPostal,
+      colonia: inputValues.colonia,
+      entreCalle1: inputValues.entreCalle1,
+      entreCalle2: inputValues.entreCalle2,
+      estado: inputValues.estado,
+      estadoId: inputValues.estadoId,
+      localidad: inputValues.localidad,
+      municipio: inputValues.municipio,
+      municipioId: inputValues.municipioId,
+      nombreVialidad: inputValues.nombreVialidad,
+      numeroExterior: inputValues.numeroExterior,
+      numeroInterior: inputValues.numeroInterior,
+      paisId: inputValues.paisId,
+      tipoVialidad: inputValues.tipoVialidad
+    });
+
+    console.log(raw);
+
+    const requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw, // Convierte el estado inputValues a JSON
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/proveedores/${ultimoValor}/DomicilioFiscal`,
+      requestOptions
+    )
+      .then((response) => {
+        if (response.ok) {
+          Swal.fire(
+            "Registro exitoso!",
+            "Los cambios se han aplicado exitosamente!",
+            "success"
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
+  
+  
+  
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -113,6 +211,23 @@ function DomicilioFiscal() {
       .then((result) => {
         console.log(result);
         setData(result);
+        setInputValues({
+          id: ultimoValor,
+          codigoPostal: result.codigoPostal,
+          colonia: result.colonia,
+          entreCalle1: result.entreCalle1,
+          entreCalle2: result.entreCalle2,
+          estado: result.estado,
+          estadoId: result.estadoId,
+          localidad: result.localidad,
+          municipio: result.municipio,
+          municipioId: result.municipioId,
+          nombreVialidad: result.nombreVialidad,
+          numeroExterior: result.numeroExterior,
+          numeroInterior: result.numeroInterior,
+          paisId: result.paisId,
+          tipoVialidad: result.tipoVialidad
+        });
       })
       .catch((error) => console.log(error));
   }, []);
@@ -127,6 +242,7 @@ function DomicilioFiscal() {
             <label htmlFor="">Codigo Postal</label>
             <input
               type="text"
+              defaultValue={data.codigoPostal}
               placeholder="Tipo de Persona"
               required
               onChange={(e) =>
@@ -142,6 +258,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.tipoVialidad}
               required
               onChange={(e) =>
                 setInputValues({
@@ -156,6 +273,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.nombreVialidad}
               required
               onChange={(e) =>
                 setInputValues({
@@ -188,9 +306,8 @@ function DomicilioFiscal() {
               <div>
                 <label htmlFor="">Estado</label>
                 <select
-                  name="estado"
                   id="estado"
-                  value={inputValues.estadoId}
+                  defaultValue={inputValues.estadoId}
                   onChange={(e) => {
                     const selectedEstadoId = e.target.value;
                     const selectedEstado = estados.find(
@@ -204,34 +321,43 @@ function DomicilioFiscal() {
                   }}
                   required
                 >
-                  <option value="">Selecciona un estado</option>
+                  <option value={data.estadoId}>{data.estado}</option>
                   {estados.map((estado) => (
-                    <option key={estado.EstadoId} value={estado.EstadoId}>
-                      {estado.Nombre}
-                    </option>
+                    <>
+                      <option key={estado.EstadoId} value={estado.EstadoId}>
+                        {estado.Nombre}
+                      </option>
+                    </>
                   ))}
                 </select>
               </div>
 
               <div>
                 <label htmlFor="">Municipio</label>
-                <input
-                  type="text"
-                  placeholder="Tipo de Persona"
+                <select
+                  name="municipio"
+                  id="municipio"
+                  defaultValue={inputValues.municipioId}
+                  onChange={handleMunicipioChange}
                   required
-                  onChange={(e) =>
-                    setInputValues({
-                      ...inputValues,
-                      municipio: e.target.value,
-                    })
-                  }
-                />
+                >
+                  <option value="">{data.municipio}</option>
+                  {municipios.map((municipio) => (
+                    <option
+                      key={municipio.Nombre}
+                      value={municipio.municipioId}
+                    >
+                      {municipio.municipio}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label htmlFor="">Colonia</label>
                 <input
                   type="text"
                   placeholder="Tipo de Persona"
+                  defaultValue={data.colonia}
                   required
                   onChange={(e) =>
                     setInputValues({
@@ -249,6 +375,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.localidad}
               required
               onChange={(e) =>
                 setInputValues({
@@ -263,6 +390,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.numeroInterior}
               required
               onChange={(e) =>
                 setInputValues({
@@ -277,6 +405,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.numeroExterior}
               required
               onChange={(e) =>
                 setInputValues({
@@ -291,6 +420,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.entreCalle1}
               required
               onChange={(e) =>
                 setInputValues({
@@ -305,6 +435,7 @@ function DomicilioFiscal() {
             <input
               type="text"
               placeholder="Tipo de Persona"
+              defaultValue={data.entreCalle2}
               required
               onChange={(e) =>
                 setInputValues({
@@ -316,7 +447,7 @@ function DomicilioFiscal() {
           </div>
         </div>
 
-        <button onClick={() => console.log(inputValues)}>
+        <button onClick={() => handleEdit()}>
           <FontAwesomeIcon icon={faCheck} /> Registrar
         </button>
         <button
