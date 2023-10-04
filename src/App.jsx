@@ -10,6 +10,7 @@ import Reporte from './components/Reporte';
 import VerFacturas from './pages/VerFacturas';
 import FacturasProveedor from './components/Proveedores/FactutasProveedor';
 import AgregarProveedor from './components/Proveedores/AgregarProveedor';
+import DocumentacionProveedor from './components/DocumentacionProveedor';
 
 
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/agregar-proveedor" element={<AgregarProveedor/>}/>
         <Route path="/verFacturas" element={<VerFacturas/>}/>
         <Route path="/facturasProveedor/:id" element={<FacturasProveedor/>}/>
+        <Route path="/documentacion-proveedor/:id" element={<DocumentacionProveedor/>}/>
       </Routes>
     </Router>
     
