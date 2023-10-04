@@ -5,12 +5,14 @@ import {
   faFile,
   faHome,
   faUser,
-  faBuildingColumns
+  faBuildingColumns,
+  faFolder
 } from "@fortawesome/free-solid-svg-icons";
 import DatosGenerales from "../components/Proveedores/DatosGenerales";
 import DatosBancarios from "../components/Proveedores/DatosBancarios";
 import DomicilioFiscal from "../components/Proveedores/DomicilioFiscal";
 import DatosRepresentante from "../components/Proveedores/DatosRepresentante";
+import EditarDocumentacion from "../components/Proveedores/EditarDocumentacion";
 function EditProveedor() {
   const [currentPage, setCurrentPage] = useState("generales"); // Estado local para la página actual
 
@@ -24,6 +26,8 @@ function EditProveedor() {
         return <DomicilioFiscal />;
       case "datosRepresentante":
         return <DatosRepresentante />;
+      case "editarDocumentacion":
+        return <EditarDocumentacion />;
     }
   };
   return (
@@ -47,6 +51,9 @@ function EditProveedor() {
           </li>
           <li onClick={() => setCurrentPage("datosBancarios")}>
             <FontAwesomeIcon icon={faBuildingColumns} /> Datos Bancarios
+          </li>
+          <li onClick={() => setCurrentPage("editarDocumentacion")}>
+            <FontAwesomeIcon icon={faFolder} /> Documentacion
           </li>
           <li onClick={() => window.history.back()}>
             <FontAwesomeIcon icon={faArrowLeft} /> Regresar
