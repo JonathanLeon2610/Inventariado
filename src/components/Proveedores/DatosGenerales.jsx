@@ -8,25 +8,28 @@ function DatosGenerales() {
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
   const [rfcError, setRfcError] = useState("");
-  const rfcRegexFisica = /^[A-Z]{4}\d{6}[A-Z0-9]{3}$/;
-  const regexRFCPersonaMoral = /^[A-Z]{3}[0-9]{6}[A-Z0-9]{3}$/;
+  const rfcRegexFisica = /[A-Z,Ñ,&]{4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
+  const regexRFCPersonaMoral = /[A-Z,Ñ,&]{3}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
   const [rfcRegex, setRfcRegex] = useState(rfcRegexFisica);
 
   const handlePersonaTipoChange = (e) => {
     const selectedPersonaTipo = parseInt(e.target.value);
-
+  
     // Actualiza la expresión regular según el tipo de persona seleccionado
     if (selectedPersonaTipo === 1) {
       setRfcRegex(rfcRegexFisica);
     } else if (selectedPersonaTipo === 2) {
       setRfcRegex(regexRFCPersonaMoral);
     }
-
-    setInputValues({
-      ...inputValues,
+  
+    setInputValues((prevInputValues) => ({
+      ...prevInputValues,
       personaTipoId: selectedPersonaTipo,
-    });
+    }));
+  
+    console.log(selectedPersonaTipo);
   };
+  
 
   const [inputValues, setInputValues] = useState({
     id: "",
@@ -45,6 +48,11 @@ function DatosGenerales() {
   });
 
   const handleEdit = () => {
+    if (!rfcRegex.test(inputValues.rfc)) {
+      setRfcError("El RFC no es válido");
+
+      return;
+    }
     const url = window.location.pathname;
     const segments = url.split("/");
     const ultimoValor = segments[segments.length - 1];
@@ -55,11 +63,6 @@ function DatosGenerales() {
       "Bearer " + localStorage.getItem("token")
     );
     myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
-
-    if (!rfcRegex.test(inputValues.rfc)) {
-      setRfcError("El RFC no es válido");
-      return;
-    }
 
     var raw = JSON.stringify({
       id: ultimoValor,
@@ -201,6 +204,7 @@ function DatosGenerales() {
                 });
                 setRfcError("");
               }}
+              minLength={data.personaTipoId === 1 ? (12) : (13)}
               required
             />
             {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
