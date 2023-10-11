@@ -46,8 +46,7 @@ function EditarDocumentacion() {
       requestOptions
     )
       .then((response) => response.text())
-      .then((result) => {
-        console.log(result);
+      .then(() => {
         Swal.fire(
           "Registro exitoso!",
           "Se ha registrado correctamente el documento",
@@ -77,7 +76,6 @@ function EditarDocumentacion() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result);
       })
       .catch((error) => console.log("error", error));
@@ -101,7 +99,6 @@ function EditarDocumentacion() {
               {data.map((item) => (
                 <>
                 <option value={item.id} key={item.name}>{item.name}</option>
-                {console.log(inputValues)}
                 </>
               ))}
             </select>

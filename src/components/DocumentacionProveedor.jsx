@@ -70,7 +70,6 @@ function DocumentacionProveedor() {
   };
 
   function getDocumentoByName(documentId) {
-    console.log(catalogoDocumentos);
     const documento = catalogoDocumentos.find(
       (documento) => documento.id === documentId
     );
@@ -117,7 +116,6 @@ function DocumentacionProveedor() {
             <tbody>
               {data.map((item, index) => (
                 <>
-                  {console.log(item)}
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{getDocumentoByName(item.documentoTipoId)}</td>

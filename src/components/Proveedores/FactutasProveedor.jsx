@@ -29,8 +29,6 @@ function FacturasProveedor() {
       redirect: "follow",
     };
 
-    console.log(ultimoValor);
-
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
         `api/v1/Cfdis/filtrar?Emisor_RFC=${ultimoValor}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,

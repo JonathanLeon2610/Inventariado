@@ -125,8 +125,8 @@ function FacturaPreview() {
 
           fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/addfile", requestOptions)
           .then(response => response.text())
-          .then(result => {
-            console.log(result)
+          .then(() => {
+  
             Swal.fire(
               "Registro exitoso!",
               "La factura se ha registrado correctamente, el siguiente paso es adjuntar el PDF, puedes hacerlo en la ventana de 'Adjuntar(PDF) o bien ver el regsitro en la ventana de 'Visualizar'",

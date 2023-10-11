@@ -98,7 +98,6 @@ function DomicilioFiscal() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setMunicipios(result)
       })
       .catch((error) => console.log("error", error));
@@ -118,11 +117,9 @@ function DomicilioFiscal() {
 
   const handleMunicipioChange = (e) => {
     const selectedMunicipioId = e.target.value;
-    console.log(parseInt(selectedMunicipioId))
     const selectedMunicipio = municipios.find(
       (municipio) => municipio.municipioId === parseInt(selectedMunicipioId)
     );
-    console.log(selectedMunicipio);
     setInputValues({
       ...inputValues,
       municipioId: selectedMunicipioId,
@@ -156,8 +153,6 @@ function DomicilioFiscal() {
       paisId: inputValues.paisId,
       tipoVialidad: inputValues.tipoVialidad
     });
-
-    console.log(raw);
 
     const requestOptions = {
       method: "PUT",
@@ -205,7 +200,6 @@ function DomicilioFiscal() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result);
         setInputValues({
           id: ultimoValor,

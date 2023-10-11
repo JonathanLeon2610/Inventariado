@@ -26,8 +26,6 @@ function DatosGenerales() {
       ...prevInputValues,
       personaTipoId: selectedPersonaTipo,
     }));
-  
-    console.log(selectedPersonaTipo);
   };
   
 
