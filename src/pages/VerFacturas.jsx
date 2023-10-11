@@ -123,8 +123,6 @@ function VerFacturas() {
       .then((response) => response.json())
       .then((result) => {
         setdata(result);
-
-       
       })
       .catch(() => console.log('Error: CODIGO #3'));
   }, [currentPage]);
