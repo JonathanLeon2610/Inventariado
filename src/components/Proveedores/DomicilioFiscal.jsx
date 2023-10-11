@@ -93,7 +93,7 @@ function DomicilioFiscal() {
     };
 
     fetch(
-      `https://192.168.10.100/api/v1/SoftwareContable/Municipios/${inputValues.estadoId}`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/SoftwareContable/Municipios/${inputValues.estadoId}`,
       requestOptions
     )
       .then((response) => response.json())

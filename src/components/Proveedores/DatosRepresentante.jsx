@@ -104,7 +104,7 @@ function DatosRepresentante() {
       };
 
       fetch(
-        `https://192.168.10.100/api/v1/proveedores/${ultimoValor}/Representante`,
+        import.meta.env.VITE_REACT_APP_API_URL+`api/v1/proveedores/${ultimoValor}/Representante`,
         requestOptions
       )
         .then((response) => response.text())
