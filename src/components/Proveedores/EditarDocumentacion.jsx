@@ -41,10 +41,6 @@ function EditarDocumentacion() {
       redirect: "follow",
     };
 
-    console.log(inputValues);
-  
-    // Log the FormData after appending data
-
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL+`api/v1/Proveedores/doctos/add`,
       requestOptions

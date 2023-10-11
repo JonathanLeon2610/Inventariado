@@ -78,8 +78,7 @@ function FacturaPreview() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
-
+    myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify(inputValuesList);
 
     const requestOptions = {
@@ -93,7 +92,7 @@ function FacturaPreview() {
       import.meta.env.VITE_REACT_APP_API_URL + `api/v1/cfdis/recibidos/addmany`,
       requestOptions
     )
-    .then((response) => response.json()) // Utiliza response.json() para obtener un objeto JSON
+    .then((response) => response.json())
     .then((result) => {
 
       result.map((registro,index)=>{
@@ -106,7 +105,7 @@ function FacturaPreview() {
           );
 
           var formdata = new FormData();
-          formdata.append("Archivo", rawXmlFiles[index], rawXmlFiles[index].name); // Agregamos el archivo al FormData
+          formdata.append("Archivo", rawXmlFiles[index], rawXmlFiles[index].name);
           formdata.append("UUID", registro.uuid ?? "");
           formdata.append("Emisor RFC", registro.emisor_RFC ?? "");
           formdata.append("Emisor Nombre", registro.emisor_Nombre ?? "");
@@ -134,7 +133,6 @@ function FacturaPreview() {
               "success"
             ).then(() => {
               setXmlDataList([])
-              //window.location.href = "/main";
             });
           })
           .catch(error => console.log('error', error));

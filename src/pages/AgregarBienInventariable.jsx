@@ -44,19 +44,18 @@ function AgregarBienInventariable() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
+    myHeaders.append("Content-Type", "application/json"); 
 
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: JSON.stringify(inputValues), // Convierte el estado inputValues a JSON
+      body: JSON.stringify(inputValues),
       redirect: "follow",
     };
 
     fetch(import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien`, requestOptions)
       .then((response) => response.json())
       .then(() => {
-        // Realiza cualquier acción adicional necesaria después de la actualización
         Swal.fire(
           "Registro exitoso!",
           "Se ha realizado su registro satisfactoriamente!",

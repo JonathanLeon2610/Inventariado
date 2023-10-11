@@ -162,7 +162,7 @@ function DomicilioFiscal() {
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: raw, // Convierte el estado inputValues a JSON
+      body: raw,
       redirect: "follow",
     };
 

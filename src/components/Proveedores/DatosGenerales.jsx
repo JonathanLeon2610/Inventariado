@@ -3,7 +3,7 @@ import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 function DatosGenerales() {
-  const [data, setData] = useState([]); // Estado local para la página actual
+  const [data, setData] = useState([]);
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
@@ -15,7 +15,7 @@ function DatosGenerales() {
   const handlePersonaTipoChange = (e) => {
     const selectedPersonaTipo = parseInt(e.target.value);
   
-    // Actualiza la expresión regular según el tipo de persona seleccionado
+
     if (selectedPersonaTipo === 1) {
       setRfcRegex(rfcRegexFisica);
     } else if (selectedPersonaTipo === 2) {
@@ -62,8 +62,7 @@ function DatosGenerales() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
-
+    myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       id: ultimoValor,
       contactos: inputValues.contactos,
@@ -83,7 +82,7 @@ function DatosGenerales() {
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: raw, // Convierte el estado inputValues a JSON
+      body: raw,
       redirect: "follow",
     };
 

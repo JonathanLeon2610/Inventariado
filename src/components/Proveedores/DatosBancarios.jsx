@@ -57,8 +57,7 @@ function DatosBancarios() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
-
+    myHeaders.append("Content-Type", "application/json"); 
     var raw = JSON.stringify({
       id: ultimoValor,
       banco: inputValues.banco,
@@ -70,7 +69,7 @@ function DatosBancarios() {
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: raw, // Convierte el estado inputValues a JSON
+      body: raw,
       redirect: "follow",
     };
 
@@ -131,7 +130,7 @@ function DatosBancarios() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    bancoCuenta: e.target.value, // Convertir a mayúsculas
+                    bancoCuenta: e.target.value, 
                   });
                 }}
               />
@@ -143,7 +142,7 @@ function DatosBancarios() {
               onChange={(e) => {
                 setInputValues({
                   ...inputValues,
-                  bancoSucursal: e.target.value, // Convertir a mayúsculas
+                  bancoSucursal: e.target.value, 
                 });
               }}
             />
@@ -160,7 +159,7 @@ function DatosBancarios() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    bancoClabe: e.target.value, // Convertir a mayúsculas
+                    bancoClabe: e.target.value, 
                   });
                 }}
               />

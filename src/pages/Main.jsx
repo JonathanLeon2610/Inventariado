@@ -21,7 +21,7 @@ import AdjuntarPDF from "./AdjuntarPDF";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currentPage, setCurrentPage] = useState(localStorage.getItem("currentPage")); // Estado local para la página actual
+  const [currentPage, setCurrentPage] = useState(localStorage.getItem("currentPage"));
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -48,16 +48,10 @@ function Main() {
     const currentUTC = new Date().toISOString();
     const expirationValue = localStorage.getItem("expiration");
     const expirationDate = new Date(expirationValue);
-
-    // Calcula la diferencia en milisegundos entre la hora actual y la hora de expiración
     const timeDiff = expirationDate.getTime() - new Date(currentUTC).getTime();
+    const fiveMinutes = 5 * 60 * 1000; 
 
-    // Define el tiempo límite, en este caso, 5 minutos antes de la expiración
-    const fiveMinutes = 5 * 60 * 1000; // 5 minutos en milisegundos
-
-    // Compara si la diferencia es menor o igual a 5 minutos
     if (timeDiff <= fiveMinutes) {
-      // Realiza la acción que desees cuando falten 5 minutos
       var myHeaders = new Headers();
       myHeaders.append(
         "Authorization",

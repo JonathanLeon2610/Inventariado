@@ -4,6 +4,7 @@ import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
 function DatosRepresentante() {
+  // eslint-disable-next-line no-unused-vars
   const [curp, setCurp] = useState("");
   const [curpError, setCurpError] = useState("");
   const url = window.location.pathname;
@@ -22,14 +23,12 @@ function DatosRepresentante() {
       datosNotaria: ""
   });
 
-  // Expresión regular para validar CURP en México
   const curpRegex = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/;
 
   const handleCurpChange = (e) => {
-    const inputValue = e.target.value.toUpperCase(); // Convertir a mayúsculas
+    const inputValue = e.target.value.toUpperCase();
     setCurp(inputValue);
 
-    // Validar el CURP con la expresión regular
     if (!curpRegex.test(inputValue)) {
       setCurpError("El CURP no es válido");
     } else {
@@ -75,9 +74,8 @@ function DatosRepresentante() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Verificar si hay un error en el campo CURP
     if (!curpError) {
-      // Realizar la acción de registro aquí
+
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append(
@@ -136,7 +134,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    representanteLegal: e.target.value, // Convertir a mayúsculas
+                    representanteLegal: e.target.value, 
                   });
                 }}
               />
@@ -151,7 +149,7 @@ function DatosRepresentante() {
                   handleCurpChange,
                   setInputValues({
                     ...inputValues,
-                    repCURP: e.target.value.toUpperCase(), // Convertir a mayúsculas
+                    repCURP: e.target.value.toUpperCase(), 
                   });
                 }}
 
@@ -168,7 +166,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    repTel: e.target.value, // Convertir a mayúsculas
+                    repTel: e.target.value, 
                   });
                 }}
               />
@@ -183,7 +181,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    repEmail: e.target.value, // Convertir a mayúsculas
+                    repEmail: e.target.value, 
                   });
                 }}
               />
@@ -198,7 +196,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    actaConstitutiva: e.target.value, // Convertir a mayúsculas
+                    actaConstitutiva: e.target.value,
                   });
                 }}
               />
@@ -213,7 +211,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    poderNotarial: e.target.value, // Convertir a mayúsculas
+                    poderNotarial: e.target.value,
                   });
                 }}
               />
@@ -228,7 +226,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    datosNotaria: e.target.value, // Convertir a mayúsculas
+                    datosNotaria: e.target.value, 
                   });
                 }}
               />

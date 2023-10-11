@@ -14,7 +14,7 @@ import DomicilioFiscal from "../components/Proveedores/DomicilioFiscal";
 import DatosRepresentante from "../components/Proveedores/DatosRepresentante";
 import EditarDocumentacion from "../components/Proveedores/EditarDocumentacion";
 function EditProveedor() {
-  const [currentPage, setCurrentPage] = useState("generales"); // Estado local para la página actual
+  const [currentPage, setCurrentPage] = useState("generales");
 
   const renderPage = () => {
     switch (currentPage) {

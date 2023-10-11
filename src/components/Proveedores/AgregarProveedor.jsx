@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Swal from "sweetalert2";
 function AgregarProveedor() {
   const [rfcError, setRfcError] = useState("");
@@ -11,7 +11,6 @@ function AgregarProveedor() {
   const handlePersonaTipoChange = (e) => {
     const selectedPersonaTipo = parseInt(e.target.value);
 
-    // Actualiza la expresión regular según el tipo de persona seleccionado
     if (selectedPersonaTipo === 1) {
       setRfcRegex(rfcRegexFisica);
     } else if (selectedPersonaTipo === 2) {
@@ -43,7 +42,7 @@ function AgregarProveedor() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
+    myHeaders.append("Content-Type", "application/json");
 
     if (!rfcRegex.test(inputValues.rfc)) {
       setRfcError("El RFC no es válido");

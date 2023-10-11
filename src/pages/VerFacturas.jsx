@@ -25,10 +25,8 @@ function VerFacturas() {
 
   const handleFileChange = (event, rowIndex, type) => {
     const selectedFiles = event.target.files;
-    // Realiza acciones con los archivos seleccionados
     setFile(selectedFiles);
-
-    // Actualiza el estado para indicar que se ha cargado un archivo en la fila específica
+    
     if (type === 2) {
       const updatedData = [...data];
       updatedData[rowIndex].hasPDFFile = true;

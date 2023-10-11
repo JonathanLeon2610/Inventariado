@@ -21,11 +21,11 @@ function ImportarBienInventariable() {
   const [data, setData] = useState(null);
   const [marcas, setMarcas] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [selectedMarca, setSelectedMarca] = useState(""); // Estado para la marca seleccionada
-  const [selectedImages, setSelectedImages] = useState([]); // Estado para la imagen seleccionada
+  const [selectedMarca, setSelectedMarca] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
 
 
-  const fileInputRef = useRef(null); // Ref para el input de archivo oculto
+  const fileInputRef = useRef(null);
   const handleShowFileInput = () => {
     fileInputRef.current.click();
   };
@@ -112,12 +112,12 @@ function ImportarBienInventariable() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
+    myHeaders.append("Content-Type", "application/json"); 
 
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: inputValues, // Convierte el estado inputValues a JSON
+      body: inputValues, 
       redirect: "follow",
     };
 
@@ -270,7 +270,7 @@ function ImportarBienInventariable() {
                 <button onClick={handleShowFileInput}><FontAwesomeIcon icon={faUpload}/> Subir  Imagen</button>
                 <input
                   type="file"
-                  accept="image/*" // Puedes ajustar los tipos de archivos que acepta
+                  accept="image/*"
                   style={{ display: "none" }}
                   ref={fileInputRef}
                   onChange={handleImageChange}

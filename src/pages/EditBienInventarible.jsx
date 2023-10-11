@@ -27,22 +27,22 @@ function EditBienInventariable() {
   const [data, setData] = useState(null);
   const [marcas, setMarcas] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [selectedMarca, setSelectedMarca] = useState(""); // Estado para la marca seleccionada
-  const [selectedImages, setSelectedImages] = useState([]); // Estado para la imagen seleccionada
-  const [imagesId, setImagesId] = useState([]); // Estado para las imagenes seleccionadas
-  const [loadImage, setLoadImage] = useState(null); // Estado para las imagenes seleccionadas
+  const [selectedMarca, setSelectedMarca] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]); 
+  const [imagesId, setImagesId] = useState([]); 
+  const [loadImage, setLoadImage] = useState(null); 
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
   const [fileName, setFileName] = useState(null);
 
-  const fileInputRef = useRef(null); // Ref para el input de archivo oculto
+  const fileInputRef = useRef(null); 
   const handleShowFileInput = () => {
     fileInputRef.current.click();
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; // Obtenemos el primer archivo
+    const file = e.target.files[0]; 
     if (file) {
       setFileName(file.name);
       var myHeaders = new Headers();
@@ -51,7 +51,7 @@ function EditBienInventariable() {
         "Bearer " + localStorage.getItem("token")
       );
       var formdata = new FormData();
-      formdata.append("Archivo", file, file.name); // Agregamos el archivo al FormData
+      formdata.append("Archivo", file, file.name);
       formdata.append("ActivoBienId", ultimoValor);
       var requestOptions = {
         method: 'POST',
@@ -68,7 +68,7 @@ function EditBienInventariable() {
         })
         .catch(() => console.log('Error: CODIGO #1'));
   
-      // Luego puedes usar el FormData para enviar la solicitud con la imagen
+
     } else {
       Swal.fire({
         icon: "error",
@@ -211,7 +211,7 @@ function EditBienInventariable() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); // Agrega el tipo de contenido JSON
+    myHeaders.append("Content-Type", "application/json");
 
 
 
@@ -235,7 +235,7 @@ function EditBienInventariable() {
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
-      body: raw, // Convierte el estado inputValues a JSON
+      body: raw,
       redirect: "follow",
     };
 
