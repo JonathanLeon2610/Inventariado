@@ -159,7 +159,7 @@ function DatosGenerales() {
         <div className="formulario-container-proveedor">
           <div>
             <label htmlFor="">Tipo de persona</label>
-            <select onChange={handlePersonaTipoChange}>
+            <select onChange={handlePersonaTipoChange} disabled={localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS)}>
               {data.personaTipoId === 1 ? (
                 <>
                   <option value={1}>Fisica</option>
@@ -182,6 +182,7 @@ function DatosGenerales() {
                   tipoProveedorId: parseInt(e.target.value),
                 })
               }
+              disabled={localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS)}
             >
               {data.tipoProveedorId === 4 ? (
                 <>
@@ -211,6 +212,7 @@ function DatosGenerales() {
               }}
               minLength={data.personaTipoId === 1 ? (12) : (13)}
               required
+              disabled={localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS)}
             />
             {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
           </div>
@@ -227,6 +229,7 @@ function DatosGenerales() {
                 })
               }
               required
+              disabled={localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS)}
             />
           </div>
           <div>
@@ -320,6 +323,7 @@ function DatosGenerales() {
                 })
               }
               required
+              disabled={localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS)}
             />
           </div>
 
