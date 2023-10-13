@@ -160,7 +160,7 @@ function Main() {
                 <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
               </span>
               <ul className="dropdown-menu">
-                {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+                {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
                 <>
                   {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (<>
                     <li
