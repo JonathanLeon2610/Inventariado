@@ -12,23 +12,6 @@ function DatosGenerales() {
   const regexRFCPersonaMoral = /[A-Z,Ñ,&]{3}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
   const [rfcRegex, setRfcRegex] = useState(rfcRegexFisica);
 
-  const handlePersonaTipoChange = (e) => {
-    const selectedPersonaTipo = parseInt(e.target.value);
-  
-
-    if (selectedPersonaTipo === 1) {
-      setRfcRegex(rfcRegexFisica);
-    } else if (selectedPersonaTipo === 2) {
-      setRfcRegex(regexRFCPersonaMoral);
-    }
-  
-    setInputValues((prevInputValues) => ({
-      ...prevInputValues,
-      personaTipoId: selectedPersonaTipo,
-    }));
-  };
-  
-
   const [inputValues, setInputValues] = useState({
     id: "",
     contactos: "",
@@ -38,12 +21,13 @@ function DatosGenerales() {
     nombreComercial: "",
     observaciones: "",
     paginaWeb: "",
-    personaTipoId: null,
+    personaTipoId: "",
     rfc: "",
     saacgnetId: "",
     telFijo: "",
     tipoProveedorId: "",
   });
+
 
   const handleEdit = () => {
     if (!rfcRegex.test(inputValues.rfc)) {
@@ -104,6 +88,15 @@ function DatosGenerales() {
   };
 
   useEffect(() => {
+    if (inputValues.personaTipoId === 1) {
+      setRfcRegex(rfcRegexFisica);
+    } else if (inputValues.personaTipoId === 2) {
+      setRfcRegex(regexRFCPersonaMoral);
+    }
+    setRfcError("")
+  }, [inputValues.personaTipoId]);
+
+  useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
@@ -142,6 +135,21 @@ function DatosGenerales() {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  const handlePersonaTipoChange = (e) => {
+    const selectedPersonaTipo = parseInt(e.target.value);
+
+    if (selectedPersonaTipo === 1) {
+      setRfcRegex(rfcRegexFisica);
+    } else if (selectedPersonaTipo === 2) {
+      setRfcRegex(regexRFCPersonaMoral);
+    }
+  
+    setInputValues((prevInputValues) => ({
+      ...prevInputValues,
+      personaTipoId: selectedPersonaTipo,
+    }));
+  };
 
   return (
     <>
@@ -182,8 +190,8 @@ function DatosGenerales() {
                 </>
               ) : (
                 <>
-                  <option value={4}>Extranjero</option>
-                  <option value={5}>Nacional</option>
+                  <option value={5}>Extranjero</option>
+                  <option value={4}>Nacional</option>
                 </>
               )}
             </select>
