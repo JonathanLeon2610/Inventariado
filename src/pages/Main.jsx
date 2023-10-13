@@ -7,6 +7,7 @@ import {
   faTruckField,
   faMoneyBill,
   faUser,
+  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import Inventariables from "../pages/Inventariable";
 import NoInventariables from "../pages/NoInventariables";
@@ -18,10 +19,13 @@ import EditBienInventariable from "./EditBienInventarible";
 import SubirFactura from "./SubirFactura";
 import VerFacturas from "./VerFacturas";
 import AdjuntarPDF from "./AdjuntarPDF";
+import Inicio from "./Inicio";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currentPage, setCurrentPage] = useState(localStorage.getItem("currentPage"));
+  const [currentPage, setCurrentPage] = useState(
+    localStorage.getItem("currentPage")
+  );
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -49,7 +53,7 @@ function Main() {
     const expirationValue = localStorage.getItem("expiration");
     const expirationDate = new Date(expirationValue);
     const timeDiff = expirationDate.getTime() - new Date(currentUTC).getTime();
-    const fiveMinutes = 5 * 60 * 1000; 
+    const fiveMinutes = 5 * 60 * 1000;
 
     if (timeDiff <= fiveMinutes) {
       var myHeaders = new Headers();
@@ -97,74 +101,119 @@ function Main() {
         return <EditProveedor />;
       case "editBienInventariable":
         return <EditBienInventariable />;
+      case "inicio":
+        return <Inicio />;
     }
   };
 
   return (
-    <div>
-      <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
-        <img
-          onClick={toggleSidebar}
-          src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"}
-          alt="No carga"
-        />
-        <ul style={{ color: "white", cursor: "pointer" }}>
-          <li onClick={() => {
-            setCurrentPage("inventariable")
-            localStorage.setItem("currentPage","inventariable")
-            }}>
-            <FontAwesomeIcon icon={faShop} /> Inventariable
-          </li>
-          <li onClick={() => {
-            setCurrentPage("noInventariable")
-            localStorage.setItem("currentPage","noInventariable")
-            }}>
-            <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
-          </li>
-          <li className="dropdown">
-            <span className="dropdown-toggle">
-              <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
-            </span>
-            <ul className="dropdown-menu">
-              <li onClick={() => {
-                setCurrentPage("subirFactura")
-                localStorage.setItem("currentPage","subirFactura");
-                }}>
-                Registrar (XML)
-              </li>
-              <li onClick={() => {
-                setCurrentPage("adjuntarPDF")
-                localStorage.setItem("currentPage","adjuntarPDF");
-                }}>
-                Adjuntar (PDF)
-              </li>
-              <li onClick={() => {
-                setCurrentPage("verFacturas")
-                localStorage.setItem("currentPage", "verFacturas")
-                }}>Visualizar</li>
-            </ul>
-          </li>
-          <li onClick={() => {
-            setCurrentPage("asignacionResguardos")
-            localStorage.setItem("currentPage", "asignacionResguardos")
-            }}>
-            <FontAwesomeIcon icon={faBookBookmark} /> Asignación de Resguardos
-          </li>
-          <li onClick={() => {
-            setCurrentPage("proveedores")
-            localStorage.setItem("currentPage","proveedores")
-            }}>
-            <FontAwesomeIcon icon={faTruckField} /> Proveedores
-          </li>
-          <li onClick={showAlert}>
-            <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
-          </li>
-        </ul>
+    <>
+      <div>
+        <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
+          <img
+            onClick={toggleSidebar}
+            src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"}
+            alt="No carga"
+          />
+          <p style={{color:"white"}}>{localStorage.getItem("email")}</p>
+          <ul style={{ color: "white", cursor: "pointer" }}>
+            <li
+              onClick={() => {
+                setCurrentPage("inicio");
+                localStorage.setItem("currentPage", "inicio");
+              }}
+            >
+              <FontAwesomeIcon icon={faHome} /> Inicio
+            </li>
+            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_RECMAT) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+              <>
+                <li
+                  onClick={() => {
+                    setCurrentPage("inventariable");
+                    localStorage.setItem("currentPage", "inventariable");
+                  }}
+                >
+                  <FontAwesomeIcon icon={faShop} /> Inventariable
+                </li>
+                <li
+                  onClick={() => {
+                    setCurrentPage("noInventariable");
+                    localStorage.setItem("currentPage", "noInventariable");
+                  }}
+                >
+                  <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
+                </li>
+                <li
+                  onClick={() => {
+                    setCurrentPage("asignacionResguardos");
+                    localStorage.setItem("currentPage", "asignacionResguardos");
+                  }}
+                >
+                  <FontAwesomeIcon icon={faBookBookmark} /> Asignación de Resguardos
+                </li>
+              </>) : ("")}
+            
+            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+            <>
+              <li className="dropdown">
+              <span className="dropdown-toggle">
+                <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
+              </span>
+              <ul className="dropdown-menu">
+                {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+                <>
+                  {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (<>
+                    <li
+                    onClick={() => {
+                      setCurrentPage("subirFactura");
+                      localStorage.setItem("currentPage", "subirFactura");
+                    }}
+                    >
+                      Registrar (XML)
+                    </li>
+                    <li
+                      onClick={() => {
+                        setCurrentPage("adjuntarPDF");
+                        localStorage.setItem("currentPage", "adjuntarPDF");
+                      }}
+                    >
+                    Adjuntar (PDF)
+                    </li>
+                  </>
+                  ) : ("")
+                  }
+                </>) : ("")}
+                <li
+                  onClick={() => {
+                    setCurrentPage("verFacturas");
+                    localStorage.setItem("currentPage", "verFacturas");
+                  }}
+                >
+                  Visualizar
+                </li>
+              </ul>
+            </li>
+            </>) : ("")}
+            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (<>
+              <li
+              onClick={() => {
+                setCurrentPage("proveedores");
+                localStorage.setItem("currentPage", "proveedores");
+              }}
+              >
+              <FontAwesomeIcon icon={faTruckField} /> Proveedores
+            </li>
+            </>) : ("")}
+            <li onClick={showAlert}>
+              <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
+            </li>
+          </ul>
+        </div>
+        <div className={`content ${sidebarCollapsed ? "content-shifted" : ""}`}>
+          {renderPage()}
+        </div>
       </div>
-      <div className={`content ${sidebarCollapsed ? "content-shifted" : ""}`}>
-        {renderPage()}
-      </div>
-    </div>
+    </>
   );
 }
 

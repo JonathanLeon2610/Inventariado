@@ -249,6 +249,7 @@ function VerFacturas() {
                           <FontAwesomeIcon icon={faDownload} /> Descargar
                         </button>
                       </a>
+                     {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) ? (<>
                       <button
                         style={{ backgroundColor: "red" }}
                         onClick={() => {
@@ -271,6 +272,7 @@ function VerFacturas() {
                       >
                         <FontAwesomeIcon icon={faBan} /> Eliminar
                       </button>
+                     </>) : ("") }
                     </>
                   ) : (
                     <>
@@ -304,7 +306,8 @@ function VerFacturas() {
                           <FontAwesomeIcon icon={faDownload} /> Descargar
                         </button>
                       </a>
-                      <button
+                      {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) ? (<>
+                        <button
                         style={{ backgroundColor: "red" }}
                         onClick={() => {
                           Swal.fire({
@@ -323,9 +326,10 @@ function VerFacturas() {
                             }
                           });
                         }}
-                      >
-                        <FontAwesomeIcon icon={faBan} /> Eliminar
-                      </button>
+                        >
+                          <FontAwesomeIcon icon={faBan} /> Eliminar
+                        </button>
+                      </>) : ("")}
                     </>
                   ) : (
                     <>
