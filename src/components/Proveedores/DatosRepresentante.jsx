@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan,faDownload } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
 function DatosRepresentante() {
@@ -121,6 +121,7 @@ function DatosRepresentante() {
     <>
       <h2>Datos del representante</h2>
       <hr />
+      <button className="add"><FontAwesomeIcon icon={faDownload} /> Importar datos</button>
       <div className="formulario-container-proveedor">
         <form onSubmit={handleSubmit}>
           <div style={{ display: "flex", flexDirection: "column" }}>

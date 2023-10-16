@@ -98,6 +98,23 @@ function AgregarProveedor() {
 
         <form action="" onSubmit={handleEdit}>
           <div className="formulario-container-proveedor">
+          <div>
+              <label htmlFor="">RFC</label>
+              <input
+                type="text"
+                placeholder="RFC"
+                onChange={(e) => {
+                  setInputValues({
+                    ...inputValues,
+                    rfc: e.target.value.toUpperCase(),
+                  });
+                  setRfcError("");
+                }}
+                required
+              />
+              {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
+              <button>Consultar RFC</button>
+            </div>
             <div>
               <label htmlFor="">Tipo de persona</label>
               <select onChange={handlePersonaTipoChange}>
@@ -138,22 +155,7 @@ function AgregarProveedor() {
                 )}
               </select>
             </div>
-            <div>
-              <label htmlFor="">RFC</label>
-              <input
-                type="text"
-                placeholder="RFC"
-                onChange={(e) => {
-                  setInputValues({
-                    ...inputValues,
-                    rfc: e.target.value.toUpperCase(),
-                  });
-                  setRfcError("");
-                }}
-                required
-              />
-              {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
-            </div>
+            
             <div>
               <label htmlFor="">Nombre</label>
               <input

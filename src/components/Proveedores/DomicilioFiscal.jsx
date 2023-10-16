@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan,faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 function DomicilioFiscal() {
@@ -226,6 +226,7 @@ function DomicilioFiscal() {
     <>
       <h2>Domicilio Fiscal</h2>
       <hr />
+      <button className="add"><FontAwesomeIcon icon={faDownload} /> Importar datos</button>
       <div className="formulario-container-proveedor">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div>
