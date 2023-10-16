@@ -17,11 +17,14 @@ function Inventariables() {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 25;
   const [marcas, setMarcas] = useState([]);
+  const [noSerie, setNoSerie] = useState([]);
+  const [noInventario, setNoInventario] = useState([]);
+  const [marcaId, setMaraId] = useState(0);
 
   useEffect(() => {
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+        `api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&NumeroInventario${noInventario}&NumeroSerie=${noSerie}`,
       {
         method: "GET",
       }
@@ -32,14 +35,6 @@ function Inventariables() {
       })
       .catch(() => console.log("Error: CODIGO #1"));
   }, [currentPage]);
-
-  function allowAddButton() {
-    if (localStorage.getItem("role") === "Auxiliar Administrativo") {
-      return true;
-    } else {
-      return null;
-    }
-  }
 
   function getMarcaNameById(marcaId) {
     const marca = marcas.find((marca) => marca.id === marcaId);
@@ -57,65 +52,103 @@ function Inventariables() {
       .catch(() => console.log("Error: CODIGO #2"));
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "noInventario":
+        setNoInventario(value);
+        break;
+      case "marcaId":
+        setMaraId(value);
+        break;
+      case "noSerie":
+        setNoSerie(value);
+        break;
+      }
+  };
+
+  const handleChangeData = (noInventario, marcaId, noSerie) => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    setCurrentPage(1);
+
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/activobien/filtrar?Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&NumeroInventario=${noInventario}&NumeroSerie=${noSerie}&MarcaId=${marcaId}`,
+      requestOptions
+    )
+    
+      .then((response) => response.json())
+      .then((result) => {
+        setdata(result);
+      })
+      .catch(() => console.log('Error: CODIGO #4'));
+  };
+
   return (
     <>
       <div className="no-print">
         <h2>Lista de Inventariables</h2>
-        {allowAddButton() ? (
-          <>
-            <div>
-              <Link to={"/agregar-bien-inventariable"}>
-                <button className="add">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Agregar Bien
-                </button>
-              </Link>
-              <Link
-                to={"/table-import-bien-inventariable"}
-                style={{ marginLeft: "1rem" }}
-              >
-                <button className="import">
-                  {" "}
-                  <FontAwesomeIcon icon={faFileImport} /> Importar Bien
-                </button>
-              </Link>
-              <button
-                className="import"
-                style={{ marginLeft: "1rem", backgroundColor: "orange" }}
-                onClick={() => window.print()}
-              >
-                {" "}
-                <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
-              </button>
-            </div>
-            <div className="filter-form">
-              <label>No. Inventario:</label>
-              <input type="text" name="uuid" placeholder="Introducir No.Inventario" />
-              <label>Marca:</label>
-              <select>
-                <option value="none" disabled selected>
-                  Selecciona una marca
-                </option>
-                {marcas.map((marca) => (
-                  <option key={marca.id} value={marca.id.toString()}>
-                    {marca.name}
-                  </option>
-                ))}
-              </select>
-              <label>No.Serie</label>
-              <input
-                type="text"
-                name="noserie"
-                placeholder="Introducir No.Serie"
-              />
-              <button className="add">
-                Buscar <FontAwesomeIcon icon={faSearch} />{" "}
-              </button>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
+        <div>
+          <Link to={"/agregar-bien-inventariable"}>
+            <button className="add">
+              {" "}
+              <FontAwesomeIcon icon={faPlus} /> Agregar Bien
+            </button>
+          </Link>
+          <Link
+            to={"/table-import-bien-inventariable"}
+            style={{ marginLeft: "1rem" }}
+          >
+            <button className="import">
+              {" "}
+              <FontAwesomeIcon icon={faFileImport} /> Importar Bien
+            </button>
+          </Link>
+          <button
+            className="import"
+            style={{ marginLeft: "1rem", backgroundColor: "orange" }}
+            onClick={() => window.print()}
+          >
+            {" "}
+            <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
+          </button>
+        </div>
+        <div className="filter-form">
+          <label>No. Inventario:</label>
+          <input
+            type="text"
+            name="noInventario"
+            placeholder="Introducir No.Inventario"
+            onChange={handleChange}
+          />
+          <label>Marca:</label>
+          <select name="marcaId" onChange={handleChange}>
+            <option value="none" disabled selected>
+              Selecciona una marca
+            </option>
+            {marcas.map((marca) => (
+              <option key={marca.id} value={marca.id.toString()}>
+                {marca.name}
+              </option>
+            ))}
+          </select>
+          <label>No.Serie</label>
+          <input type="text" name="noSerie" placeholder="Introducir No.Serie" onChange={handleChange}/>
+          <button className="add" onClick={() => handleChangeData(noInventario, marcaId, noSerie)}>
+            Buscar <FontAwesomeIcon icon={faSearch} />{" "}
+          </button>
+        </div>
         <table className="table-to-print">
           <thead>
             <tr>
@@ -131,11 +164,7 @@ function Inventariables() {
               <th>Modelo</th>
               <th># Serie</th>
               <th>Costo</th>
-              {allowAddButton() ? (
-                <th className="option-button">Opciones</th>
-              ) : (
-                ""
-              )}
+              <th className="option-button">Opciones</th>
             </tr>
           </thead>
           <tbody>
@@ -148,17 +177,13 @@ function Inventariables() {
                 <td>{item.modelo}</td>
                 <td>{item.numeroSerie}</td>
                 <td>${item.costo.toLocaleString("en")}</td>
-                {allowAddButton() ? (
-                  <td className="option-button">
-                    <Link to={`/edit-bien-inventariable/${item.id}`}>
-                      <button className="free">
-                        <FontAwesomeIcon icon={faEdit} /> Editar
-                      </button>
-                    </Link>
-                  </td>
-                ) : (
-                  ""
-                )}
+                <td className="option-button">
+                  <Link to={`/edit-bien-inventariable/${item.id}`}>
+                    <button className="free">
+                      <FontAwesomeIcon icon={faEdit} /> Editar
+                    </button>
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -222,7 +222,7 @@ function VerFacturas() {
               <th>Total</th>
               <th>Fecha</th>
               <th className="no-print">Archivo XML</th>
-              <th className="no-print">Arhivo PDF</th>
+              <th className="no-print">Archivo PDF</th>
               {/* {allowAddButton() ? <th className="option-button">Opciones</th> : ""} */}
             </tr>
           </thead>

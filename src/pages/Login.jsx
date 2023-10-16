@@ -54,12 +54,14 @@ const Login = () => {
         return response.text();
       })
       .then((result) => {
-        console.log(JSON.parse(result));
         var value = JSON.parse(result);
+        
         localStorage.setItem("token", value.token);
         localStorage.setItem("email", email);
         const token = localStorage.getItem("token");
         const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        localStorage.setItem("nombre", decodedToken['Nombre']);
         localStorage.setItem("role", decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
         localStorage.setItem("expiration", value.expiration);
         localStorage.setItem("currentPage", "inicio")

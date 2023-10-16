@@ -129,7 +129,7 @@ function FacturaPreview() {
   
             Swal.fire(
               "Registro exitoso!",
-              "La factura se ha registrado correctamente, el siguiente paso es adjuntar el PDF, puedes hacerlo en la ventana de 'Adjuntar(PDF) o bien ver el regsitro en la ventana de 'Visualizar'",
+              "La factura se ha registrado correctamente, el siguiente paso es adjuntar el PDF, puedes hacerlo en la ventana de 'Adjuntar(PDF)' o bien ver el registro en la ventana de 'Visualizar'",
               "success"
             ).then(() => {
               setXmlDataList([])

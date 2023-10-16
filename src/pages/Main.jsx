@@ -115,7 +115,7 @@ function Main() {
             src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"}
             alt="No carga"
           />
-          <p style={{color:"white"}}>{localStorage.getItem("email")}</p>
+          <p style={{color:"white"}}>{localStorage.getItem("nombre")}</p>
           <ul style={{ color: "white", cursor: "pointer" }}>
             <li
               onClick={() => {
