@@ -520,7 +520,8 @@ td button.set:hover {
 
 .filter-form {
   display: flex;
-  gap: 12px;
+  font-size: 12px;
+  gap: 8px;
   height: 2rem;
   margin-bottom: 1rem;
 }
