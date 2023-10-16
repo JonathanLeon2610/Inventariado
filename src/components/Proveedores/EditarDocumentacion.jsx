@@ -119,7 +119,9 @@ function EditarDocumentacion() {
                   ...inputValues,
                   Reference: e.target.value,
                 })
-              }/>
+              }
+              placeholder="Referencias del documento"
+              />
           </div>
           <div>
             <label htmlFor="">Archivo</label>
