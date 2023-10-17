@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan,faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useState} from "react";
 import Swal from "sweetalert2";
 function AgregarProveedor() {
@@ -68,26 +68,38 @@ function AgregarProveedor() {
     };
 
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/proveedores`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/proveedores`,
       requestOptions
     )
       .then((response) => {
         if (response.ok) {
-            Swal.fire(
-                "Registro exitoso!",
-                "Se ha registrado correctamente el nuevo proveedor!",
-                "success"
-              ).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "/main"
-                }
-              })
+          // Manejar respuesta exitosa
+          Swal.fire(
+            "Registro exitoso!",
+            "Se ha registrado correctamente el nuevo proveedor!",
+            "success"
+          ).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/main";
+            }
+          });
+        } else {
+          // Manejar errores HTTP
+          if (response.status === 405) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Es posible que ese RFC ya este asignado a un proveedor',
+            })
+          } else {
+            console.error("Error desconocido con código de estado:", response.status);
+          }
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
+    
   };
 
   return (
@@ -95,7 +107,13 @@ function AgregarProveedor() {
       <div>
         <h2 style={{ marginLeft: "1rem" }}>Datos Generales</h2>
         <hr />
-
+        <button
+              className="add"
+              style={{ marginLeft: "1rem", backgroundColor: "gray" }}
+              onClick={() => (window.location.href = "/main")}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+            </button>
         <form action="" onSubmit={handleEdit}>
           <div className="formulario-container-proveedor">
           <div>
