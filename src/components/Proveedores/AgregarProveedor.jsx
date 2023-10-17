@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan,faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useState} from "react";
+import { faCheck, faBan, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 import Swal from "sweetalert2";
 function AgregarProveedor() {
   const [rfcError, setRfcError] = useState("");
-  const rfcRegexFisica = /^[A-Z]{4}\d{6}[A-Z0-9]{3}$/;
-  const regexRFCPersonaMoral = /^[A-Z]{3}[0-9]{6}[A-Z0-9]{3}$/;
+  const rfcRegexFisica = /[A-Z,Ñ,&]{4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
+  const regexRFCPersonaMoral = /[A-Z,Ñ,&]{3}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
   const [rfcRegex, setRfcRegex] = useState(rfcRegexFisica);
 
   const handlePersonaTipoChange = (e) => {
@@ -28,7 +28,7 @@ function AgregarProveedor() {
     nombre: "",
     nombreComercial: "",
     observaciones: "",
-    personaTipoId: 1,
+    personaTipoId: 0,
     rfc: "",
     saacgnetId: 0,
     tipoProveedorId: 4,
@@ -46,6 +46,11 @@ function AgregarProveedor() {
 
     if (!rfcRegex.test(inputValues.rfc)) {
       setRfcError("El RFC no es válido");
+      return;
+    }
+
+    if (inputValues.personaTipoId === 0) {
+      alert("No se ha seleccionado un tipo de persona");
       return;
     }
 
@@ -87,19 +92,75 @@ function AgregarProveedor() {
           // Manejar errores HTTP
           if (response.status === 405) {
             Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Es posible que ese RFC ya este asignado a un proveedor',
-            })
+              icon: "error",
+              title: "Oops...",
+              text: "Es posible que ese RFC ya este asignado a un proveedor",
+            });
           } else {
-            console.error("Error desconocido con código de estado:", response.status);
+            console.error(
+              "Error desconocido con código de estado:",
+              response.status
+            );
           }
         }
       })
       .catch((error) => {
         console.error(error);
       });
-    
+  };
+
+  const handleconsult = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/SoftwareContable/proveedor/${inputValues.rfc}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        // Formatear la fecha en el formato "yyyy-MM-dd"
+        const fechaNacimiento = new Date(result.fechaNacimiento);
+        const fechaFormateada = fechaNacimiento.toISOString().split("T")[0];
+
+        setInputValues({
+          fechaNacimiento: fechaFormateada,
+          nombre: result.nombre,
+          nombreComercial: result.nombreComercial,
+          observaciones: result.observaciones,
+          personaTipoId: result.personaTipoId,
+          rfc: result.rfc,
+          saacgnetId: result.saacgnetId,
+          tipoProveedorId: result.tipoProveedorId,
+        });
+
+        // Actualizar los campos del formulario
+        document.getElementById("fechaNacimiento").value =
+          fechaFormateada || "";
+        document.getElementById("nombre").value = result.nombre || "";
+        document.getElementById("nombreComercial").value =
+          result.nombreComercial || "";
+        document.getElementById("observaciones").value =
+          result.observaciones || "";
+        document.getElementById("personaTipoId").value =
+          result.personaTipoId || "";
+        document.getElementById("rfc").value = result.rfc || "";
+        document.getElementById("saacgnetId").value = result.saacgnetId || "";
+        document.getElementById("tipoProveedorId").value =
+          result.tipoProveedorId || "";
+      })
+      .catch((error) => console.log("error", error));
   };
 
   return (
@@ -108,17 +169,18 @@ function AgregarProveedor() {
         <h2 style={{ marginLeft: "1rem" }}>Datos Generales</h2>
         <hr />
         <button
-              className="add"
-              style={{ marginLeft: "1rem", backgroundColor: "gray" }}
-              onClick={() => (window.location.href = "/main")}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} /> Regresar
-            </button>
+          className="add"
+          style={{ marginLeft: "1rem", backgroundColor: "gray" }}
+          onClick={() => (window.location.href = "/main")}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Regresar
+        </button>
         <form action="" onSubmit={handleEdit}>
           <div className="formulario-container-proveedor">
-          <div>
+            <div>
               <label htmlFor="">RFC</label>
               <input
+                id="rfc"
                 type="text"
                 placeholder="RFC"
                 onChange={(e) => {
@@ -131,20 +193,30 @@ function AgregarProveedor() {
                 required
               />
               {rfcError && <p style={{ color: "red" }}>{rfcError}</p>}
-              <button>Consultar RFC</button>
+              <button type="button" onClick={handleconsult}>
+                Importar proveedor con ese RFC
+              </button>
             </div>
             <div>
               <label htmlFor="">Tipo de persona</label>
-              <select onChange={handlePersonaTipoChange}>
-                {inputValues.personaTipoId === 1 ? (
+              <select onChange={handlePersonaTipoChange} id="personaTipoId">
+                {inputValues.personaTipoId === 0 ? (
                   <>
-                    <option value={1}>Fisica</option>
+                    <option value={0}>
+                      Seleccione una opción
+                    </option>
+                    <option value={1}>Física</option>
+                    <option value={2}>Moral</option>
+                  </>
+                ) : inputValues.personaTipoId === 1 ? (
+                  <>
+                    <option value={1}>Física</option>
                     <option value={2}>Moral</option>
                   </>
                 ) : (
                   <>
                     <option value={2}>Moral</option>
-                    <option value={1}>Fisica</option>
+                    <option value={1}>Física</option>
                   </>
                 )}
               </select>
@@ -152,6 +224,7 @@ function AgregarProveedor() {
             <div>
               <label htmlFor="">Tipo de proveedor</label>
               <select
+                id="tipoProveedorId"
                 onChange={(e) =>
                   setInputValues({
                     ...inputValues,
@@ -173,10 +246,26 @@ function AgregarProveedor() {
                 )}
               </select>
             </div>
-            
+            <div>
+              <label htmlFor="">saacgnetId</label>
+              <input
+                id="saacgnetId"
+                type="text"
+                placeholder="Nombre"
+                onChange={(e) =>
+                  setInputValues({
+                    ...inputValues,
+                    saacgnetId: e.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+
             <div>
               <label htmlFor="">Nombre</label>
               <input
+                id="nombre"
                 type="text"
                 placeholder="Nombre"
                 onChange={(e) =>
@@ -191,6 +280,7 @@ function AgregarProveedor() {
             <div>
               <label htmlFor="">Nombre Comercial</label>
               <input
+                id="nombreComercial"
                 type="text"
                 placeholder="Nombre Comercial"
                 onChange={(e) =>
@@ -205,6 +295,7 @@ function AgregarProveedor() {
             <div>
               <label htmlFor="">Observaciones</label>
               <input
+                id="observaciones"
                 type="text"
                 placeholder="Observaciones"
                 onChange={(e) =>
@@ -219,6 +310,7 @@ function AgregarProveedor() {
             <div>
               <label htmlFor="">Inicio de Operaciones</label>
               <input
+                id="fechaNacimiento"
                 type="date"
                 placeholder="Tipo de Persona"
                 onChange={(e) =>

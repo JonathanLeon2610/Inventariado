@@ -116,6 +116,7 @@ function DatosGenerales() {
     )
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         setData(result);
         setInputValues({
           id: ultimoValor,

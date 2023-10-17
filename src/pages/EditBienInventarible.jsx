@@ -34,6 +34,7 @@ function EditBienInventariable() {
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
+  // eslint-disable-next-line no-unused-vars
   const [fileName, setFileName] = useState(null);
 
   const fileInputRef = useRef(null); 

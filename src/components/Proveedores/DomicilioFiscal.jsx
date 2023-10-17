@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan,faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 function DomicilioFiscal() {
+  
   const [data, setData] = useState([]);
   const [municipios, setMunicipios] = useState([]);
   const url = window.location.pathname;
@@ -79,30 +80,6 @@ function DomicilioFiscal() {
     tipoVialidad: "",
   });
 
-  useEffect(() => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + localStorage.getItem("token")
-    );
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/SoftwareContable/Municipios/${inputValues.estadoId}`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        setMunicipios(result)
-      })
-      .catch((error) => console.log("error", error));
-  }, [inputValues.estadoId]);
-
   const handlePaisChange = (e) => {
     const selectedPaisId = e.target.value;
     setInputValues({
@@ -127,7 +104,6 @@ function DomicilioFiscal() {
     });
   };
 
-
   const handleEdit = () => {
     const myHeaders = new Headers();
     myHeaders.append(
@@ -151,7 +127,7 @@ function DomicilioFiscal() {
       numeroExterior: inputValues.numeroExterior,
       numeroInterior: inputValues.numeroInterior,
       paisId: inputValues.paisId,
-      tipoVialidad: inputValues.tipoVialidad
+      tipoVialidad: inputValues.tipoVialidad,
     });
 
     const requestOptions = {
@@ -179,7 +155,61 @@ function DomicilioFiscal() {
         console.log(error);
       });
   };
+
+  const handleImport = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
   
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+  
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/Proveedores/${ultimoValor}/DomicilioFiscal`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setInputValues({
+          id: ultimoValor,
+          codigoPostal: result.codigoPostal || "",
+          colonia: result.colonia || "",
+          entreCalle1: result.entreCalle1 || "",
+          entreCalle2: result.entreCalle2 || "",
+          estado: result.estado || "",
+          estadoId: result.estadoId || "",
+          localidad: result.localidad || "",
+          municipio: result.municipio || "",
+          municipioId: result.municipioId || "",
+          nombreVialidad: result.nombreVialidad || "",
+          numeroExterior: result.numeroExterior || "",
+          numeroInterior: result.numeroInterior || "",
+          paisId: result.paisId || "",
+          tipoVialidad: result.tipoVialidad || "",
+        });
+        
+  
+        // Actualizar los campos del formulario
+        document.getElementById("codigoPostal").value = result.codigoPostal || "";
+        document.getElementById("tipoVialidad").value = result.tipoVialidad || "";
+        document.getElementById("nombreVialidad").value = result.nombreVialidad || "";
+        document.getElementById("colonia").value = result.colonia || "";
+        document.getElementById("localidad").value = result.localidad || "";
+        document.getElementById("numeroInterior").value = result.numeroInterior || "";
+        document.getElementById("numeroExterior").value = result.numeroExterior || "";
+        document.getElementById("entreCalle1").value = result.entreCalle1 || "";
+        document.getElementById("entreCalle2").value = result.entreCalle2 || "";
+        document.getElementById("pais").value = result.paisId || "";
+        document.getElementById("estado").value = result.estadoId || "";
+        document.getElementById("municipio").value = result.municipioId || "";
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   useEffect(() => {
     var myHeaders = new Headers();
     myHeaders.append(
@@ -216,22 +246,50 @@ function DomicilioFiscal() {
           numeroExterior: result.numeroExterior,
           numeroInterior: result.numeroInterior,
           paisId: result.paisId,
-          tipoVialidad: result.tipoVialidad
+          tipoVialidad: result.tipoVialidad,
         });
       })
       .catch((error) => console.log(error));
   }, []);
 
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/SoftwareContable/Municipios/${inputValues.estadoId}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setMunicipios(result);
+      })
+      .catch((error) => console.log("error", error));
+  }, [inputValues.estadoId]);
+
   return (
     <>
       <h2>Domicilio Fiscal</h2>
       <hr />
-      <button className="add"><FontAwesomeIcon icon={faDownload} /> Importar datos</button>
+      <button className="add" onClick={handleImport}>
+        <FontAwesomeIcon icon={faDownload} /> Importar datos
+      </button>
       <div className="formulario-container-proveedor">
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div>
             <label htmlFor="">Codigo Postal</label>
             <input
+              id="codigoPostal"
               type="text"
               defaultValue={data.codigoPostal}
               placeholder="Codigo postal"
@@ -247,6 +305,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Tipo de vialidad</label>
             <input
+              id="tipoVialidad"
               type="text"
               placeholder="Tipo de vialidad (Calle, boulevard, etc)"
               defaultValue={data.tipoVialidad}
@@ -262,6 +321,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Nombre de vialidad</label>
             <input
+              id="nombreVialidad"
               type="text"
               placeholder="Nombre de la vialidad"
               defaultValue={data.nombreVialidad}
@@ -297,13 +357,13 @@ function DomicilioFiscal() {
               <div>
                 <label htmlFor="">Estado</label>
                 <select
+                  defaultValue={inputValues.estado}
                   id="estado"
-                  defaultValue={inputValues.estadoId}
                   onChange={(e) => {
                     const selectedEstadoId = e.target.value;
                     const selectedEstado = estados.find(
                       (estado) => estado.EstadoId === selectedEstadoId
-                    );
+                      );
                     setInputValues({
                       ...inputValues,
                       estadoId: selectedEstadoId,
@@ -346,8 +406,9 @@ function DomicilioFiscal() {
               <div>
                 <label htmlFor="">Colonia</label>
                 <input
+                  id="colonia"
                   type="text"
-                  placeholder="Nombre de la colinia"
+                  placeholder="Nombre de la colonia"
                   defaultValue={data.colonia}
                   required
                   onChange={(e) =>
@@ -364,6 +425,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Localidad (Ciudad)</label>
             <input
+              id="localidad"
               type="text"
               placeholder="Nombre de la localidad"
               defaultValue={data.localidad}
@@ -379,6 +441,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Numero interior</label>
             <input
+              id="numeroInterior"
               type="text"
               placeholder="No. Interior"
               defaultValue={data.numeroInterior}
@@ -394,6 +457,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Numero exterior</label>
             <input
+              id="numeroExterior"
               type="text"
               placeholder="No. Exterior"
               defaultValue={data.numeroExterior}
@@ -409,6 +473,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Calle 1</label>
             <input
+              id="entreCalle1"
               type="text"
               placeholder="Calle 1"
               defaultValue={data.entreCalle1}
@@ -424,6 +489,7 @@ function DomicilioFiscal() {
           <div>
             <label htmlFor="">Calle 2</label>
             <input
+              id="entreCalle2"
               type="text"
               placeholder="Calle 2"
               defaultValue={data.entreCalle2}
