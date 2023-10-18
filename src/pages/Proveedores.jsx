@@ -172,11 +172,6 @@ function Proveedores() {
                         <FontAwesomeIcon icon={faArrowRight} /> Ver Facturas
                       </button>
                     </Link>
-                    <Link to={`/documentacion-proveedor/${item.id}`}>
-                      <button className="add" style={{backgroundColor:"orange"}}>
-                        <FontAwesomeIcon icon={faArrowRight} /> Ver documentos
-                      </button>
-                    </Link>
                   </td>
                 </tr>
               </>

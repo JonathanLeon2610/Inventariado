@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan,faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 function DatosBancarios() {
   const url = window.location.pathname;

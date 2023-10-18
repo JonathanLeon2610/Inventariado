@@ -103,7 +103,48 @@ function DocumentacionProveedor() {
           <table className="table-to-print">
             <thead>
               <tr>
-                <th colSpan="12">Lista de documentos</th>
+                <th colSpan="12">Lista de documentos obligatorios</th>
+              </tr>
+              <tr>
+                <th>#</th>
+                <th>Tipo de documentacion</th>
+                <th>Ultima fecha de actualizacion</th>
+                <th>Referencias</th>
+                <th className="no-print">Archivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <>
+                  <tr key={index} style={{backgroundColor:"#DFD426"}}>
+                    <td>{index + 1}</td>
+                    <td>{getDocumentoByName(item.documentoTipoId)}</td>
+                    <td>{formatFecha(item.fechaActualizacion)}</td>
+                    <td>{item.reference}</td>
+                    <td className="no-print">
+                      <a
+                        href={item.fileUrl}
+                        target="blank"
+                        download={item.fileUrl}
+                      >
+                        <button className="free">
+                          <FontAwesomeIcon icon={faDownload} /> Descargar
+                          documento
+                        </button>
+                      </a>
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <hr />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <table className="table-to-print">
+            <thead>
+              <tr>
+                <th colSpan="12">Lista de documentos extras</th>
               </tr>
               <tr>
                 <th>#</th>
