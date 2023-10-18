@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faBan,faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faBan, faDownload } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
 function DatosRepresentante() {
@@ -13,14 +13,14 @@ function DatosRepresentante() {
   const [data, setData] = useState("");
 
   const [inputValues, setInputValues] = useState({
-      id: "",
-      representanteLegal: "",
-      repCURP: "",
-      repTel: "",
-      repEmail: "",
-      actaConstitutiva: "",
-      poderNotarial: "",
-      datosNotaria: ""
+    id: "",
+    representanteLegal: "",
+    repCURP: "",
+    repTel: "",
+    repEmail: "",
+    actaConstitutiva: "",
+    poderNotarial: "",
+    datosNotaria: "",
   });
 
   const curpRegex = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/;
@@ -59,75 +59,129 @@ function DatosRepresentante() {
         setData(result);
         setInputValues({
           id: ultimoValor,
-          representanteLegal: result.representanteLegal,
-          repCURP: result.repCURP,
-          repTel: result.repTel,
-          repEmail: result.repEmail,
-          actaConstitutiva: result.actaConstitutiva,
-          poderNotarial: result.poderNotarial,
-          datosNotaria: result.datosNotaria
+          representanteLegal: result.representanteLegal || "",
+          repCURP: result.repCURP || "",
+          repTel: result.repTel || "",
+          repEmail: result.repEmail || "",
+          actaConstitutiva: result.actaConstitutiva || "",
+          poderNotarial: result.poderNotarial || "",
+          datosNotaria: result.datosNotaria || "",
         });
       })
       .catch((error) => console.log(error));
   }, []);
 
+  const handleconsult = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/SoftwareContable/proveedor/${ultimoValor}/Representante`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setInputValues({
+          id: ultimoValor,
+          representanteLegal: result.representanteLegal || "",
+          repCURP: result.repCURP || "",
+          repTel: result.repTel || "",
+          repEmail: result.repEmail || "",
+          actaConstitutiva: result.actaConstitutiva || "",
+          poderNotarial: result.poderNotarial || "",
+          datosNotaria: result.datosNotaria || "",
+        });
+
+        document.getElementById("nombre").value = result.representanteLegal || "";
+        document.getElementById("curp").value =
+          result.repCURP || "";
+        document.getElementById("telefono").value =
+          result.repTel || "";
+        document.getElementById("email").value =
+          result.repEmail || "";
+        document.getElementById("actaConstitutiva").value = result.actaConstitutiva || "";
+        document.getElementById("poderNotarial").value = result.poderNotarial || "";
+        document.getElementById("datosNotaria").value =
+          result.datosNotaria || "";
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!curpError) {
+    if (curpError) {
+      return; // No permitir el envío si hay un error en el CURP
+    }
 
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append(
-        "Authorization",
-        "Bearer " + localStorage.getItem("token")
-      );
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
 
-      var raw = JSON.stringify({
-        id: ultimoValor,
-        representanteLegal: inputValues.representanteLegal,
-        repCURP: inputValues.repCURP,
-        repTel: inputValues.repTel,
-        repEmail: inputValues.repEmail,
-        actaConstitutiva: inputValues.actaConstitutiva,
-        poderNotarial: inputValues.poderNotarial,
-        datosNotaria: inputValues.datosNotaria
-      });
+    var raw = JSON.stringify({
+      id: ultimoValor,
+      representanteLegal: inputValues.representanteLegal,
+      repCURP: inputValues.repCURP,
+      repTel: inputValues.repTel,
+      repEmail: inputValues.repEmail,
+      actaConstitutiva: inputValues.actaConstitutiva,
+      poderNotarial: inputValues.poderNotarial,
+      datosNotaria: inputValues.datosNotaria,
+    });
 
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-      fetch(
-        import.meta.env.VITE_REACT_APP_API_URL+`api/v1/proveedores/${ultimoValor}/Representante`,
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then(() => {
-          Swal.fire(
-            "Registro exitoso!",
-            "Los cambios se han aplicado exitosamente!",
-            "success"
-          );
-        })
-        .catch((error) => console.log("error", error));
-    } 
+    console.log(raw);
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/proveedores/${ultimoValor}/Representante`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then(() => {
+        Swal.fire(
+          "Registro exitoso!",
+          "Los cambios se han aplicado exitosamente!",
+          "success"
+        );
+      })
+      .catch((error) => console.log("error", error));
   };
 
   return (
     <>
       <h2>Datos del representante</h2>
       <hr />
-      <button className="add"><FontAwesomeIcon icon={faDownload} /> Importar datos</button>
+      <button className="add" onClick={handleconsult}>
+        <FontAwesomeIcon icon={faDownload}/> Importar datos
+      </button>
       <div className="formulario-container-proveedor">
         <form onSubmit={handleSubmit}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div>
               <label htmlFor="">Nombre:</label>
               <input
+                id="nombre"
                 type="text"
                 placeholder="Nombre"
                 required
@@ -135,7 +189,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    representanteLegal: e.target.value, 
+                    representanteLegal: e.target.value,
                   });
                 }}
               />
@@ -143,23 +197,24 @@ function DatosRepresentante() {
             <div>
               <label htmlFor="">CURP:</label>
               <input
+                id="curp"
                 type="text"
                 placeholder="CURP"
                 defaultValue={data.repCURP}
                 onChange={(e) => {
-                  handleCurpChange,
+                  handleCurpChange(e);
                   setInputValues({
                     ...inputValues,
-                    repCURP: e.target.value.toUpperCase(), 
+                    repCURP: e.target.value.toUpperCase(),
                   });
                 }}
-
               />
               {curpError && <p style={{ color: "red" }}>{curpError}</p>}
             </div>
             <div>
               <label htmlFor="">Telefono:</label>
               <input
+                id="telefono"
                 type="text"
                 placeholder="Telefono"
                 required
@@ -167,7 +222,7 @@ function DatosRepresentante() {
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    repTel: e.target.value, 
+                    repTel: e.target.value,
                   });
                 }}
               />
@@ -175,14 +230,15 @@ function DatosRepresentante() {
             <div>
               <label htmlFor="">Email:</label>
               <input
-                type="text"
+                id="email"
+                type="email"
                 placeholder="Email"
                 required
                 defaultValue={data.repEmail}
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    repEmail: e.target.value, 
+                    repEmail: e.target.value,
                   });
                 }}
               />
@@ -190,9 +246,10 @@ function DatosRepresentante() {
             <div>
               <label htmlFor="">No. de acta constitutiva:</label>
               <input
+                id="actaConstitutiva"
                 type="text"
                 placeholder="No. de acta constitutiva"
-                required
+
                 defaultValue={data.actaConstitutiva}
                 onChange={(e) => {
                   setInputValues({
@@ -205,9 +262,10 @@ function DatosRepresentante() {
             <div>
               <label htmlFor="">No. Poder notarial:</label>
               <input
+                id="poderNotarial"
                 type="text"
                 placeholder="No. Poder notarial"
-                required
+
                 defaultValue={data.poderNotarial}
                 onChange={(e) => {
                   setInputValues({
@@ -220,14 +278,15 @@ function DatosRepresentante() {
             <div>
               <label htmlFor="">Datos de la notaria:</label>
               <input
+                id="datosNotaria"
                 type="text"
                 placeholder="Datos de la notaria"
-                required
+
                 defaultValue={data.datosNotaria}
                 onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    datosNotaria: e.target.value, 
+                    datosNotaria: e.target.value,
                   });
                 }}
               />

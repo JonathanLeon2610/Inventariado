@@ -96,7 +96,6 @@ function DatosBancarios() {
     <>
       <h2>Datos Bancarios</h2>
       <hr />
-      <button className="add"><FontAwesomeIcon icon={faDownload} /> Importar datos</button>
       <div className="formulario-container-proveedor">
 
           <div style={{ display: "flex", flexDirection: "column" }}>

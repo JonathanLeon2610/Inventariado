@@ -4,8 +4,10 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 function AgregarProveedor() {
   const [rfcError, setRfcError] = useState("");
-  const rfcRegexFisica = /[A-Z,Ñ,&]{4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
-  const regexRFCPersonaMoral = /[A-Z,Ñ,&]{3}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
+  const rfcRegexFisica =
+    /[A-Z,Ñ,&]{4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
+  const regexRFCPersonaMoral =
+    /[A-Z,Ñ,&]{3}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?/;
   const [rfcRegex, setRfcRegex] = useState(rfcRegexFisica);
 
   const handlePersonaTipoChange = (e) => {
@@ -21,6 +23,21 @@ function AgregarProveedor() {
       ...inputValues,
       personaTipoId: selectedPersonaTipo,
     });
+
+    console.log(inputValues);
+  };
+
+  const handlePersonaTipoChange2 = (id) => {
+    if (id === 1) {
+      setRfcRegex(rfcRegexFisica);
+    } else if (id === 2) {
+      setRfcRegex(regexRFCPersonaMoral);
+    }
+
+    setInputValues({
+      ...inputValues,
+      personaTipoId: id,
+    });
   };
 
   const [inputValues, setInputValues] = useState({
@@ -28,7 +45,7 @@ function AgregarProveedor() {
     nombre: "",
     nombreComercial: "",
     observaciones: "",
-    personaTipoId: 0,
+    personaTipoId: "",
     rfc: "",
     saacgnetId: 0,
     tipoProveedorId: 4,
@@ -129,19 +146,18 @@ function AgregarProveedor() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        // Formatear la fecha en el formato "yyyy-MM-dd"
         const fechaNacimiento = new Date(result.fechaNacimiento);
         const fechaFormateada = fechaNacimiento.toISOString().split("T")[0];
+        handlePersonaTipoChange2(result.personaTipoId);
 
         setInputValues({
           fechaNacimiento: fechaFormateada,
           nombre: result.nombre,
           nombreComercial: result.nombreComercial,
           observaciones: result.observaciones,
-          personaTipoId: result.personaTipoId,
           rfc: result.rfc,
           saacgnetId: result.saacgnetId,
+          personaTipoId: result.personaTipoId,
           tipoProveedorId: result.tipoProveedorId,
         });
 
@@ -168,6 +184,7 @@ function AgregarProveedor() {
       <div>
         <h2 style={{ marginLeft: "1rem" }}>Datos Generales</h2>
         <hr />
+        {inputValues.personaTipoId}
         <button
           className="add"
           style={{ marginLeft: "1rem", backgroundColor: "gray" }}
@@ -200,23 +217,15 @@ function AgregarProveedor() {
             <div>
               <label htmlFor="">Tipo de persona</label>
               <select onChange={handlePersonaTipoChange} id="personaTipoId">
-                {inputValues.personaTipoId === 0 ? (
-                  <>
-                    <option value={0}>
-                      Seleccione una opción
-                    </option>
-                    <option value={1}>Física</option>
-                    <option value={2}>Moral</option>
-                  </>
-                ) : inputValues.personaTipoId === 1 ? (
+                {inputValues.personaTipoId === 1 ? (
                   <>
                     <option value={1}>Física</option>
                     <option value={2}>Moral</option>
                   </>
                 ) : (
                   <>
-                    <option value={2}>Moral</option>
                     <option value={1}>Física</option>
+                    <option value={2}>Moral</option>
                   </>
                 )}
               </select>
@@ -304,7 +313,6 @@ function AgregarProveedor() {
                     observaciones: e.target.value,
                   })
                 }
-                required
               />
             </div>
             <div>

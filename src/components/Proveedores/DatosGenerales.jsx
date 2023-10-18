@@ -68,6 +68,7 @@ function DatosGenerales() {
       redirect: "follow",
     };
 
+    console.log(raw);
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
         `api/v1/proveedores/${ultimoValor}`,
