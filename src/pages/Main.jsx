@@ -8,6 +8,7 @@ import {
   faMoneyBill,
   faUser,
   faHome,
+  faBoxesPacking
 } from "@fortawesome/free-solid-svg-icons";
 import Inventariables from "../pages/Inventariable";
 import NoInventariables from "../pages/NoInventariables";
@@ -20,6 +21,7 @@ import SubirFactura from "./SubirFactura";
 import VerFacturas from "./VerFacturas";
 import AdjuntarPDF from "./AdjuntarPDF";
 import Inicio from "./Inicio";
+import RequisicionDeBien from "../components/Bienes/RequisicionDeBien";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -101,6 +103,8 @@ function Main() {
         return <EditProveedor />;
       case "editBienInventariable":
         return <EditBienInventariable />;
+      case "requisicionMaterial":
+        return <RequisicionDeBien />;
       case "inicio":
         return <Inicio />;
     }
@@ -115,7 +119,7 @@ function Main() {
             src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"}
             alt="No carga"
           />
-          <p style={{color:"white"}}>{localStorage.getItem("nombre")}</p>
+          <p style={{ color: "white" }}>{localStorage.getItem("nombre")}</p>
           <ul style={{ color: "white", cursor: "pointer" }}>
             <li
               onClick={() => {
@@ -125,7 +129,12 @@ function Main() {
             >
               <FontAwesomeIcon icon={faHome} /> Inicio
             </li>
-            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_RECMAT) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+            {localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_DA_RECMAT) ||
+            localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
               <>
                 <li
                   onClick={() => {
@@ -149,61 +158,123 @@ function Main() {
                     localStorage.setItem("currentPage", "asignacionResguardos");
                   }}
                 >
-                  <FontAwesomeIcon icon={faBookBookmark} /> Asignación de Resguardos
+                  <FontAwesomeIcon icon={faBookBookmark} /> Asignación de
+                  Resguardos
                 </li>
-              </>) : ("")}
-            
-            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
-            <>
-              <li className="dropdown">
-              <span className="dropdown-toggle">
-                <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
-              </span>
-              <ul className="dropdown-menu">
-                {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
-                <>
-                  {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (<>
-                    <li
-                    onClick={() => {
-                      setCurrentPage("subirFactura");
-                      localStorage.setItem("currentPage", "subirFactura");
-                    }}
-                    >
-                      Registrar (XML)
-                    </li>
+              </>
+            ) : (
+              ""
+            )}
+
+            {localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) ||
+            localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+              <>
+                <li className="dropdown">
+                  <span className="dropdown-toggle">
+                    <FontAwesomeIcon icon={faMoneyBill} /> Facturas (CFD)
+                  </span>
+                  <ul className="dropdown-menu">
+                    {localStorage
+                      .getItem("role")
+                      .includes(import.meta.env.VITE_REACT_APP_ADM_COMPRAS) ||
+                    localStorage
+                      .getItem("role")
+                      .includes(import.meta.env.VITE_REACT_APP_AUX_COMPRAS) ||
+                    localStorage
+                      .getItem("role")
+                      .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+                      <>
+                        {localStorage
+                          .getItem("role")
+                          .includes(
+                            import.meta.env.VITE_REACT_APP_AUX_COMPRAS
+                          ) ||
+                        localStorage
+                          .getItem("role")
+                          .includes(
+                            import.meta.env.VITE_REACT_APP_ADM_COMPRAS
+                          ) ||
+                        localStorage
+                          .getItem("role")
+                          .includes(
+                            import.meta.env.VITE_REACT_APP_SUPERADMIN
+                          ) ? (
+                          <>
+                            <li
+                              onClick={() => {
+                                setCurrentPage("subirFactura");
+                                localStorage.setItem(
+                                  "currentPage",
+                                  "subirFactura"
+                                );
+                              }}
+                            >
+                              Registrar (XML)
+                            </li>
+                            <li
+                              onClick={() => {
+                                setCurrentPage("adjuntarPDF");
+                                localStorage.setItem(
+                                  "currentPage",
+                                  "adjuntarPDF"
+                                );
+                              }}
+                            >
+                              Adjuntar (PDF)
+                            </li>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
                     <li
                       onClick={() => {
-                        setCurrentPage("adjuntarPDF");
-                        localStorage.setItem("currentPage", "adjuntarPDF");
+                        setCurrentPage("verFacturas");
+                        localStorage.setItem("currentPage", "verFacturas");
                       }}
                     >
-                    Adjuntar (PDF)
+                      Visualizar
                     </li>
-                  </>
-                  ) : ("")
-                  }
-                </>) : ("")}
+                  </ul>
+                </li>
+              </>
+            ) : (
+              ""
+            )}
+            {localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) ||
+            localStorage
+              .getItem("role")
+              .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
+              <>
                 <li
                   onClick={() => {
-                    setCurrentPage("verFacturas");
-                    localStorage.setItem("currentPage", "verFacturas");
+                    setCurrentPage("proveedores");
+                    localStorage.setItem("currentPage", "proveedores");
                   }}
                 >
-                  Visualizar
+                  <FontAwesomeIcon icon={faTruckField} /> Proveedores
                 </li>
-              </ul>
-            </li>
-            </>) : ("")}
-            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (<>
-              <li
+              </>
+            ) : (
+              ""
+            )}
+            <li
               onClick={() => {
-                setCurrentPage("proveedores");
-                localStorage.setItem("currentPage", "proveedores");
+                setCurrentPage("requisicionMaterial");
+                localStorage.setItem("currentPage", "requisicionMaterial");
               }}
-              >
-              <FontAwesomeIcon icon={faTruckField} /> Proveedores
+            >
+              <FontAwesomeIcon icon={faBoxesPacking} /> Solicitar material
             </li>
-            </>) : ("")}
             <li onClick={showAlert}>
               <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
             </li>
