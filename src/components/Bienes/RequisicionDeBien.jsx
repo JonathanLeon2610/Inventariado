@@ -7,6 +7,7 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 function RequisicionDeBien() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +58,20 @@ function RequisicionDeBien() {
     ? { ...backdropStyles, backgroundColor: "rgba(0, 0, 0, 0.5)" }
     : backdropStyles;
 
+
+  const handleSubmit = () =>{
+    Swal.fire({
+      title: 'Confirmar solicitud',
+      showCancelButton: true,
+      confirmButtonText: 'Si, confirmar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('Solicitud realizada correctamente!', '', 'success')
+      }
+    })
+  }
+
   return (
     <>
       <div>
@@ -78,7 +93,7 @@ function RequisicionDeBien() {
           >
             <FontAwesomeIcon icon={faEye} /> Catalogo de materiales
           </button>
-          <button className="add" style={{ backgroundColor: "#0056b3" }}>
+          <button className="add" style={{ backgroundColor: "#0056b3" }} onClick={handleSubmit}>
             Realizar solicitud <FontAwesomeIcon icon={faCheck} />
           </button>
         </div>

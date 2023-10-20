@@ -3,9 +3,9 @@ import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
-
   faCheck,
   faBan,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
 function AgregarBienInventariable() {
@@ -23,12 +23,8 @@ function AgregarBienInventariable() {
     Caracteristicas: "",
   });
 
-
-
-
-
   useEffect(() => {
-    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL + "api/v1/marcas", {
       method: "GET",
     })
       .then((response) => response.json())
@@ -44,7 +40,7 @@ function AgregarBienInventariable() {
       "Authorization",
       "Bearer " + localStorage.getItem("token")
     );
-    myHeaders.append("Content-Type", "application/json"); 
+    myHeaders.append("Content-Type", "application/json");
 
     const requestOptions = {
       method: "POST",
@@ -53,7 +49,10 @@ function AgregarBienInventariable() {
       redirect: "follow",
     };
 
-    fetch(import.meta.env.VITE_REACT_APP_API_URL+`api/v1/activobien`, requestOptions)
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/activobien`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then(() => {
         Swal.fire(
@@ -69,7 +68,7 @@ function AgregarBienInventariable() {
           icon: "error",
           title: "Hubo un error al crear el registro",
           text: "Por favor intente nuevamente",
-        })
+        });
         console.log("Error: CODIGO #2");
       });
   };
@@ -84,7 +83,19 @@ function AgregarBienInventariable() {
         >
           <FontAwesomeIcon icon={faArrowLeft} /> Regresar
         </button>
+        <div className="filter-form" style={{ marginLeft: "1rem" }}>
+          <label>Añadir por No. Inventario:</label>
+          <input
+            type="text"
+            name="noInventario"
+            placeholder="Introducir No.Inventario"
+          />
+          <button className="add">
+            Buscar <FontAwesomeIcon icon={faSearch} />
+          </button>
+        </div>
         <div className="formulario-container">
+          
           <input
             type="text"
             placeholder="Tipo de Activo"
@@ -201,7 +212,6 @@ function AgregarBienInventariable() {
           >
             <FontAwesomeIcon icon={faBan} /> Cancelar
           </button>
-
         </div>
       </div>
     </>

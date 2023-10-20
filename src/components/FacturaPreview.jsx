@@ -34,6 +34,8 @@ function FacturaPreview() {
       const parsedDataList = xmlDataList.map((xmlData) => {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+        console.log(xmlDoc .getElementsByTagName("cfdi:Conceptos")[0]);
+        console.log(xmlDoc .getElementsByTagName("cfdi:Conceptos")[0].getElementsByTagName("cfdi:Concepto").length);
         return {
           uuid: xmlDoc
             .getElementsByTagName("cfdi:Complemento")[0]

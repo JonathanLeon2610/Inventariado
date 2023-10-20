@@ -8,7 +8,8 @@ import {
   faMoneyBill,
   faUser,
   faHome,
-  faBoxesPacking
+  faBoxesPacking,
+  faBoxArchive
 } from "@fortawesome/free-solid-svg-icons";
 import Inventariables from "../pages/Inventariable";
 import NoInventariables from "../pages/NoInventariables";
@@ -22,6 +23,7 @@ import VerFacturas from "./VerFacturas";
 import AdjuntarPDF from "./AdjuntarPDF";
 import Inicio from "./Inicio";
 import RequisicionDeBien from "../components/Bienes/RequisicionDeBien";
+import MisSolicitudes from "../components/Bienes/MisSolicitudes";
 
 function Main() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -105,6 +107,8 @@ function Main() {
         return <EditBienInventariable />;
       case "requisicionMaterial":
         return <RequisicionDeBien />;
+      case "misSolicitudes":
+        return <MisSolicitudes />;
       case "inicio":
         return <Inicio />;
     }
@@ -267,14 +271,31 @@ function Main() {
             ) : (
               ""
             )}
-            <li
-              onClick={() => {
-                setCurrentPage("requisicionMaterial");
-                localStorage.setItem("currentPage", "requisicionMaterial");
-              }}
-            >
-              <FontAwesomeIcon icon={faBoxesPacking} /> Solicitar material
-            </li>
+            <>
+              <li className="dropdown">
+                <span className="dropdown-toggle">
+                  <FontAwesomeIcon icon={faBoxArchive} /> Requisicion Material
+                </span>
+                <ul className="dropdown-menu">
+                  <li
+                    onClick={() => {
+                      setCurrentPage("requisicionMaterial");
+                      localStorage.setItem("currentPage", "requisicionMaterial");
+                    }}
+                  >
+                    Solicitar
+                  </li>
+                  <li
+                    onClick={() => {
+                      setCurrentPage("misSolicitudes");
+                      localStorage.setItem("currentPage", "misSolicitudes");
+                    }}
+                  >
+                    Ver mis solicitudes
+                  </li>
+                </ul>
+              </li>
+            </>
             <li onClick={showAlert}>
               <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
             </li>
