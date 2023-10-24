@@ -34,8 +34,6 @@ function FacturaPreview() {
       const parsedDataList = xmlDataList.map((xmlData) => {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlData, "text/xml");
-        console.log(xmlDoc .getElementsByTagName("cfdi:Conceptos")[0]);
-        console.log(xmlDoc .getElementsByTagName("cfdi:Conceptos")[0].getElementsByTagName("cfdi:Concepto").length);
         return {
           uuid: xmlDoc
             .getElementsByTagName("cfdi:Complemento")[0]
@@ -98,7 +96,7 @@ function FacturaPreview() {
     .then((result) => {
 
       result.map((registro,index)=>{
-        if (registro.isXML == false){
+        if (registro.isXML === false){
           
           var myHeaders = new Headers();
           myHeaders.append(
@@ -124,6 +122,8 @@ function FacturaPreview() {
             body: formdata,
             redirect: 'follow'
           };
+
+          
 
           fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/cfdis/recibidos/addfile", requestOptions)
           .then(response => response.text())

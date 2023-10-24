@@ -19,8 +19,8 @@ function VerFacturas() {
   const [XML, setXML] = useState(true);
   const [UUID, setUUID] = useState("");
   const [RFC, setRFC] = useState("");
-  const [fechaDesde, setFechaDesde] = useState("");
-  const [fechaHasta, setFechaHasta] = useState("");
+  const [fechaDesde, setFechaDesde] = useState("1900-01-01");
+  const [fechaHasta, setFechaHasta] = useState("1900-01-01");
   const [isFechaDesdeEnabled, setIsFechaDesdeEnabled] = useState(true);
   const [isFechaHastaEnabled, setIsFechaHastaEnabled] = useState(true);
 
