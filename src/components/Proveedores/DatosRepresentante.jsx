@@ -86,12 +86,10 @@ function DatosRepresentante() {
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/SoftwareContable/proveedor/${ultimoValor}/Representante`,
+      `api/v1/Proveedores/${ultimoValor}/Representante`,
       requestOptions
     )
-      .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setInputValues({
           id: ultimoValor,
           representanteLegal: result.representanteLegal || "",
@@ -115,7 +113,13 @@ function DatosRepresentante() {
         document.getElementById("datosNotaria").value =
           result.datosNotaria || "";
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No se encontraron datos relacionados con este proveedor',
+        })
+      });
   };
 
   const handleSubmit = (e) => {

@@ -68,7 +68,6 @@ function DatosGenerales() {
       redirect: "follow",
     };
 
-    console.log(raw);
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
         `api/v1/proveedores/${ultimoValor}`,
@@ -117,7 +116,6 @@ function DatosGenerales() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result);
         setInputValues({
           id: ultimoValor,

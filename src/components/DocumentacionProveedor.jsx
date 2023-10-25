@@ -25,9 +25,8 @@ function DocumentacionProveedor() {
       headers: myHeaders,
       redirect: "follow",
     };
-
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/documentotipos/vlist/5`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/documentotipos/vlist/5`,
       requestOptions
     )
       .then((response) => response.json())
@@ -51,7 +50,8 @@ function DocumentacionProveedor() {
     };
 
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/proveedores/${ultimoValor}/doctos`,
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/proveedores/${ultimoValor}/doctos`,
       requestOptions
     )
       .then((response) => response.json())
@@ -75,6 +75,35 @@ function DocumentacionProveedor() {
     );
     return documento ? documento.name : "Desconocida";
   }
+  const calcularDiferenciaEnDias = (fechaEspecifica) => {
+    // Dividir la fecha en sus componentes (año, mes y día)
+    const fechaEspecificaComponentes = fechaEspecifica.split("/");
+    if (fechaEspecificaComponentes.length === 3) {
+      const year = parseInt(fechaEspecificaComponentes[0], 10);
+      const month = parseInt(fechaEspecificaComponentes[1], 10) - 1; // Restamos 1 al mes para que esté en el rango correcto (0-11).
+      const day = parseInt(fechaEspecificaComponentes[2], 10);
+
+      // Verificar si los componentes son válidos
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        // Crear la fecha especificada
+        const fechaEspecificaDate = new Date(year, month, day);
+
+        // Obtener la fecha actual
+        const fechaActual = new Date();
+
+        // Calcular la diferencia en milisegundos
+        const diferenciaEnMilisegundos = fechaEspecificaDate - fechaActual;
+
+        // Calcular la diferencia en días y truncar la parte decimal
+        const diferenciaEnDias = Math.trunc(
+          diferenciaEnMilisegundos / (1000 * 60 * 60 * 24)
+        );
+        return diferenciaEnDias * -1;
+      }
+    }
+
+    return "Fecha no válida";
+  };
 
   return (
     <>
@@ -107,61 +136,32 @@ function DocumentacionProveedor() {
               </tr>
               <tr>
                 <th>#</th>
-                <th>Tipo de documentacion</th>
-                <th>Ultima fecha de actualizacion</th>
+                <th style={{ width: "50px" }}>Tipo de documentacion</th>
+                <th style={{ width: "150px" }}>Ultima fecha de actualizacion</th>
                 <th>Referencias</th>
-                <th className="no-print">Archivo</th>
+                <th className="no-print" style={{ width: "100px" }}>Archivo</th>
               </tr>
             </thead>
             <tbody>
               {data.map((item, index) => (
                 <>
-                  <tr key={index} style={{backgroundColor:"#DFD426"}}>
+                  <tr
+                    key={index}
+                    style={{
+                      backgroundColor:
+                        (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) >= 0 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=30)//pocos dias
+                          ? "#81BF85" 
+                          : (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) > 30 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=60)//mitad
+                          ? "#DDE366"
+                          : (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) > 60 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=90)//cerca
+                          ? "#EBAC57" 
+                          : "#EC9080", //expirado
+                    }}
+                  >
                     <td>{index + 1}</td>
                     <td>{getDocumentoByName(item.documentoTipoId)}</td>
                     <td>{formatFecha(item.fechaActualizacion)}</td>
-                    <td>{item.reference}</td>
-                    <td className="no-print">
-                      <a
-                        href={item.fileUrl}
-                        target="blank"
-                        download={item.fileUrl}
-                      >
-                        <button className="free">
-                          <FontAwesomeIcon icon={faDownload} /> Descargar
-                          documento
-                        </button>
-                      </a>
-                    </td>
-                  </tr>
-                </>
-              ))}
-            </tbody>
-          </table>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <hr />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <table className="table-to-print">
-            <thead>
-              <tr>
-                <th colSpan="12">Lista de documentos extras</th>
-              </tr>
-              <tr>
-                <th>#</th>
-                <th>Tipo de documentacion</th>
-                <th>Ultima fecha de actualizacion</th>
-                <th>Referencias</th>
-                <th className="no-print">Archivo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <>
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{getDocumentoByName(item.documentoTipoId)}</td>
-                    <td>{formatFecha(item.fechaActualizacion)}</td>
-                    <td>{item.reference}</td>
+                    <td>{item.reference || "Sin referencias"}  </td>
                     <td className="no-print">
                       <a
                         href={item.fileUrl}

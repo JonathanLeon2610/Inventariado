@@ -184,7 +184,6 @@ function AgregarProveedor() {
       <div>
         <h2 style={{ marginLeft: "1rem" }}>Datos Generales</h2>
         <hr />
-        {inputValues.personaTipoId}
         <button
           className="add"
           style={{ marginLeft: "1rem", backgroundColor: "gray" }}

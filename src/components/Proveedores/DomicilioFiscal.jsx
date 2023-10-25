@@ -207,7 +207,13 @@ function DomicilioFiscal() {
         document.getElementById("estado").value = result.estadoId || "";
         document.getElementById("municipio").value = result.municipioId || "";
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No se encontraron datos relacionados con este proveedor',
+        })
+      });
   };
 
   useEffect(() => {

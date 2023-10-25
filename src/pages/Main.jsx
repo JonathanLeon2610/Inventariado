@@ -8,7 +8,6 @@ import {
   faMoneyBill,
   faUser,
   faHome,
-  faBoxesPacking,
   faBoxArchive
 } from "@fortawesome/free-solid-svg-icons";
 import Inventariables from "../pages/Inventariable";
@@ -26,14 +25,11 @@ import RequisicionDeBien from "../components/Bienes/RequisicionDeBien";
 import MisSolicitudes from "../components/Bienes/MisSolicitudes";
 
 function Main() {
+  // eslint-disable-next-line no-unused-vars
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState(
     localStorage.getItem("currentPage")
   );
-
-  const toggleSidebar = () => {
-    setSidebarCollapsed(!sidebarCollapsed);
-  };
 
   const showAlert = () => {
     Swal.fire({
@@ -119,7 +115,6 @@ function Main() {
       <div>
         <div className={`sidebar ${sidebarCollapsed ? "collapsed" : ""}`}>
           <img
-            onClick={toggleSidebar}
             src={import.meta.env.VITE_REACT_APP_API_URL + "images/logotipo.png"}
             alt="No carga"
           />

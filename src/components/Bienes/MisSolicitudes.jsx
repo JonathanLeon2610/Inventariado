@@ -28,7 +28,7 @@ function MisSolicitudes() {
           <input
             type="text"
             name="noInventario"
-            placeholder="Introducir No.Inventario"
+            placeholder="Introducir No. de solicitud"
           />
 
           <button className="add" style={{ backgroundColor: "#0056b3" }} onClick={handleSubmit}>

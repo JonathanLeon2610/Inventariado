@@ -276,7 +276,6 @@ function VerFacturas() {
               <th>Fecha</th>
               <th className="no-print">Archivo XML</th>
               <th className="no-print">Archivo PDF</th>
-              {/* {allowAddButton() ? <th className="option-button">Opciones</th> : ""} */}
             </tr>
           </thead>
           {data.length > 0 && data ? (
