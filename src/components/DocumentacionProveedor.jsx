@@ -9,9 +9,11 @@ import {
 function DocumentacionProveedor() {
   const [data, setData] = useState([]);
   const [catalogoDocumentos, setCatalogoDocumentos] = useState([]);
+  const [catalogoDocumentos2, setCatalogoDocumentos2] = useState([]);
   const url = window.location.pathname;
   const segments = url.split("/");
   const ultimoValor = segments[segments.length - 1];
+  const [filtroDocumentoId, setFiltroDocumentoId] = useState(0);
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -26,15 +28,48 @@ function DocumentacionProveedor() {
       redirect: "follow",
     };
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/documentotipos/vlist/5`,
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/documentotipos/vlist/301`,
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
+        
         setCatalogoDocumentos(result);
       })
       .catch((error) => console.log("error", error));
   }, []);
+
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/documentotipos/vlist/300`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setCatalogoDocumentos2(result);
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
+
+  function getDocumentoByName(documentId) {
+    const documento = catalogoDocumentos2.find(
+      (documento) => documento.id === documentId
+    );
+    return documento ? documento.name : "Desconocida";
+  }
 
   useEffect(() => {
     var myHeaders = new Headers();
@@ -56,10 +91,17 @@ function DocumentacionProveedor() {
     )
       .then((response) => response.json())
       .then((result) => {
-        setData(result);
+        console.log(result);
+        // Ordena los datos por fecha de actualización (del más nuevo al más antiguo)
+        const dataOrdenada = [...result].sort((a, b) => {
+          const fechaA = new Date(a.fechaActualizacion);
+          const fechaB = new Date(b.fechaActualizacion);
+          return fechaB - fechaA;
+        });
+        setData(dataOrdenada);
       })
       .catch((error) => console.log("error", error));
-  }, []);
+  }, [ultimoValor]);
 
   const formatFecha = (fecha) => {
     const date = new Date(fecha);
@@ -69,41 +111,15 @@ function DocumentacionProveedor() {
     return `${year}/${month}/${day}`;
   };
 
-  function getDocumentoByName(documentId) {
-    const documento = catalogoDocumentos.find(
-      (documento) => documento.id === documentId
-    );
-    return documento ? documento.name : "Desconocida";
-  }
-  const calcularDiferenciaEnDias = (fechaEspecifica) => {
-    // Dividir la fecha en sus componentes (año, mes y día)
-    const fechaEspecificaComponentes = fechaEspecifica.split("/");
-    if (fechaEspecificaComponentes.length === 3) {
-      const year = parseInt(fechaEspecificaComponentes[0], 10);
-      const month = parseInt(fechaEspecificaComponentes[1], 10) - 1; // Restamos 1 al mes para que esté en el rango correcto (0-11).
-      const day = parseInt(fechaEspecificaComponentes[2], 10);
-
-      // Verificar si los componentes son válidos
-      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
-        // Crear la fecha especificada
-        const fechaEspecificaDate = new Date(year, month, day);
-
-        // Obtener la fecha actual
-        const fechaActual = new Date();
-
-        // Calcular la diferencia en milisegundos
-        const diferenciaEnMilisegundos = fechaEspecificaDate - fechaActual;
-
-        // Calcular la diferencia en días y truncar la parte decimal
-        const diferenciaEnDias = Math.trunc(
-          diferenciaEnMilisegundos / (1000 * 60 * 60 * 24)
-        );
-        return diferenciaEnDias * -1;
-      }
-    }
-
-    return "Fecha no válida";
+  const handleChangeFiltro = (e) => {
+    setFiltroDocumentoId(parseInt(e.target.value));
   };
+
+  // Filtrar los datos de la segunda tabla basados en el filtroDocumentoId
+  const datosFiltradosSegundaTabla = data.filter((item) =>
+    filtroDocumentoId === 0 ? true : item.documentoTipoId === filtroDocumentoId
+  );
+
 
   return (
     <>
@@ -128,57 +144,111 @@ function DocumentacionProveedor() {
           >
             <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
           </button>
-
           <table className="table-to-print">
             <thead>
               <tr>
-                <th colSpan="12">Lista de documentos obligatorios</th>
+                <th colSpan="12">Lista de documentos obligatorios mas recientes</th>
               </tr>
               <tr>
                 <th>#</th>
                 <th style={{ width: "50px" }}>Tipo de documentacion</th>
-                <th style={{ width: "150px" }}>Ultima fecha de actualizacion</th>
+                <th style={{ width: "150px" }}>
+                  Ultima fecha de actualizacion
+                </th>
                 <th>Referencias</th>
-                <th className="no-print" style={{ width: "100px" }}>Archivo</th>
+                <th className="no-print" style={{ width: "100px" }}>
+                  Archivo
+                </th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <>
-                  <tr
-                    key={index}
-                    style={{
-                      backgroundColor:
-                        (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) >= 0 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=30)//pocos dias
-                          ? "#81BF85" 
-                          : (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) > 30 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=60)//mitad
-                          ? "#DDE366"
-                          : (calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) > 60 && calcularDiferenciaEnDias(formatFecha(item.fechaActualizacion)) <=90)//cerca
-                          ? "#EBAC57" 
-                          : "#EC9080", //expirado
-                    }}
-                  >
+              {catalogoDocumentos.map((item, index) => {
+                const matchingData = data.find(dataItem => dataItem.documentoTipoId === item.id);
+
+                return (
+                  <tr key={index} style={{
+                    backgroundColor: matchingData ? ((matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 0 && matchingData.diasTranscurridosDesdeActualizacion < 30) ? "#81BF85"  
+                    : (matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 30 && matchingData.diasTranscurridosDesdeActualizacion < 60) ? "#DDE366" 
+                    : (matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 60 && matchingData.diasTranscurridosDesdeActualizacion < 60) ? "#EBAC57"
+                    : "#EC9080") : ("")
+                  }}>
                     <td>{index + 1}</td>
-                    <td>{getDocumentoByName(item.documentoTipoId)}</td>
-                    <td>{formatFecha(item.fechaActualizacion)}</td>
-                    <td>{item.reference || "Sin referencias"}  </td>
+                    <td>{item.name}</td>
+                    <td>{matchingData ? formatFecha(matchingData.fechaActualizacion) : "N/a"}</td>
+                    <td>{matchingData ? (matchingData.reference || "No hay referencias") : "N/a"}</td>
                     <td className="no-print">
-                      <a
-                        href={item.fileUrl}
-                        target="blank"
-                        download={item.fileUrl}
-                      >
+                      {matchingData ? <a href={matchingData.fileUrl} target="blank" download={matchingData.fileUrl}>
                         <button className="free">
-                          <FontAwesomeIcon icon={faDownload} /> Descargar
-                          documento
+                          <FontAwesomeIcon icon={faDownload} /> Descargar documento
                         </button>
-                      </a>
+                      </a> : "No hay documento registrado"}
                     </td>
                   </tr>
-                </>
+                );
+              })}
+            </tbody>
+
+
+          </table>
+          &nbsp;
+
+          <div style={{ marginLeft: "1rem", marginTop: "1rem" }}>
+            <label htmlFor="filtroDocumento">Filtrar por tipo de documento: </label>
+            <select
+              id="filtroDocumento"
+              onChange={handleChangeFiltro}
+              value={filtroDocumentoId}
+            >
+              <option value={0}>Todos</option>
+              {catalogoDocumentos2.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <table className="table-to-print">
+            <thead>
+              <tr>
+                <th colSpan="12">Historial de documentos del proveedor</th>
+              </tr>
+              <tr>
+                <th>#</th>
+                <th style={{ width: "50px" }}>Tipo de documentacion</th>
+                <th style={{ width: "150px" }}>
+                  Ultima fecha de actualizacion
+                </th>
+                <th>Referencias</th>
+                <th className="no-print" style={{ width: "100px" }}>
+                  Archivo
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {datosFiltradosSegundaTabla.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{getDocumentoByName(item.documentoTipoId)}</td>
+                  <td>{formatFecha(item.fechaActualizacion)}</td>
+                  <td>{item.reference || "Sin referencias"}</td>
+                  <td className="no-print">
+                    <a
+                      href={item.fileUrl}
+                      target="blank"
+                      download={item.fileUrl}
+                    >
+                      <button className="free">
+                        <FontAwesomeIcon icon={faDownload} /> Descargar documento
+                      </button>
+                    </a>
+                  </td>
+                </tr>
               ))}
             </tbody>
+
           </table>
+
+          
         </div>
       ) : (
         <h1>Cargando</h1>

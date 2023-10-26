@@ -71,14 +71,28 @@ function EditarDocumentacion() {
     };
 
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/documentotipos/vlist/5`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/documentotipos/vlist/301`,
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         setData(result);
       })
       .catch((error) => console.log("error", error));
+  }, []);
+
+  useEffect(() => {
+    // Calcular la fecha máxima permitida (hoy)
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, "0");
+    const dd = String(hoy.getDate()).padStart(2, "0");
+    const fechaMaxima = `${yyyy}-${mm}-${dd}`;
+
+    // Actualizar la fecha máxima en el campo de entrada de fecha
+    const fechaInput = document.querySelector("input[type='date']");
+    fechaInput.setAttribute("max", fechaMaxima);
   }, []);
   
   return (
@@ -88,53 +102,65 @@ function EditarDocumentacion() {
       <div className="formulario-container-proveedor">
         <div>
           <div>
-            <label htmlFor="">Tipo de documentacion </label>
-            <select name="" id="" onChange={(e) =>
+            <label htmlFor="">Tipo de documentación</label>
+            <select
+              name=""
+              id=""
+              onChange={(e) =>
                 setInputValues({
                   ...inputValues,
                   DocumentoTipoId: parseInt(e.target.value),
                 })
-              }>
-                <option value={0}>Seleccione un tipo de documento</option>
+              }
+            >
+              <option value={0}>Seleccione un tipo de documento</option>
               {data.map((item) => (
-                <>
-                <option value={item.id} key={item.name}>{item.name}</option>
-                </>
+                <option value={item.id} key={item.name}>
+                  {item.name}
+                </option>
               ))}
             </select>
           </div>
           <div>
-            <label htmlFor="">Ultima fecha de actualizacion</label>
-            <input type="date"  onChange={(e) =>
+            <label htmlFor="">Ultima fecha de actualización</label>
+            <input
+              type="date"
+              onChange={(e) =>
                 setInputValues({
                   ...inputValues,
                   FechaActualizacion: e.target.value,
                 })
-              }/>
+              }
+            />
           </div>
           <div>
             <label htmlFor="">Referencias</label>
-            <input type="text" onChange={(e) =>
+            <input
+              type="text"
+              onChange={(e) =>
                 setInputValues({
                   ...inputValues,
                   Reference: e.target.value,
                 })
               }
               placeholder="Referencias del documento"
-              />
+            />
           </div>
           <div>
             <label htmlFor="">Archivo</label>
-            <input type="file" onChange={(e) =>
+            <input
+              type="file"
+              onChange={(e) =>
                 setInputValues({
                   ...inputValues,
                   Archivo: e.target.files,
                 })
-              }/>
+              }
+            />
           </div>
         </div>
-        <button onClick={()=> handleSubmit()}>
-          <FontAwesomeIcon icon={faCheck} /> Agregrar documento
+        <button onClick={() => handleSubmit()}>
+          <FontAwesomeIcon icon={faCheck} /> Agregar documento
         </button>
         <button
           style={{ backgroundColor: "red" }}
