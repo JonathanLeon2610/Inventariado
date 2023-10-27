@@ -71,12 +71,11 @@ function EditarDocumentacion() {
     };
 
     fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/documentotipos/vlist/301`,
+      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/documentotipos/vlist/300`,
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result);
       })
       .catch((error) => console.log("error", error));
@@ -156,7 +155,7 @@ function EditarDocumentacion() {
                   Archivo: e.target.files,
                 })
               }
-            />
+            accept=".pdf"/>
           </div>
         </div>
         <button onClick={() => handleSubmit()}>

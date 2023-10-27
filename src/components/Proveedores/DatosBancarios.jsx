@@ -66,6 +66,8 @@ function DatosBancarios() {
       bancoClabe: inputValues.bancoClabe,
     });
 
+    console.log(raw);
+
     const requestOptions = {
       method: "PUT",
       headers: myHeaders,
@@ -101,24 +103,12 @@ function DatosBancarios() {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div>
               <label htmlFor="">Banco</label>
-              <select name="" id="" onChange={(e) => {
+              <input type="text" placeholder="Nombre del banco" maxLength={32} defaultValue={data.banco} onChange={(e) => {
                   setInputValues({
                     ...inputValues,
-                    banco: parseInt(e.target.value),
+                    banco:  e.target.value,
                   });
-                }}>
-                {data.banco === "4" ? (
-                <>
-                  <option value={4}>Nacional</option>
-                  <option value={5}>Extranjero</option>
-                </>
-              ) : (
-                <>
-                  <option value={5}>Extranjero</option>
-                  <option value={4}>Nacional</option>
-                </>
-              )}
-              </select>
+                }} />
             </div>
             <div>
               <label htmlFor="">Cuenta</label>

@@ -34,7 +34,6 @@ function DocumentacionProveedor() {
     )
       .then((response) => response.json())
       .then((result) => {
-        
         setCatalogoDocumentos(result);
       })
       .catch((error) => console.log("error", error));
@@ -91,7 +90,6 @@ function DocumentacionProveedor() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         // Ordena los datos por fecha de actualización (del más nuevo al más antiguo)
         const dataOrdenada = [...result].sort((a, b) => {
           const fechaA = new Date(a.fechaActualizacion);
@@ -167,9 +165,9 @@ function DocumentacionProveedor() {
 
                 return (
                   <tr key={index} style={{
-                    backgroundColor: matchingData ? ((matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 0 && matchingData.diasTranscurridosDesdeActualizacion < 30) ? "#81BF85"  
-                    : (matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 30 && matchingData.diasTranscurridosDesdeActualizacion < 60) ? "#DDE366" 
-                    : (matchingData && matchingData.diasTranscurridosDesdeActualizacion >= 60 && matchingData.diasTranscurridosDesdeActualizacion < 60) ? "#EBAC57"
+                    backgroundColor: matchingData ? (((item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) <= item.vigencia && (item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) >= (item.vigencia*0.6)) ? "#81BF85"  
+                    : (matchingData && (item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) < (item.vigencia*0.6) && (item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) >= (item.vigencia*0.3)) ? "#DDE366" 
+                    : (matchingData && (item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) < (item.vigencia*0.3) && (item.vigencia-matchingData.diasTranscurridosDesdeActualizacion) >= (item.vigencia*0.1)) ? "#EBAC57"
                     : "#EC9080") : ("")
                   }}>
                     <td>{index + 1}</td>
