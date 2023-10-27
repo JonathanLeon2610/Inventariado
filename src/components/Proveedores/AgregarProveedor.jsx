@@ -176,7 +176,13 @@ function AgregarProveedor() {
         document.getElementById("tipoProveedorId").value =
           result.tipoProveedorId || "";
       })
-      .catch((error) => console.log("error", error));
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "No se encontraron datos de un proveedor con ese rfc",
+        });
+      });
   };
 
   return (
