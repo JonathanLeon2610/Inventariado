@@ -124,24 +124,6 @@ function DocumentacionProveedor() {
       {data ? (
         <div className="tabla-facturas-proveedor-container">
           <h2 style={{ marginLeft: "1rem" }}>Documentacion del proveedor</h2>
-          <button
-            className="add no-print"
-            style={{ marginLeft: "1rem", backgroundColor: "gray" }}
-            onClick={() => (window.location.href = "/main")}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} /> Regresar
-          </button>
-          <button
-            className="import"
-            style={{
-              backgroundColor: "orange",
-              marginLeft: "1rem",
-              marginTop: "1rem",
-            }}
-            onClick={() => window.print()}
-          >
-            <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
-          </button>
           <table className="table-to-print">
             <thead>
               <tr>
