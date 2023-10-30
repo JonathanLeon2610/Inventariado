@@ -66,7 +66,6 @@ function DatosBancarios() {
       bancoClabe: inputValues.bancoClabe,
     });
 
-    console.log(raw);
 
     const requestOptions = {
       method: "PUT",

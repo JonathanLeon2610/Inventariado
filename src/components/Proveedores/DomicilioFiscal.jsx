@@ -85,10 +85,10 @@ function DomicilioFiscal() {
     setInputValues({
       ...inputValues,
       paisId: selectedPaisId,
-      estadoId: selectedPaisId !== "MX" ? "00" : inputValues.estadoId,
+      estadoId: selectedPaisId !== "MX" ? 500 : inputValues.estadoId,
       estado: selectedPaisId !== "MX" ? "" : inputValues.estado,
       municipio: selectedPaisId !== "MX" ? "" : inputValues.municipio,
-      colonia: selectedPaisId !== "MX" ? "" : inputValues.colonia,
+      municipioId: selectedPaisId !== "MX" ? 500 : inputValues.municipio,
     });
   };
 
@@ -152,7 +152,7 @@ function DomicilioFiscal() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error,inputValues);
       });
   };
 
@@ -173,7 +173,6 @@ function DomicilioFiscal() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setInputValues({
           id: ultimoValor,
           codigoPostal: result.codigoPostal || "",

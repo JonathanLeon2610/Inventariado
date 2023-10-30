@@ -86,9 +86,10 @@ function DatosRepresentante() {
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
-      `api/v1/Proveedores/${ultimoValor}/Representante`,
+      `api/v1/SoftwareContable/proveedor/${ultimoValor}/Representante`,
       requestOptions
     )
+      .then((response) => response.json())
       .then((result) => {
         setInputValues({
           id: ultimoValor,
@@ -153,8 +154,6 @@ function DatosRepresentante() {
       body: raw,
       redirect: "follow",
     };
-
-    console.log(raw);
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +

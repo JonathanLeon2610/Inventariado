@@ -342,6 +342,7 @@ function AgregarProveedor() {
             <button
               style={{ backgroundColor: "red" }}
               onClick={() => (window.location.href = "/main")}
+              type="button"
             >
               <FontAwesomeIcon icon={faBan} /> Cancelar
             </button>
