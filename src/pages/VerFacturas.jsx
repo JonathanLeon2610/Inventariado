@@ -63,9 +63,6 @@ function VerFacturas() {
     }
   };
   
-  
-  
-
   const handleDelete = (uuid, type) => {
     var myHeaders = new Headers();
     myHeaders.append(

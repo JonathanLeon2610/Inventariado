@@ -16,46 +16,59 @@ function EditarDocumentacion() {
   });
 
   const handleSubmit = () => {
-    if(inputValues.DocumentoTipoId === 0){
+    if (inputValues.DocumentoTipoId === 0) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'No hay seleccionado un tipo de documento',
-      })
-    }
-    else{
+        text: 'No has seleccionado un tipo de documento',
+      });
+    } else if (!inputValues.Archivo[0] || inputValues.Archivo[0].type !== 'application/pdf') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'El archivo seleccionado no es un archivo PDF válido',
+      });
+      // Limpiar el valor del input de archivo
+      setInputValues({
+        ...inputValues,
+        Archivo: '',
+      });
+    } else {
+      // Resto de tu código para enviar el archivo PDF
       var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+    
+      var formdata = new FormData();
+      formdata.append("ProveedorId", parseInt(ultimoValor));
+      formdata.append("DocumentoTipoId", parseInt(inputValues.DocumentoTipoId));
+      formdata.append("Reference", inputValues.Reference);
+      formdata.append("FechaActualizacion", inputValues.FechaActualizacion);
+      formdata.append("Archivo", inputValues.Archivo[0], inputValues.Archivo[0].name);
+    
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow",
+      };
   
-    var formdata = new FormData();
-    formdata.append("ProveedorId", parseInt(ultimoValor));
-    formdata.append("DocumentoTipoId", parseInt(inputValues.DocumentoTipoId));
-    formdata.append("Reference", inputValues.Reference);
-    formdata.append("FechaActualizacion", inputValues.FechaActualizacion);
-    formdata.append("Archivo", inputValues.Archivo[0], inputValues.Archivo[0].name);
-  
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: formdata,
-      redirect: "follow",
-    };
-
-    fetch(
-      import.meta.env.VITE_REACT_APP_API_URL+`api/v1/Proveedores/doctos/add`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then(() => {
-        Swal.fire(
-          "Registro exitoso!",
-          "Se ha registrado correctamente el documento",
-          "success"
-        )
-      })
-      .catch((error) => console.log("error", error));
+      fetch(
+        import.meta.env.VITE_REACT_APP_API_URL+`api/v1/Proveedores/doctos/add`,
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then(() => {
+          Swal.fire(
+            "Registro exitoso!",
+            "Se ha registrado correctamente el documento",
+            "success"
+          )
+          .then(()=> window.location.reload())
+        })
+        .catch((error) => console.log("error", error));
     }
   };
+  
 
   useEffect(() => {
     var myHeaders = new Headers();
