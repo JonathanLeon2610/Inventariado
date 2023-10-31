@@ -29,18 +29,42 @@ function VerFacturas() {
 
   const handleFileChange = (event, rowIndex, type) => {
     const selectedFiles = event.target.files;
-    setFile(selectedFiles);
-
-    if (type === 2) {
-      const updatedData = [...data];
-      updatedData[rowIndex].hasPDFFile = true;
-      setdata(updatedData);
-    } else {
-      const updatedData = [...data];
-      updatedData[rowIndex].hasXMLFile = true;
-      setdata(updatedData);
+  
+    if (type === 2) { // PDF
+      if (selectedFiles.length === 0 || !selectedFiles[0].name.toLowerCase().endsWith('.pdf')) {
+        event.target.value = null; // Resetea el valor del campo de entrada
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Formato de archivo invalido',
+        })
+      } else {
+        setFile(selectedFiles);
+  
+        const updatedData = [...data];
+        updatedData[rowIndex].hasPDFFile = true;
+        setdata(updatedData);
+      }
+    } else { // XML
+      if (selectedFiles.length === 0 || !selectedFiles[0].name.toLowerCase().endsWith('.xml')) {
+        event.target.value = null; // Resetea el valor del campo de entrada
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Formato de archivo invalido',
+        })
+      } else {
+        setFile(selectedFiles);
+  
+        const updatedData = [...data];
+        updatedData[rowIndex].hasXMLFile = true;
+        setdata(updatedData);
+      }
     }
   };
+  
+  
+  
 
   const handleDelete = (uuid, type) => {
     var myHeaders = new Headers();
@@ -268,7 +292,7 @@ function VerFacturas() {
             </tr>
             <tr>
               <th>#</th>
-              <th>UUI</th>
+              <th>UUID</th>
               <th>Nombre del emisor</th>
               <th>RFC del emisor</th>
               <th>Folio</th>

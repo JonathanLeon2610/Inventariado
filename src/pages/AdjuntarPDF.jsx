@@ -9,8 +9,19 @@ function AdjuntarPDF() {
 
   const handleFileUpload = (e) => {
     const filesUploaded = e.target.files;
-    setFiles([...files, ...filesUploaded]);
+    const pdfFiles = [];
+  
+    for (const file of filesUploaded) {
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        pdfFiles.push(file);
+      } else {
+        console.log(`Ignoring non-PDF file: ${file.name}`);
+      }
+    }
+  
+    setFiles([...files, ...pdfFiles]);
   };
+  
 
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();

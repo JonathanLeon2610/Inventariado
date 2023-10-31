@@ -11,66 +11,111 @@ function FacturaPreview() {
   const handleFileUpload = (e) => {
     const files = e.target.files;
     if (files) {
-      const promises = Array.from(files).map((file) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const xmlString = event.target.result;
-            resolve(xmlString);
-          };
-          reader.readAsText(file);
-        });
-      });
-
-      Promise.all(promises).then((xmlDataArray) => {
-        setXmlDataList(xmlDataArray);
-        setRawXmlFiles(files);
-      });
+      const xmlPromises = [];
+      const validFiles = [];
+  
+      for (const file of files) {
+        if (file.name.toLowerCase().endsWith('.xml')) {
+          validFiles.push(file);
+          xmlPromises.push(
+            new Promise((resolve) => {
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                const xmlString = event.target.result;
+                resolve(xmlString);
+              };
+              reader.readAsText(file);
+            })
+          );
+        } else {
+          console.log(`Skipping non-XML file: ${file.name}`);
+        }
+      }
+  
+      if (xmlPromises.length > 0) {
+        Promise.all(xmlPromises)
+          .then((xmlDataArray) => {
+            setXmlDataList(xmlDataArray);
+            setRawXmlFiles(validFiles);
+          })
+          .catch((error) => {
+            console.error("Error reading files:", error);
+            // Eliminar el último archivo de la lista de archivos brutos
+            if (validFiles.length > 0) {
+              validFiles.pop();
+            }
+            setRawXmlFiles(validFiles);
+            // Puedes agregar un código aquí para manejar el error, si es necesario.
+          });
+      }
     }
   };
+  
+  
+  
+  
+  
 
   useEffect(() => {
     if (xmlDataList.length > 0) {
-      const parsedDataList = xmlDataList.map((xmlData) => {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlData, "text/xml");
-        return {
-          uuid: xmlDoc
-            .getElementsByTagName("cfdi:Complemento")[0]
-            .getElementsByTagName("tfd:TimbreFiscalDigital")[0]
-            .getAttribute("UUID"),
-          emisor_Nombre: xmlDoc
-            .getElementsByTagName("cfdi:Emisor")[0]
-            .getAttribute("Nombre"),
-          emisor_RFC: xmlDoc
-            .getElementsByTagName("cfdi:Emisor")[0]
-            .getAttribute("Rfc"),
-          comprobante_Fecha: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("Fecha"),
-          comprobante_Folio: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("Folio"),
-          comprobante_Version: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("Version"),
-          comprobante_Total: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("Total"),
-          comprobante_TipoDeComprobante: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("TipoDeComprobante"),
-          receptor_RFC: xmlDoc
-            .getElementsByTagName("cfdi:Receptor")[0]
-            .getAttribute("Rfc"),
+      const parsedDataList = [];
+  
+      for (const xmlData of xmlDataList) {
+        let dataItem = null;
+  
+        try {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+  
+          dataItem = {
+            uuid: xmlDoc
+              .getElementsByTagName("cfdi:Complemento")[0]
+              .getElementsByTagName("tfd:TimbreFiscalDigital")[0]
+              .getAttribute("UUID"),
+            emisor_Nombre: xmlDoc
+              .getElementsByTagName("cfdi:Emisor")[0]
+              .getAttribute("Nombre"),
+            emisor_RFC: xmlDoc
+              .getElementsByTagName("cfdi:Emisor")[0]
+              .getAttribute("Rfc"),
+            comprobante_Fecha: xmlDoc
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("Fecha"),
+            comprobante_Folio: xmlDoc
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("Folio"),
+            comprobante_Version: xmlDoc
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("Version"),
+            comprobante_Total: xmlDoc
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("Total"),
+            comprobante_TipoDeComprobante: xmlDoc
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("TipoDeComprobante"),
+            receptor_RFC: xmlDoc
+              .getElementsByTagName("cfdi:Receptor")[0]
+              .getAttribute("Rfc"),
             comprobante_Serie: xmlDoc
-            .getElementsByTagName("cfdi:Comprobante")[0]
-            .getAttribute("Serie"),
-        };
-      });
+              .getElementsByTagName("cfdi:Comprobante")[0]
+              .getAttribute("Serie"),
+          };
+        } catch (error) {
+          console.error("Error parsing XML:", error);
+          dataItem= null
+          Swal.fire('Se han ingorado algunos archivo que no cumplian con el formato deaseado')
+        }
+  
+        if (dataItem) {
+          parsedDataList.push(dataItem);
+        }
+      }
       setInputValuesList(parsedDataList);
     }
   }, [xmlDataList]);
+  
+  
+  
 
   const handlePost = () => {
     const myHeaders = new Headers();
@@ -169,7 +214,7 @@ function FacturaPreview() {
           </tr>
         </thead>
         <tbody>
-          {xmlDataList.map((xmlData, index) => (
+          {inputValuesList.map((xmlData, index) => (
             <tr key={index}>
               <td>
                 <p>{inputValuesList[index]?.uuid || ""}</p>
@@ -205,7 +250,7 @@ function FacturaPreview() {
                     setInputValuesList(updatedInputValuesList);
                   }}
                 >
-                  <FontAwesomeIcon icon={faBan} /> Quitar factura de la lista
+                  <FontAwesomeIcon icon={faBan} /> Quitar factura
                 </button>
               </td>
             </tr>
