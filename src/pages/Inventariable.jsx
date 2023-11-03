@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPlus,
   faEdit,
   faArrowRight,
   faArrowLeft,
-  faFileImport,
-  faPrint,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -99,31 +96,7 @@ function Inventariables() {
     <>
       <div className="no-print">
         <h2>Lista de Inventariables</h2>
-        <div>
-          <Link to={"/agregar-bien-inventariable"}>
-            <button className="add">
-              {" "}
-              <FontAwesomeIcon icon={faPlus} /> Agregar Bien
-            </button>
-          </Link>
-          <Link
-            to={"/table-import-bien-inventariable"}
-            style={{ marginLeft: "1rem" }}
-          >
-            <button className="import">
-              {" "}
-              <FontAwesomeIcon icon={faFileImport} /> Importar Bien
-            </button>
-          </Link>
-          <button
-            className="import"
-            style={{ marginLeft: "1rem", backgroundColor: "orange" }}
-            onClick={() => window.print()}
-          >
-            {" "}
-            <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
-          </button>
-        </div>
+
         <div className="filter-form">
           <label>No. Inventario:</label>
           <input

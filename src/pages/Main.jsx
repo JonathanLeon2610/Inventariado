@@ -23,6 +23,7 @@ import AdjuntarPDF from "./AdjuntarPDF";
 import Inicio from "./Inicio";
 import RequisicionDeBien from "../components/Bienes/RequisicionDeBien";
 import MisSolicitudes from "../components/Bienes/MisSolicitudes";
+import AgregarBienInventariable from "./AgregarBienInventariable";
 
 function Main() {
   // eslint-disable-next-line no-unused-vars
@@ -87,6 +88,8 @@ function Main() {
         return <Inventariables />;
       case "subirFactura":
         return <SubirFactura />;
+      case "registrarBien":
+        return <AgregarBienInventariable/>;
       case "adjuntarPDF":
         return <AdjuntarPDF />;
       case "verFacturas":
@@ -135,14 +138,30 @@ function Main() {
               .getItem("role")
               .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
               <>
-                <li
-                  onClick={() => {
-                    setCurrentPage("inventariable");
-                    localStorage.setItem("currentPage", "inventariable");
-                  }}
-                >
-                  <FontAwesomeIcon icon={faShop} /> Inventariable
-                </li>
+
+                <li className="dropdown">
+                <span className="dropdown-toggle">
+                  <FontAwesomeIcon icon={faBoxArchive} /> Inventariable
+                </span>
+                <ul className="dropdown-menu">
+                  <li
+                    onClick={() => {
+                      setCurrentPage("inventariable");
+                      localStorage.setItem("currentPage", "inventariable");
+                    }}
+                  >
+                    Ver inventario
+                  </li>
+                  <li
+                    onClick={() => {
+                      setCurrentPage("registrarBien");
+                      localStorage.setItem("currentPage", "registrarBien");
+                    }}
+                  >
+                    Registrar nuevo bien
+                  </li>
+                </ul>
+              </li>
                 <li
                   onClick={() => {
                     setCurrentPage("noInventariable");

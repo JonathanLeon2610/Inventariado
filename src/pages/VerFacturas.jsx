@@ -247,7 +247,6 @@ function VerFacturas() {
               onClick={() => {
                 setIsFechaDesdeEnabled(!isFechaDesdeEnabled);
                 setIsFechaHastaEnabled(!isFechaHastaEnabled);
-                console.log(isFechaDesdeEnabled);
               }}
               className="add"
               style={{backgroundColor:"brown"}}

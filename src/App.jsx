@@ -33,6 +33,7 @@ function App() {
         <Route path="/verFacturas" element={<VerFacturas/>}/>
         <Route path="/facturasProveedor/:id" element={<FacturasProveedor/>}/>
         <Route path="/documentacion-proveedor/:id" element={<DocumentacionProveedor/>}/>
+        <Route path="/agregarBien" element={<AgregarBienInventariable/>}/>
       </Routes>
     </Router>
     

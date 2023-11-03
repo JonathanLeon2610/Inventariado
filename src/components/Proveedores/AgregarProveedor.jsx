@@ -23,8 +23,6 @@ function AgregarProveedor() {
       ...inputValues,
       personaTipoId: selectedPersonaTipo,
     });
-
-    console.log(inputValues);
   };
 
   const handlePersonaTipoChange2 = (id) => {
