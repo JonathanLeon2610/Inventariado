@@ -11,7 +11,6 @@ import {
 function EditBienInventariable() {
   const [inputValues, setInputValues] = useState({
     id: "",
-    activoTipo: "",
     numeroInventario: "",
     activoDescripcion: "",
     MarcaId: "",
@@ -137,7 +136,6 @@ function EditBienInventariable() {
         setInputValues({
           id: ultimoValor,
           activoDescripcion: result.activoDescripcion,
-          activoTipo: result.activoTipo,
           numeroInventario: result.numeroInventario,
           numeroSerie:result.numeroSerie,
           caracteristicas: result.caracteristicas,
@@ -220,7 +218,6 @@ function EditBienInventariable() {
     var raw = JSON.stringify({
       "id": inputValues.id,
       "activoDescripcion": inputValues.activoDescripcion,
-      "activoTipo": inputValues.activoTipo,
       "numeroInventario": inputValues.numeroInventario,
       "numeroSerie": inputValues.numeroSerie,
       "caracteristicas": inputValues.caracteristicas,
@@ -274,14 +271,8 @@ function EditBienInventariable() {
               <FontAwesomeIcon icon={faArrowLeft} /> Regresar
             </button>
             <div className="formulario-container">
-              <input
-                type="text"
-                placeholder="Tipo de Activo"
-                defaultValue={data.activoTipo}
-                onChange={(e) =>
-                  setInputValues({ ...inputValues, activoTipo: e.target.value })
-                }
-              />
+             <div>
+              <label htmlFor="">Numero de inventario</label>
               <input
                 type="text"
                 placeholder="Numero de Inventario"
@@ -294,7 +285,10 @@ function EditBienInventariable() {
                 }
                 disabled
               />
-              <input
+             </div>
+              <div style={{display:"flex", alignItems:"center"}}>
+                <label htmlFor="">Descripcion</label>
+                <textarea style={{ marginLeft:"1rem", paddingTop:"1rem" }}
                 type="text"
                 placeholder="activoDescripcion"
                 defaultValue={data.activoDescripcion}
@@ -305,7 +299,10 @@ function EditBienInventariable() {
                   })
                 }
               />
-              <select
+              </div>
+              <div>
+                <label htmlFor="">Marca</label>
+                <select
                 defaultValue={inputValues.MarcaId}
                 onChange={(e) =>
                   setInputValues({ ...inputValues, MarcaId: e.target.value })
@@ -318,7 +315,10 @@ function EditBienInventariable() {
                   </option>
                 ))}
               </select>
-              <input
+              </div>
+              <div>
+                <label htmlFor="">Modelo</label>
+                <input
                 type="text"
                 placeholder="Modelo"
                 defaultValue={data.modelo}
@@ -326,7 +326,10 @@ function EditBienInventariable() {
                   setInputValues({ ...inputValues, modelo: e.target.value })
                 }
               />
-              <input
+              </div>
+              <div style={{display:"flex", alignItems:"center"}}>
+                <label htmlFor="">Caracteristicas</label>
+                <textarea style={{ marginLeft:"1rem", paddingTop:"1rem" }}
                 type="text"
                 placeholder="Caracteristicas (Opcional)"
                 defaultValue={data.caracteristicas}
@@ -337,7 +340,10 @@ function EditBienInventariable() {
                   })
                 }
               />
-              <input
+              </div>
+              <div style={{display:"flex", alignItems:"center"}}>
+                <label htmlFor="">Comentarios</label>
+                <textarea style={{ marginLeft:"1rem", paddingTop:"1rem", marginTop:"1rem" }}
                 type="text"
                 placeholder="Comentarios (Opcional)"
                 defaultValue={data.comentarios}
@@ -348,21 +354,26 @@ function EditBienInventariable() {
                   })
                 }
               />
+              </div>
 
-              <select
+              <div>
+                <label htmlFor="">Tipo de alta</label>
+                <select
                 onChange={(e) =>
                   setInputValues({ ...inputValues, tipoAlta: e.target.value })
                 }
               >
-                <option value={data.tipoAlta} disabled>
+                <option value={data.tipoAlta} >
                   {data.tipoAlta}
                 </option>
-                <option value={"compra"}>Compra</option>
-                <option value={"Dato"}>Como Dato</option>
-                <option value={"donacion"}>Donaciòn</option>
-                <option value={"otro"}>Otro</option>
+                <option value={"compra"}>COMPRA</option>
+                <option value={"Dato"}>DATO</option>
+                <option value={"donacion"}>DONACION</option>
+                <option value={"otro"}>OTRO</option>
               </select>
-              <input
+              <div>
+                <label htmlFor="">Costo</label>
+                <input
                 type="number"
                 placeholder="Costo"
                 defaultValue={data.costo}
@@ -370,6 +381,8 @@ function EditBienInventariable() {
                   setInputValues({ ...inputValues, costo: e.target.value })
                 }
               />
+              </div>
+              </div>
               <button onClick={handleEdit}>
                 {" "}
                 <FontAwesomeIcon icon={faCheck} /> Confirmar cambios
@@ -395,6 +408,7 @@ function EditBienInventariable() {
               >
                 <FontAwesomeIcon icon={faBan} /> Cancelar
               </button>
+              <h3>Imagenes del bien</h3>
               <div className="images-area-container">
                 {selectedImages.length > 0 ? (
                   <>

@@ -223,6 +223,7 @@ td button.set:hover {
   flex-wrap: wrap;
   padding-top: 2rem;
   background-color: #f0f0f0; /* Color de fondo */
+  padding-left: 1rem;
 }
 
 

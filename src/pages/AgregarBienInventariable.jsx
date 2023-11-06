@@ -22,7 +22,15 @@ function AgregarBienInventariable() {
     TipoAlta: null,
     Comentarios: "",
     Caracteristicas: "",
-    PartidaEspecifica:""
+    PartidaEspecifica:"",
+    CategoriaId: "",
+    CfdiDate:"",
+    CfdiDetalleId:"",
+    CfdiId:"",
+    EstatusBienId:"",
+    GrupoId:"",
+    SaacgNetActivoId:"",
+    subcategoriaId:""
   });
 
   const handleClear = () => {
@@ -81,6 +89,7 @@ function AgregarBienInventariable() {
           "Se ha realizado su registro satisfactoriamente!",
           "success"
         ).then(() => {
+          localStorage.setItem("currentPage","inventariable");
           window.location.href = "/main";
         });
       })
@@ -125,7 +134,15 @@ function AgregarBienInventariable() {
           TipoAlta: result.tipoAlta,
           Comentarios: result.comentarios,
           Caracteristicas: result.caracteristicas,
-          PartidaEspecifica: result.partidaEspecifica
+          PartidaEspecifica: result.partidaEspecifica,
+          CategoriaId:  result.categoriaId,
+          CfdiDate: result.cfdiDate,
+          CfdiDetalleId: result.cfdiDetalleId,
+          CfdiId: result.cfdiId,
+          EstatusBienId: result.estatusBienId,
+          GrupoId: result.grupoId,
+          SaacgNetActivoId: result.saacgNetActivoId,
+          subcategoriaId: result.subcategoriaId
         });
       })
       .catch((error) => console.log("error", error));
@@ -136,10 +153,9 @@ function AgregarBienInventariable() {
   return (
     <>
       <div>
-        <h2 style={{ marginLeft: "1rem" }}>Agregar Bien Inventariable</h2>
+        <h2>Agregar Bien Inventariable</h2>
         <div
           className="filter-form"
-          style={{ marginLeft: "1rem", marginBottom: "-1rem" }}
         >
           <label>Añadir por No. Inventario:</label>
           <input
