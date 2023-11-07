@@ -23,14 +23,14 @@ function AgregarBienInventariable() {
     Comentarios: "",
     Caracteristicas: "",
     PartidaEspecifica:"",
-    CategoriaId: "",
-    CfdiDate:"",
-    CfdiDetalleId:"",
-    CfdiId:"",
-    EstatusBienId:"",
-    GrupoId:"",
-    SaacgNetActivoId:"",
-    subcategoriaId:""
+    CategoriaId: "0",
+    CfdiDate:"1900-01-01",
+    CfdiDetalleId:"0",
+    CfdiId:"0",
+    EstatusBienId:"1",
+    GrupoId:"0",
+    SaacgNetActivoId:"0",
+    subcategoriaId:"0"
   });
 
   const handleClear = () => {
@@ -63,14 +63,39 @@ function AgregarBienInventariable() {
   }, []);
 
   const handleEdit = () => {
-
+    console.log(inputValues);
+    const requiredFields = [
+      "NumeroInventario",
+      "activoDescripcion",
+      "Marca",
+      "Modelo",
+      "NumeroSerie",
+      "TipoAlta",
+    ];
+  
+    const missingFields = requiredFields.filter((field) => {
+      const value = inputValues[field];
+      // Verifica si el campo está vacío, es undefined o no cumple con la longitud requerida
+      return value === undefined || value === "" || (field === "activoDescripcion" && (value.length <= 4 || value.length > 20));
+    });
+  
+    if (missingFields.length > 0) {
+      // Display an error message with the missing fields
+      const missingFieldsMessage = `Por favor asegúrese de que cumplen con los requisitos`;
+      Swal.fire({
+        icon: "error",
+        title: "Campos faltantes o inválidos",
+        text: missingFieldsMessage,
+      });
+      return;
+    }
+  
+  
+    // Continue with the API request if all required fields are filled
     const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + localStorage.getItem("token")
-    );
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
     myHeaders.append("Content-Type", "application/json");
-
+  
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -78,30 +103,29 @@ function AgregarBienInventariable() {
       redirect: "follow",
     };
 
-    fetch(
-      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/activobien`,
-      requestOptions
-    )
+    
+  
+    fetch(import.meta.env.VITE_REACT_APP_API_URL + `api/v1/activobien`, requestOptions)
       .then((response) => response.json())
       .then(() => {
-        Swal.fire(
-          "Registro exitoso!",
-          "Se ha realizado su registro satisfactoriamente!",
-          "success"
-        ).then(() => {
-          localStorage.setItem("currentPage","inventariable");
+        Swal.fire("Registro exitoso!", "Se ha realizado su registro satisfactoriamente!", "success").then(() => {
+          localStorage.setItem("currentPage", "inventariable");
           window.location.href = "/main";
         });
       })
       .catch(() => {
+        // Handle the error case
         Swal.fire({
           icon: "error",
           title: "Hubo un error al crear el registro",
-          text: "Por favor intente nuevamente",
+          text: "Por favor, inténtelo nuevamente.",
         });
         console.log("Error: CODIGO #2");
       });
   };
+  
+  
+  
 
   const handleConsult = () => {
     setBloq(true)
@@ -134,7 +158,7 @@ function AgregarBienInventariable() {
           TipoAlta: result.tipoAlta,
           Comentarios: result.comentarios,
           Caracteristicas: result.caracteristicas,
-          PartidaEspecifica: result.partidaEspecifica,
+          PartidaEspecifica: result.PartidaEspecifica,
           CategoriaId:  result.categoriaId,
           CfdiDate: result.cfdiDate,
           CfdiDetalleId: result.cfdiDetalleId,
@@ -157,7 +181,7 @@ function AgregarBienInventariable() {
         <div
           className="filter-form"
         >
-          <label>Añadir por No. Inventario:</label>
+          <label>Importar por No. Inventario:</label>
           <input
             type="text"
             name="noInventario"
@@ -177,6 +201,7 @@ function AgregarBienInventariable() {
             <label htmlFor="">Numero inventario</label>
             <input
             type="text"
+            minLength={4}
             placeholder="No. Inventario"
             value={inputValues.NumeroInventario}
             disabled={bloq===true ? true : false}
@@ -193,12 +218,13 @@ function AgregarBienInventariable() {
             <label htmlFor="">Descripcion</label>
             <textarea
               style={{ marginLeft:"1rem", paddingTop:"1rem" }}
-              value={inputValues.activoDescripcion}
+              defaultValue={inputValues.activoDescripcion}
+              disabled={bloq===true ? true : false}
               placeholder="Descripcion"
               onChange={(e) =>
                 setInputValues({
                   ...inputValues,
-                  ActivoDescripcion: e.target.value,
+                  activoDescripcion: e.target.value,
                 })
               }
               required
@@ -265,12 +291,13 @@ function AgregarBienInventariable() {
           <div>
             <label htmlFor="">Partida Especifica</label>
             <input
-            value={inputValues.PartidaEspecifica}
+            defaultValue={inputValues.PartidaEspecifica}
             type="number"
+            pattern="[0-9]*"
             placeholder="Partida Especifica"
             disabled={bloq===true ? true : false}
             onChange={(e) =>
-              setInputValues({ ...inputValues, partidaEspecifica: e.target.value })
+              setInputValues({ ...inputValues, PartidaEspecifica: e.target.value })
             }
             required
           />
@@ -310,16 +337,16 @@ function AgregarBienInventariable() {
           <div>
             <label htmlFor="">Costo</label>
             <input
-            value={inputValues.Costo}
-            type="numer"
-            pattern="[0-9]*"
-            placeholder="Costo"
-            disabled={bloq===true ? true : false}
-            onChange={(e) =>
-              setInputValues({ ...inputValues, Costo: e.target.value })
-            }
-            required
-          />
+              value={inputValues.Costo}
+              type="number"
+              pattern="[0-9]*"
+              placeholder="Costo"
+              disabled={bloq === true ? true : false}
+              onChange={(e) =>
+                setInputValues({ ...inputValues, Costo: e.target.value })
+              }
+              required
+            />
           </div>
           <div>
             <label htmlFor="">Tipo de alta</label>
@@ -330,7 +357,7 @@ function AgregarBienInventariable() {
             }
           >
             {!inputValues.TipoAlta ? (<option value={"COMPRA"}>COMPRA</option>) : (<option value={inputValues.TipoAlta}>{inputValues.TipoAlta}</option>) }
-            <option value={"DATO"}>COMO DATO</option>
+            <option value={"COMODATO"}>COMODATO</option>
             <option value={"DONACION"}>DONACION</option>
             <option value={"OTRO"}>OTRO</option>
           </select>

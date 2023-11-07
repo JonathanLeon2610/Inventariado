@@ -22,7 +22,7 @@ function EditBienInventariable() {
     costo: "",
     estatusBienId: "1",
   });
-
+  
   const [data, setData] = useState(null);
   const [marcas, setMarcas] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -41,34 +41,54 @@ function EditBienInventariable() {
     fileInputRef.current.click();
   };
 
+  useEffect(() => {
+    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMarcas(data);
+      })
+      .catch(() => console.log('Error: CODIGO #5'));
+  }, []);
+
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; 
-    if (file) {
-      setFileName(file.name);
-      var myHeaders = new Headers();
-      myHeaders.append(
-        "Authorization",
-        "Bearer " + localStorage.getItem("token")
-      );
-      var formdata = new FormData();
-      formdata.append("Archivo", file, file.name);
-      formdata.append("ActivoBienId", ultimoValor);
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: formdata,
-        redirect: 'follow'
-      };
-
-      
-      fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/ActivoBien/doctos/add", requestOptions)
-        .then(response => response.text())
-        .then(() => {
-          window.location.reload();
-        })
-        .catch(() => console.log('Error: CODIGO #1'));
+    const file = e.target.files[0];
   
-
+    if (file) {
+      const allowedImageFormats = ['jpg', 'jpeg', 'png'];
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+  
+      if (allowedImageFormats.includes(fileExtension)) {
+        setFileName(file.name);
+        var myHeaders = new Headers();
+        myHeaders.append(
+          "Authorization",
+          "Bearer " + localStorage.getItem("token")
+        );
+        var formdata = new FormData();
+        formdata.append("Archivo", file, file.name);
+        formdata.append("ActivoBienId", ultimoValor);
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: formdata,
+          redirect: 'follow'
+        };
+  
+        fetch(import.meta.env.VITE_REACT_APP_API_URL + "api/v1/ActivoBien/doctos/add", requestOptions)
+          .then(response => response.text())
+          .then(() => {
+            window.location.reload();
+          })
+          .catch(() => console.log('Error: CODIGO #1'));
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Formato de archivo no válido. Por favor, sube una imagen en formato jpg, jpeg o png.",
+        });
+      }
     } else {
       Swal.fire({
         icon: "error",
@@ -77,6 +97,7 @@ function EditBienInventariable() {
       });
     }
   };
+  
   
 
   const handleRemoveImage = (index, id) => {
@@ -189,16 +210,7 @@ function EditBienInventariable() {
       .catch(() => console.log('Error: CODIGO #4'));
   }, []);
 
-  useEffect(() => {
-    fetch(import.meta.env.VITE_REACT_APP_API_URL+"api/v1/marcas", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setMarcas(data);
-      })
-      .catch(() => console.log('Error: CODIGO #5'));
-  }, []);
+
 
   const handleEdit = () => {
     const url = window.location.pathname;
@@ -256,6 +268,7 @@ function EditBienInventariable() {
         });
       });
   };
+  
 
   return (
     <>
@@ -303,19 +316,24 @@ function EditBienInventariable() {
               <div>
                 <label htmlFor="">Marca</label>
                 <select
-                defaultValue={inputValues.MarcaId}
-                onChange={(e) =>
-                  setInputValues({ ...inputValues, MarcaId: e.target.value })
-                }
-                
-              >
-                {marcas.map((marca) => (
-                  <option key={marca.id} value={marca.id}>
-                    {marca.name}
-                  </option>
-                ))}
-              </select>
+                  value={inputValues.MarcaId}
+                  onChange={(e) =>
+                    setInputValues({ ...inputValues, MarcaId: e.target.value })
+                  }
+                >
+                  {inputValues.MarcaId !== "" && (
+                    <option value={inputValues.MarcaId}>
+                      {marcas.find((marca) => marca.id === inputValues.MarcaId)?.name}
+                    </option>
+                  )}
+                  {marcas.map((marca) => (
+                    <option key={marca.id} value={marca.id}>
+                      {marca.name}
+                    </option>
+                  ))}
+                </select>
               </div>
+
               <div>
                 <label htmlFor="">Modelo</label>
                 <input
