@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
+import EditProveedor from './components/Proveedores/EditProveedor';
+import EditBienInventariable from './components/Bienes/EditBienInventarible';
+import AgregarBienInventariable from './components/Bienes/AgregarBienInventariable';
+import VerFacturas from './components/Facturas/VerFacturas';
+import DocumentacionProveedor from './components/Proveedores/DocumentacionProveedor';
+import ImportarBienInventariable from "./components/Bienes/ImportarBienInventariable"
+import TablaImportarBien from "./components/Bienes/TablaImportarBien"
+import Login from "./pages/Login"
 import Main from './pages/Main';
-import EditProveedor from './pages/EditProveedor';
-import Login from './pages/Login';
-import EditBienInventariable from './pages/EditBienInventarible';
-import AgregarBienInventariable from './pages/AgregarBienInventariable';
-import TablaImportarBien from './pages/TablaImportarBien';
-import ImportarBienInventariable from './pages/ImportarBienInventariable';
-import Reporte from './components/Reporte';
-import VerFacturas from './pages/VerFacturas';
-import FacturasProveedor from './components/Proveedores/FactutasProveedor';
-import AgregarProveedor from './components/Proveedores/AgregarProveedor';
-import DocumentacionProveedor from './components/DocumentacionProveedor';
+import Reporte from "./pages/Reporte"
+import AgregarProveedor from "./components/Proveedores/AgregarProveedor"
+import FacturasProveedor from "./components/Proveedores/FactutasProveedor"
 
 
 

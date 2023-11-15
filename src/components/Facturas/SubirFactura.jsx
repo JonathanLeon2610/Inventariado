@@ -1,4 +1,4 @@
-import FacturaPreview from "../components/FacturaPreview";
+import FacturaPreview from "./FacturaPreview";
 
 function SubirFactura(){
     return(

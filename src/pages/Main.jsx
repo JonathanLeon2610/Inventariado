@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faStore,
-  faShop,
   faBookBookmark,
   faTruckField,
   faMoneyBill,
@@ -10,20 +9,21 @@ import {
   faHome,
   faBoxArchive
 } from "@fortawesome/free-solid-svg-icons";
-import Inventariables from "../pages/Inventariable";
-import NoInventariables from "../pages/NoInventariables";
-import AsignacionResguardos from "../pages/AsignacionResguardos";
-import Proveedores from "../pages/Proveedores";
-import EditProveedor from "../pages/EditProveedor";
+import Inventariables from "../components/Bienes/Inventariable";
+import NoInventariables from "../components/Bienes/NoInventariables";
+import AsignacionResguardos from "../components/Bienes/AsignacionResguardos";
+import Proveedores from "../components/Proveedores/Proveedores";
+import EditProveedor from "../components/Proveedores/EditProveedor";
 import Swal from "sweetalert2";
-import EditBienInventariable from "./EditBienInventarible";
-import SubirFactura from "./SubirFactura";
-import VerFacturas from "./VerFacturas";
-import AdjuntarPDF from "./AdjuntarPDF";
+import EditBienInventariable from "../components/Bienes/EditBienInventarible";
+import SubirFactura from "../components/Facturas/SubirFactura";
+import VerFacturas from "../components/Facturas/VerFacturas";
+import AdjuntarPDF from "../components/Facturas/AdjuntarPDF";
 import Inicio from "./Inicio";
-import RequisicionDeBien from "../components/Bienes/RequisicionDeBien";
-import MisSolicitudes from "../components/Bienes/MisSolicitudes";
-import AgregarBienInventariable from "./AgregarBienInventariable";
+import RequisicionDeBien from "../components/SolicitudMaterial/RequisicionDeBien";
+import MisSolicitudes from "../components/SolicitudMaterial/MisSolicitudes";
+import AgregarBienInventariable from "../components/Bienes/AgregarBienInventariable";
+import RelacionarBienFactura from "../components/Bienes/RelacionarBienFactura";
 
 function Main() {
   // eslint-disable-next-line no-unused-vars
@@ -108,6 +108,8 @@ function Main() {
         return <RequisicionDeBien />;
       case "misSolicitudes":
         return <MisSolicitudes />;
+      case "relacionarBienFactura":
+        return <RelacionarBienFactura />;
       case "inicio":
         return <Inicio />;
     }
@@ -159,6 +161,14 @@ function Main() {
                     }}
                   >
                     Registrar nuevo bien
+                  </li>
+                  <li
+                    onClick={() => {
+                      setCurrentPage("relacionarBienFactura");
+                      localStorage.setItem("currentPage", "relacionarBienFactura");
+                    }}
+                  >
+                    Relacionar bien y factura
                   </li>
                 </ul>
               </li>

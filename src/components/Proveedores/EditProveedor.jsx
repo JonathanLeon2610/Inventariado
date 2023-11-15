@@ -8,12 +8,12 @@ import {
   faBuildingColumns,
   faFolder,
 } from "@fortawesome/free-solid-svg-icons";
-import DatosGenerales from "../components/Proveedores/DatosGenerales";
-import DatosBancarios from "../components/Proveedores/DatosBancarios";
-import DomicilioFiscal from "../components/Proveedores/DomicilioFiscal";
-import DatosRepresentante from "../components/Proveedores/DatosRepresentante";
-import EditarDocumentacion from "../components/Proveedores/EditarDocumentacion";
-import DocumentacionProveedor from "../components/DocumentacionProveedor";
+import DatosGenerales from "./DatosGenerales";
+import DatosBancarios from "./DatosBancarios";
+import DomicilioFiscal from "./DomicilioFiscal";
+import DatosRepresentante from "./DatosRepresentante";
+import EditarDocumentacion from "./EditarDocumentacion";
+import DocumentacionProveedor from "./DocumentacionProveedor";
 function EditProveedor() {
   const [currentPage, setCurrentPage] = useState("generales");
 
