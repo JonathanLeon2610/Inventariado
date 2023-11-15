@@ -470,6 +470,7 @@ function EditBienInventariable() {
                   <h1>No hay imagenes disponibles</h1>
                 )}
               </div>
+              {console.log(data)}
               <div className="images-area-container">
                 <div className="images-area">
                   {loadImage ? (

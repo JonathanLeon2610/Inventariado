@@ -75,8 +75,9 @@ function AgregarBienInventariable() {
   
     const missingFields = requiredFields.filter((field) => {
       const value = inputValues[field];
+      console.log(value);
       // Verifica si el campo está vacío, es undefined o no cumple con la longitud requerida
-      return value === undefined || value === "" || (field === "activoDescripcion" && (value.length <= 4 || value.length > 20));
+      return value === undefined || value === "" || (field === "NumeroInventario" && (value.length <= 4 || value.length > 20));
     });
   
     if (missingFields.length > 0) {
@@ -107,7 +108,8 @@ function AgregarBienInventariable() {
   
     fetch(import.meta.env.VITE_REACT_APP_API_URL + `api/v1/activobien`, requestOptions)
       .then((response) => response.json())
-      .then(() => {
+      .then((result) => {
+        console.log(result);
         Swal.fire("Registro exitoso!", "Se ha realizado su registro satisfactoriamente!", "success").then(() => {
           localStorage.setItem("currentPage", "inventariable");
           window.location.href = "/main";
@@ -147,6 +149,7 @@ function AgregarBienInventariable() {
     )
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         setInputValues({
           NumeroInventario: result.numeroInventario,
           activoDescripcion: result.activoDescripcion,
@@ -158,7 +161,7 @@ function AgregarBienInventariable() {
           TipoAlta: result.tipoAlta,
           Comentarios: result.comentarios,
           Caracteristicas: result.caracteristicas,
-          PartidaEspecifica: result.PartidaEspecifica,
+          PartidaEspecifica: result.partidaEspecifica,
           CategoriaId:  result.categoriaId,
           CfdiDate: result.cfdiDate,
           CfdiDetalleId: result.cfdiDetalleId,
