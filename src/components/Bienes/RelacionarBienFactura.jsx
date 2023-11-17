@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faEye,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { faCheck, faEye,faSearch,faBroom} from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 
 function RelacionarBienFactura() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
+  const [id, setId] = useState([]);
+  const [fecha, setFecha] = useState([]);
+  const [cfdis, setCfdis] = useState([]);
+  const [numInventario, setNumInventario] = useState([]);
+  const [numInventarioInput, setNumInventarioInput] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -56,22 +59,110 @@ function RelacionarBienFactura() {
     ? { ...backdropStyles, backgroundColor: "rgba(0, 0, 0, 0.5)" }
     : backdropStyles;
 
-  const handleSubmit = () => {
-    Swal.fire({
-      title: "Confirmar solicitud",
-      showCancelButton: true,
-      confirmButtonText: "Si, confirmar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire("Solicitud realizada correctamente!", "", "success");
-      }
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/ActivoBien/cfdipendientes`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result);
+        setOriginalData(result); // Almacena los datos originales
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
+
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(
+      import.meta.env.VITE_REACT_APP_API_URL +
+        `api/v1/cfdis/filtrar?Cfdi_Fecha=${fecha}`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setCfdis(result);
+      })
+      .catch((error) => console.log("error", error));
+  }, [fecha]);
+
+  const handleSubmit = (uuid, rfc) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + localStorage.getItem("token")
+    );
+
+    var raw = JSON.stringify({
+      Id: id,
+      NumeroInventario: numInventario,
+      UUID: uuid,
+      EmisorRFC: rfc,
     });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(import.meta.env.VITE_REACT_APP_API_URL + `api/v1/ActivoBien/${id}/cfdi`, requestOptions)
+      .then(() => {
+        Swal.fire({
+          title: "Asignacion realizada correctamente!",
+          icon: "success"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });        
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const buscarPorNumInventario = () => {
+    const filteredData = data.filter(
+      (item) =>
+        item.numeroInventario.toLowerCase().includes(numInventarioInput.toLowerCase())
+    );
+
+    setData(filteredData);
+  };
+
+  const resetFilters = () => {
+    setData(originalData); // Restaura los datos a su estado original
+    setNumInventarioInput(""); // Limpia el campo de búsqueda
   };
 
   return (
     <>
-      <div>
+       <div>
         <h2>Relacionar bien y factura</h2>
         <div className="filter-form">
           <label>Buscar por No.inventario:</label>
@@ -79,9 +170,20 @@ function RelacionarBienFactura() {
             type="text"
             name="noInventario"
             placeholder="Introducir No.Inventario"
+            value={numInventarioInput}
+            onChange={(e) => setNumInventarioInput(e.target.value)}
           />
-          <button className="add">
+          <button
+            className="add"
+            onClick={() => {
+              buscarPorNumInventario();
+            }}
+          >
             Buscar <FontAwesomeIcon icon={faSearch} />
+          </button>
+          {/* Nuevo botón para limpiar filtros */}
+          <button className="add" style={{backgroundColor:"#154b96"}} onClick={resetFilters}>
+            Limpiar Filtros <FontAwesomeIcon icon={faBroom} />
           </button>
         </div>
         <table>
@@ -95,36 +197,30 @@ function RelacionarBienFactura() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>PZA</td>
-              <td>Prueba</td>
-              <td>$1500</td>
-              <td>
-                <button
-                  onClick={openModal}
-                  className="add"
-                  style={{ backgroundColor: "orange" }}
-                >
-                  <FontAwesomeIcon icon={faEye} /> Buscar factura
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Computadora 2</td>
-              <td>N/A</td>
-              <td>N/A</td>
-              <td>$1500</td>
-              <td>
-                <button
-                  onClick={openModal}
-                  className="add"
-                  style={{ backgroundColor: "orange" }}
-                >
-                  <FontAwesomeIcon icon={faEye} /> Buscar factura
-                </button>
-              </td>
-            </tr>
+            {data.map((item) => (
+              <tr key={item.id}>
+                <td>{item.numeroInventario}</td>
+                <td>{item.activoDescripcion}</td>
+                <td>{item.modelo}</td>
+                <td>${item.costo}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      setFecha(
+                        new Date(item.cfdiDate).toISOString().split("T")[0]
+                      );
+                      setId(item.id);
+                      setNumInventario(item.numeroInventario)
+                      openModal();
+                    }}
+                    className="add"
+                    style={{ backgroundColor: "orange" }}
+                  >
+                    <FontAwesomeIcon icon={faEye} /> Buscar factura
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -138,97 +234,47 @@ function RelacionarBienFactura() {
           <span className="close" onClick={closeModal}>
             <p>Cerrrar &times;</p>
           </span>
+          <h2>Fecha de busqueda: {fecha}</h2>
           <table>
             <thead>
               <tr>
-                <th >UUID</th>
-                <th >Proveedor</th>
+                <th>UUID</th>
+                <th>Proveedor</th>
                 <th style={{ width: "150px" }}>Folio</th>
                 <th style={{ width: "150px" }}>Opciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>3FF4D9E5-AFCA-4CCC-8D0B-84B0A7DFF038</td>
-                <td>Prueba</td>
-                <td>123</td>
-                <td>
-                  <button className="add" onClick={handleSubmit}>
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>PZA</td>
-                <td>Prueba</td>
-                <td>
-                  <button className="add">
-                    <FontAwesomeIcon icon={faCheck} /> Asignar
-                  </button>
-                </td>
-              </tr>
+              {Array.isArray(cfdis) &&
+                cfdis.map((item) => (
+                  <>
+                    <tr>
+                      <td>{item.uuid}</td>
+                      <td>{item.emisor_Nombre}</td>
+                      <td>{item.comprobante_Folio}</td>
+                      <td>
+                        <button
+                          className="add"
+                          onClick={()=>Swal.fire({
+                            title: "Estas seguro de realizar esta asignacion?",
+                            showCancelButton: true,
+                            confirmButtonText: "Confirmar",
+                            denyButtonText: `No, cancelar`,
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                              handleSubmit(item.uuid,item.emisor_RFC)
+                            } else if (result.isDenied) {
+                              Swal.fire("No se ha hecho la asignacion", "", "info");
+                            }
+                          })}
+                        >
+                          <FontAwesomeIcon icon={faCheck} /> Asignar
+                        </button>
+                      </td>
+                    </tr>
+                  </>
+                ))}
             </tbody>
           </table>
         </div>

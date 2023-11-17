@@ -144,12 +144,11 @@ function AgregarBienInventariable() {
     };
 
     fetch(
-      `https://192.168.10.109/api/v1/softwarecontable/activobien/${buscarNum}`,
+      import.meta.env.VITE_REACT_APP_API_URL + `api/v1/softwarecontable/activobien/${buscarNum}`,
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setInputValues({
           NumeroInventario: result.numeroInventario,
           activoDescripcion: result.activoDescripcion,
