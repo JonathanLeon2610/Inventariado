@@ -172,6 +172,13 @@ tbody :hover{
   transition: all .1s ease-in-out;
 }
 
+.close {
+  position: absolute;
+  right: 5rem;
+  cursor: pointer;
+  /* Otros estilos del botón de cierre... */
+}
+
 
 td button{
   display: block; /* Hacer que el botón sea un bloque para centrarlo */

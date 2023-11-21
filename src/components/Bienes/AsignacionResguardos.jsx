@@ -6,12 +6,14 @@ import Swal from "sweetalert2";
 function AsignacionResguardos() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [personal, setPersonal] = useState([]);
+  const [searchName, setSearchName] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    setSearchName("")
     setIsModalOpen(false);
   };
 
@@ -68,7 +70,7 @@ function AsignacionResguardos() {
   
       fetch(
         import.meta.env.VITE_REACT_APP_API_URL +
-          `api/v1/personacolaboradores/filtrar?baja=false`,
+          `api/v1/personacolaboradores/filtrar?Nombre=`,
         requestOptions
       )
         .then((response) => response.json())
@@ -78,6 +80,32 @@ function AsignacionResguardos() {
         })
         .catch((error) => console.log("error", error));
     }, []);
+
+    useEffect(() => {
+      var myHeaders = new Headers();
+      myHeaders.append(
+        "Authorization",
+        "Bearer " + localStorage.getItem("token")
+      );
+  
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+  
+      fetch(
+        import.meta.env.VITE_REACT_APP_API_URL +
+          `api/v1/personacolaboradores/filtrar?Nombre=${searchName}`,
+        requestOptions
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setPersonal(result);
+        })
+        .catch((error) => console.log("error", error));
+    }, [searchName]);
 
   return (
     <>
@@ -97,6 +125,7 @@ function AsignacionResguardos() {
         <table>
           <thead>
             <tr>
+              <th>No. Inventario</th>
               <th>Articulo</th>
               <th>Asignado a</th>
               <th>Fecha de asignacion</th>
@@ -105,6 +134,7 @@ function AsignacionResguardos() {
           </thead>
           <tbody>
             <tr>
+              <td>65981-6</td>
               <td>Computadora 2</td>
               <td>N/A</td>
               <td>N/A</td>
@@ -116,7 +146,7 @@ function AsignacionResguardos() {
                   className="add"
                   style={{ backgroundColor: "orange" }}
                 >
-                  <FontAwesomeIcon icon={faEye} /> Buscar factura
+                  <FontAwesomeIcon icon={faEye} /> Buscar personal
                 </button>
               </td>
             </tr>
@@ -130,9 +160,18 @@ function AsignacionResguardos() {
       {isModalOpen && (
         <div className="modal" style={modalAnimationStyles}>
           <span className="close" onClick={closeModal}>
-            <p>Cerrrar &times;</p>
+          <p>Cerrrar &times;</p>
           </span>
           <h2>Personal disponible</h2>
+          <div className="filter-form">
+          <label>Buscar por nombre:</label>
+          <input
+            type="text"
+            name="noInventario"
+            placeholder="Introducir nombre"
+            onChange={(e) => setSearchName(e.target.value)}
+          />
+        </div>
           <table>
             <thead>
                 <tr>

@@ -225,16 +225,15 @@ function RelacionarBienFactura() {
         </table>
       </div>
 
-      {/* Fondo oscuro */}
       {isModalOpen && <div style={backdropAnimationStyles}></div>}
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="modal" style={modalAnimationStyles}>
           <span className="close" onClick={closeModal}>
             <p>Cerrrar &times;</p>
           </span>
           <h2>Fecha de busqueda: {fecha}</h2>
+          <h4>Tabla de facturas</h4>
           <table>
             <thead>
               <tr>
