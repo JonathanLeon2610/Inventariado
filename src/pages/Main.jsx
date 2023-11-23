@@ -24,6 +24,7 @@ import RequisicionDeBien from "../components/SolicitudMaterial/RequisicionDeBien
 import MisSolicitudes from "../components/SolicitudMaterial/MisSolicitudes";
 import AgregarBienInventariable from "../components/Bienes/AgregarBienInventariable";
 import RelacionarBienFactura from "../components/Bienes/RelacionarBienFactura";
+import VerResguardos from "../components/Bienes/VerResguardos";
 
 function Main() {
   // eslint-disable-next-line no-unused-vars
@@ -110,6 +111,8 @@ function Main() {
         return <MisSolicitudes />;
       case "relacionarBienFactura":
         return <RelacionarBienFactura />;
+      case "verResguardos":
+        return <VerResguardos />;
       case "inicio":
         return <Inicio />;
     }
@@ -180,15 +183,32 @@ function Main() {
                 >
                   <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
                 </li>
-                <li
-                  onClick={() => {
-                    setCurrentPage("asignacionResguardos");
-                    localStorage.setItem("currentPage", "asignacionResguardos");
-                  }}
-                >
+
+
+                <li className="dropdown">
+                <span className="dropdown-toggle">
                   <FontAwesomeIcon icon={faBookBookmark} /> Asignación de
-                  Resguardos
-                </li>
+                    Resguardos
+                </span>
+                <ul className="dropdown-menu">
+                  <li
+                    onClick={() => {
+                      setCurrentPage("asignacionResguardos");
+                      localStorage.setItem("currentPage", "asignacionResguardos");
+                    }}
+                  >
+                    Manejo de resguardo
+                  </li>
+                  <li
+                    onClick={() => {
+                      setCurrentPage("verResguardos");
+                      localStorage.setItem("currentPage", "verResguardos");
+                    }}
+                  >
+                    Ver resguardo por personal
+                  </li>
+                </ul>
+              </li>
               </>
             ) : (
               ""
