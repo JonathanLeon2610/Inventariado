@@ -136,20 +136,19 @@ function Inventariables() {
               <th>Marca</th>
               <th>Modelo</th>
               <th># Serie</th>
-              <th>Costo</th>
               <th className="option-button">Opciones</th>
             </tr>
           </thead>
           <tbody>
             {data.map((item, index) => (
               <tr key={item.id}>
+                {console.log(item)}
                 <td>{index + 1}</td>
                 <td>{item.numeroInventario}</td>
                 <td>{item.activoDescripcion}</td>
                 <td>{getMarcaNameById(item.marcaId)}</td>
                 <td>{item.modelo}</td>
                 <td>{item.numeroSerie}</td>
-                <td>${item.costo.toLocaleString("en")}</td>
                 <td className="option-button">
                   <Link to={`/edit-bien-inventariable/${item.id}`}>
                     <button className="free">

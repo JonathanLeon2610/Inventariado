@@ -86,7 +86,6 @@ function AsignacionResguardos() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setPersonal(result);
       })
       .catch((error) => console.log("error", error));
@@ -112,7 +111,7 @@ function AsignacionResguardos() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+
         setPersonal(result);
       })
       .catch((error) => console.log("error", error));

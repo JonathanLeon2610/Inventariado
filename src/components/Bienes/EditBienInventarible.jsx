@@ -21,6 +21,9 @@ function EditBienInventariable() {
     tipoAlta: "",
     costo: "",
     estatusBienId: "1",
+    baja: "",
+    cfdiAsignado: "",
+    enSaacgNet: "",
   });
   
   const [data, setData] = useState(null);
@@ -166,6 +169,9 @@ function EditBienInventariable() {
           costo: result.costo,
           MarcaId: result.marcaId,
           modelo: result.modelo,
+          baja: result.baja,
+          cfdiAsignado: result.cfdiAsignado,
+          enSaacgNet: result.enSaacgNet
         });
         setData(result);
         setSelectedMarca(result.marca);
@@ -283,6 +289,7 @@ function EditBienInventariable() {
             >
               <FontAwesomeIcon icon={faArrowLeft} /> Regresar
             </button>
+
             <div className="formulario-container">
              <div>
               <label htmlFor="">Numero de inventario</label>
@@ -373,34 +380,33 @@ function EditBienInventariable() {
                 }
               />
               </div>
+              {console.log(data)}
+
 
               <div>
-                <label htmlFor="">Tipo de alta</label>
-                <select
-                onChange={(e) =>
-                  setInputValues({ ...inputValues, tipoAlta: e.target.value })
-                }
-              >
-                <option value={data.tipoAlta} >
-                  {data.tipoAlta}
-                </option>
-                <option value={"compra"}>COMPRA</option>
-                <option value={"Dato"}>DATO</option>
-                <option value={"donacion"}>DONACION</option>
-                <option value={"otro"}>OTRO</option>
-              </select>
-              <div>
-                <label htmlFor="">Costo</label>
+                <label htmlFor="">Dado de baja</label>
                 <input
-                type="number"
-                placeholder="Costo"
-                defaultValue={data.costo}
-                onChange={(e) =>
-                  setInputValues({ ...inputValues, costo: e.target.value })
-                }
+                type="checkbox"
+                checked={data.baja}
+                disabled
+              />
+              <label htmlFor="">Factura asignada</label>
+                <input
+                type="checkbox"
+                checked={data.cfdiAsignado}
+                disabled
+              />
+              <label htmlFor="">Disponible en SaacgNet</label>
+                <input
+                type="checkbox"
+                checked={data.enSaacgNet}
+                disabled
               />
               </div>
-              </div>
+              <hr />
+
+
+
               <button onClick={handleEdit}>
                 {" "}
                 <FontAwesomeIcon icon={faCheck} /> Confirmar cambios
@@ -470,7 +476,7 @@ function EditBienInventariable() {
                   <h1>No hay imagenes disponibles</h1>
                 )}
               </div>
-              {console.log(data)}
+
               <div className="images-area-container">
                 <div className="images-area">
                   {loadImage ? (

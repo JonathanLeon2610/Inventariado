@@ -102,7 +102,6 @@ function VerResguardos() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setPersonal(result);
       })
       .catch((error) => console.log("error", error));
@@ -129,7 +128,7 @@ function VerResguardos() {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+
         setPersonal(result);
       })
       .catch((error) => console.log("error", error));

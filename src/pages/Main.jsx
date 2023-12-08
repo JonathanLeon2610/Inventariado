@@ -25,6 +25,8 @@ import MisSolicitudes from "../components/SolicitudMaterial/MisSolicitudes";
 import AgregarBienInventariable from "../components/Bienes/AgregarBienInventariable";
 import RelacionarBienFactura from "../components/Bienes/RelacionarBienFactura";
 import VerResguardos from "../components/Bienes/VerResguardos";
+import SubirNomina from "../components/Nominas/SubirNomina";
+import VerNominas from "../components/Nominas/VerNominas";
 
 function Main() {
   // eslint-disable-next-line no-unused-vars
@@ -113,6 +115,10 @@ function Main() {
         return <RelacionarBienFactura />;
       case "verResguardos":
         return <VerResguardos />;
+      case "subirNomina":
+        return <SubirNomina />;
+      case "verNominas":
+        return <VerNominas />;
       case "inicio":
         return <Inicio />;
     }
@@ -136,6 +142,46 @@ function Main() {
             >
               <FontAwesomeIcon icon={faHome} /> Inicio
             </li>
+
+            {/* --------------------------------------------------------------- */}
+
+            {/* Nomina */}
+
+            {localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) || localStorage.getItem("role").includes(import.meta.env.VITE_REACT_APP_DA_RECHUM) ? (
+              <>
+              <li className="dropdown">
+                  <span className="dropdown-toggle">
+                    <FontAwesomeIcon icon={faMoneyBill} /> Nomina (CFD)
+                  </span>
+                  <ul className="dropdown-menu">
+                          <>
+                            <li
+                              onClick={() => {
+                                setCurrentPage("subirNomina");
+                                localStorage.setItem(
+                                  "currentPage",
+                                  "subirNomina"
+                                );
+                              }}
+                            >
+                              Registrar (XML)
+                            </li>
+                          </>
+                    <li
+                      onClick={() => {
+                        setCurrentPage("verNominas");
+                        localStorage.setItem("currentPage", "verNominas");
+                      }}
+                    >
+                      Visualizar
+                    </li>
+                  </ul>
+            </li>
+              </>
+            ): ("")}
+            
+
+            {/* Inventariable */}
             {localStorage
               .getItem("role")
               .includes(import.meta.env.VITE_REACT_APP_DA_RECMAT) ||
@@ -175,17 +221,21 @@ function Main() {
                   </li>
                 </ul>
               </li>
-                <li
+
+              {/* No inventariable */}
+                {/* <li
                   onClick={() => {
                     setCurrentPage("noInventariable");
                     localStorage.setItem("currentPage", "noInventariable");
                   }}
                 >
                   <FontAwesomeIcon icon={faStore} /> No Inventariable (Almacen)
-                </li>
+                </li> */}
 
+                {/* --------------------------------------------------------------- */}
 
-                <li className="dropdown">
+                {/* Asignacion de resguardos */}
+                {/* <li className="dropdown">
                 <span className="dropdown-toggle">
                   <FontAwesomeIcon icon={faBookBookmark} /> Asignación de
                     Resguardos
@@ -208,11 +258,16 @@ function Main() {
                     Ver resguardo por personal
                   </li>
                 </ul>
-              </li>
+                </li> */}
+                {/* --------------------------------------------------------------- */}
               </>
             ) : (
               ""
             )}
+
+            {/* --------------------------------------------------------------- */}
+
+            {/* Facturas */}
 
             {localStorage
               .getItem("role")
@@ -236,22 +291,6 @@ function Main() {
                       .getItem("role")
                       .includes(import.meta.env.VITE_REACT_APP_SUPERADMIN) ? (
                       <>
-                        {localStorage
-                          .getItem("role")
-                          .includes(
-                            import.meta.env.VITE_REACT_APP_AUX_COMPRAS
-                          ) ||
-                        localStorage
-                          .getItem("role")
-                          .includes(
-                            import.meta.env.VITE_REACT_APP_ADM_COMPRAS
-                          ) ||
-                        localStorage
-                          .getItem("role")
-                          .includes(
-                            import.meta.env.VITE_REACT_APP_SUPERADMIN
-                          ) ? (
-                          <>
                             <li
                               onClick={() => {
                                 setCurrentPage("subirFactura");
@@ -274,10 +313,6 @@ function Main() {
                             >
                               Adjuntar (PDF)
                             </li>
-                          </>
-                        ) : (
-                          ""
-                        )}
                       </>
                     ) : (
                       ""
@@ -296,6 +331,11 @@ function Main() {
             ) : (
               ""
             )}
+
+            {/* --------------------------------------------------------------- */}
+
+            {/* Proveedores */}
+
             {localStorage
               .getItem("role")
               .includes(import.meta.env.VITE_REACT_APP_DA_COMPRAS) ||
@@ -315,7 +355,11 @@ function Main() {
             ) : (
               ""
             )}
-            <>
+
+            {/* --------------------------------------------------------------- */}
+
+            {/* Requisicion de material */}
+            {/* <>
               <li className="dropdown">
                 <span className="dropdown-toggle">
                   <FontAwesomeIcon icon={faBoxArchive} /> Requisicion Material
@@ -339,7 +383,9 @@ function Main() {
                   </li>
                 </ul>
               </li>
-            </>
+            </> */}
+            {/* --------------------------------------------------------------- */}
+
             <li onClick={showAlert}>
               <FontAwesomeIcon icon={faUser} /> Cerrar Sesión
             </li>

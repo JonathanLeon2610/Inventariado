@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRight,
   faArrowLeft,
-  faPrint,
   faDownload,
   faBan,
   faUpload,
@@ -11,7 +10,7 @@ import {
 import Swal from "sweetalert2";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-function VerFacturas() {
+function VerNominas() {
   const [data, setdata] = useState([]);
   const [file, setFile] = useState([]);
 
@@ -142,7 +141,7 @@ function VerFacturas() {
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
+        `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${import.meta.env.VITE_REACT_APP_RFC_TRIBUNAL}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -169,7 +168,7 @@ function VerFacturas() {
 
     fetch(
       import.meta.env.VITE_REACT_APP_API_URL +
-        `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${RFC}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&ByRecibidos=${!isFechaDesdeEnabled}&FechaDesde=${fechaDesde}&FechaHasta=${fechaHasta}`,
+        `api/v1/Cfdis/filtrar?isPDF=${PDF}&isXML=${XML}&Emisor_RFC=${import.meta.env.VITE_REACT_APP_RFC_TRIBUNAL}&UUID=${UUID}&Pagina=${currentPage}&CantidadRegistros=${recordsPerPage}&ByRecibidos=${!isFechaDesdeEnabled}&FechaDesde=${fechaDesde}&FechaHasta=${fechaHasta}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -201,15 +200,7 @@ function VerFacturas() {
     <>
       <div>
         <div className="no-print">
-          <h2>Tabla de facturas</h2>
-          <button
-            className="import"
-            style={{ backgroundColor: "orange" }}
-            onClick={() => window.print()}
-          >
-            {" "}
-            <FontAwesomeIcon icon={faPrint} /> Imprimir Tabla
-          </button>
+          <h2>Tabla de nominas</h2>
           <div className="filter-form">
             <label>UUID:</label>
             <input
@@ -218,14 +209,7 @@ function VerFacturas() {
               onChange={handleChange}
               placeholder="Introducir UUID"
             />
-            <label>RFC del Emisor:</label>
-            <input
-              type="text"
-              name="emisorRFC"
-              onChange={handleChange}
-              placeholder="Introducir RFC (Emisor)"
-            />
-
+            
             <label>Sin PDF:</label>
             <input
               type="checkbox"
@@ -285,7 +269,7 @@ function VerFacturas() {
           <thead>
             <tr>
 
-              <th colSpan="12">Lista de facturas -- Pagina #{currentPage}</th>
+              <th colSpan="12">Lista de nominas -- Pagina #{currentPage}</th>
             </tr>
             <tr>
               <th>#</th>
@@ -325,7 +309,7 @@ function VerFacturas() {
                         {localStorage
                           .getItem("role")
                           .includes(
-                            import.meta.env.VITE_REACT_APP_ADM_COMPRAS
+                            import.meta.env.VITE_REACT_APP_SUPERADMIN
                           ) ? (
                           <>
                             <button
@@ -392,7 +376,7 @@ function VerFacturas() {
                         {localStorage
                           .getItem("role")
                           .includes(
-                            import.meta.env.VITE_REACT_APP_ADM_COMPRAS
+                            import.meta.env.VITE_REACT_APP_SUPERADMIN
                           ) ? (
                           <>
                             <button
@@ -479,4 +463,4 @@ function VerFacturas() {
   );
 }
 
-export default VerFacturas;
+export default VerNominas;
